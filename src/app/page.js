@@ -130,7 +130,7 @@ export default function Home(props) {
           <div className='h-5vh '>
             Antra sekcija
           </div>
-          <button onClick={addProject} className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Add Project</button>
+          <button onClick={addProject} className="w-32 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Add Project</button>
 
           <div className='flex'> 
             {projectTemplates}
