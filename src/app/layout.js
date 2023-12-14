@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
 
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(true)
   const [account, setAccount] = useState(false)
   const [accountCreation, setAccountCreation] = useState(false)
     useEffect( () => {

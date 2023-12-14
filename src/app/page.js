@@ -92,20 +92,7 @@ export default function Home(props) {
 
   return (
     <div className='flex flex-row'>
-      <div className="w-24 bg-gray-900 h-screen flex flex-col justify-between" >
-        <div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Logo</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Menu</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >ACc</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Calendar</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Summary</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Cloud</div>
-          <div className='text-white p-2 border-gray-600 rounded-full border-4 m-1' >Map</div>
-        </div>
-        <div className="text-white p-2 border-gray-600 rounded-full border-4 m-1">
-          logout
-        </div>
-      </div>
+      
       {creation?
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parent={creationName} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
