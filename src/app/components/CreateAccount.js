@@ -8,6 +8,7 @@ export default function CreateAccount(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [accountExist, setAccountExists] = useState(false)
     const handleNameChange = (e) => {
         setUsername(e.target.value);
     };
@@ -36,6 +37,7 @@ export default function CreateAccount(props) {
         const responseBody  = await response.json()
         if (responseBody === "Account exists") {
             console.log("Account already exists", responseBody)
+            setAccountExists(true)
         } else {
             console.log("laba diena viskas gerai")
             props.authenticate(responseBody)
@@ -51,13 +53,26 @@ export default function CreateAccount(props) {
         <div className="h-100vh w-15vw z-10 ml-24 absolute flex flex-col items-center justify-center  bg-white rounded-lg shadow-lg p-6 mx-auto">
             <form onSubmit={handleSubmit} className="w-full">
                 <div className="w-full mb-4">
-                    <input 
+                    {!accountExist?<input 
                         id="username"
                         value={username}
                         onChange={handleNameChange}
                         className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
                         placeholder="Enter username"
-                    />
+                        
+                    />:
+                    <div>
+                        <div className="text-red-500 text-sm">Username already exists</div>
+                        <input 
+                        id="username"
+                        value={username}
+                        onChange={handleNameChange}
+                        className="w-full p-2 border rounded-md border-red-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 transition duration-200"
+                        placeholder="Enter username"
+                        />
+                    </div>
+
+                    }
                 </div>
                 <div className="w-full mb-4">
                     <input 
