@@ -10,19 +10,28 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
 
-  const [loggedIn, setLoggedIn] = useState(true)
+  const [loggedIn, setLoggedIn] = useState(null)
   const [account, setAccount] = useState(false)
   const [accountCreation, setAccountCreation] = useState(false)
     useEffect( () => {
       fetch("api/connectToDB")
     }, []
     )
+
+    useEffect( () => {
+        if (localStorage.getItem('acc') !== null) {
+          setAccount(async (i) =>  localStorage.getItem('acc'))
+          setLoggedIn(true)
+      } 
+    }, [])
    
 
   const authenticate = async (acc) => {
     console.log("authenticated", acc)
-    setAccount(acc)
+    localStorage.setItem('acc', JSON.stringify(acc));
+    console.log(localStorage.getItem("acc"))
     setLoggedIn(true)
+    setAccount(acc)
     
   }
 
@@ -36,7 +45,8 @@ export default function RootLayout({ children }) {
   return (
     <accountContext.Provider value={{account: account}}>
         <html lang="en">
-        <body className={inter.className}>{loggedIn?children:
+        <body className={inter.className}>{loggedIn===null?<div></div>:loggedIn?
+        children:
         accountCreation?<CreateAccount authenticate={authenticate} />:<Login startAccountCreation={startAccountCreation} authenticate={authenticate}/>
         
         }</body>
