@@ -20,18 +20,20 @@ export default function RootLayout({ children }) {
 
     useEffect( () => {
         if (localStorage.getItem('acc') !== null) {
-          setAccount(async (i) =>  localStorage.getItem('acc'))
+          let acc = JSON.parse(localStorage.getItem('acc'))
+          setAccount({...acc, setLoggedIn})
+          
           setLoggedIn(true)
       } 
     }, [])
-   
 
   const authenticate = async (acc) => {
     console.log("authenticated", acc)
     localStorage.setItem('acc', JSON.stringify(acc));
     console.log(localStorage.getItem("acc"))
+    setAccount({...acc, setLoggedIn})
+
     setLoggedIn(true)
-    setAccount(acc)
     
   }
 
@@ -45,7 +47,7 @@ export default function RootLayout({ children }) {
   return (
     <accountContext.Provider value={{account: account}}>
         <html lang="en">
-        <body className={inter.className}>{loggedIn===null?<div></div>:loggedIn?
+        <body className={inter.className}>{loggedIn?
         children:
         accountCreation?<CreateAccount authenticate={authenticate} />:<Login startAccountCreation={startAccountCreation} authenticate={authenticate}/>
         

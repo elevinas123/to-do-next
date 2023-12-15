@@ -9,6 +9,7 @@ import { Fascinate_Inline } from 'next/font/google'
 import accountContext from './context/accountContext'
 import EmptyProjectCard from './components/EmptyProjectCard';
 import TaskCreation from './components/TaskCreation'
+import Navbar from './components/Navbar'
 
 export default function Home(props) {
   
@@ -92,7 +93,7 @@ export default function Home(props) {
 
   return (
     <div className='flex flex-row'>
-      
+      <Navbar />
       {creation?
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parent={creationName} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
