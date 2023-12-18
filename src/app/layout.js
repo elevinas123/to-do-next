@@ -1,13 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local'
 import './globals.css';
 import accountContext from './context/accountContext';
 import Login from './components/Login';
 import CreateAccount from './components/CreateAccount';
 
-const inter = Inter({ subsets: ['latin'] });    
-
+const myFont = localFont({ src: '../Work_Sans/static/WorkSans-Medium.ttf' })
+ 
 export default function RootLayout({ children }) {
 
   const [loggedIn, setLoggedIn] = useState(null)
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
   return (
     <accountContext.Provider value={{account: account}}>
         <html lang="en">
-        <body className={inter.className}>{loggedIn?
+        <body className={myFont.className}>{loggedIn?
         children:
         accountCreation?<CreateAccount authenticate={authenticate} />:<Login startAccountCreation={startAccountCreation} authenticate={authenticate}/>
         
