@@ -18,3 +18,18 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: error.message }))
     }
   } 
+
+  export async function PUT(req) {
+    try {
+        const {name, text, completed} = await req.json()
+        console.log(name, date, parent)
+        let task = await TaskSchema.create({parent: parent, name: name, deadline: date, subTasks: []})
+
+
+
+      return new Response(JSON.stringify(task))
+    } catch (error) {
+      console.log(error)
+      return new Response(JSON.stringify({ error: error.message }))
+    }
+  }

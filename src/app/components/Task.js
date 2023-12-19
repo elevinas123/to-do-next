@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import SubTask from './SubTask';
+import { ObjectId } from 'bson';
 
 
 export default function Task(props){
@@ -18,6 +19,7 @@ export default function Task(props){
                 
               })
             const body = await response.json()
+            console.log("body", body)
             setTasks({...body})
         }
         if (props.taskId!=null){
@@ -31,8 +33,17 @@ export default function Task(props){
         for (let i =0; i<tasks.subTasks.length; i++) {
             p.push(<SubTask {...subTasks[i] }/>)
         }
+        console.log(p)
         setSubTasks(p)
     }, [tasks])
+
+    const addSubTask = () => {
+        console.log("hi")
+        let id = new ObjectId()
+        setSubTasks(i => [...i, <SubTask id={id.toString()} />])
+    }
+
+
     return(
         <div className="ml-5 mt-5 flex flex-row">
            <div>
@@ -40,7 +51,7 @@ export default function Task(props){
                 {subTasks}
                 
            </div>
-            <button onClick={() => console.log("hi")} className="flex flex-row m-2">
+            <button onClick={addSubTask} className="flex flex-row m-2">
                     <div   className="text-gray-400 rounded-full bg-gray-200 flex justify-center items-center h-4 w-4 mt-0.5 pb-0.5">
                         <span >+</span>
                     </div>
