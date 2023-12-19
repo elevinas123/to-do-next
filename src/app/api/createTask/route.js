@@ -8,7 +8,7 @@ export async function POST(req) {
     try {
         const {name, date, parent} = await req.json()
         console.log(name, date, parent)
-        let task = await TaskSchema.create({parent: parent, name: name, deadline: date, dateCreated: new Date().toDateString(), text: ""})
+        let task = await TaskSchema.create({parent: parent, name: name, deadline: date, subTasks: []})
 
 
 

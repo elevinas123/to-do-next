@@ -1,27 +1,38 @@
-const mongoose = require("mongoose")
-const TaskSchemaObj  = new mongoose.Schema({
-    name: {
-        type: String,
-        req: true
-    },
-    
-    deadline: {
-        type: String,
-        req: false
-    },
+const mongoose = require("mongoose");
+
+const SubTaskSchema = new mongoose.Schema({
     text: {
         type: String,
-        req: true
+        required: true
     },
+    completed: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+});
+
+const TaskSchemaObj = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    deadline: {
+        type: String,
+        required: false
+    },
+    subTasks: [SubTaskSchema], // Define subTasks as an array of SubTaskSchema
     parent: {
         type: String,
-        req: true
+        required: true
     }
-})
-let TaskSchema 
+});
+
+let TaskSchema;
 try {
-    TaskSchema  = mongoose.model("Task")
+    TaskSchema = mongoose.model("Task");
 } catch {
-    TaskSchema  = mongoose.model("Task", TaskSchemaObj )
+    TaskSchema = mongoose.model("Task", TaskSchemaObj);
 }
-export default TaskSchema 
+
+export default TaskSchema;

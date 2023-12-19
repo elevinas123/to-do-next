@@ -1,12 +1,14 @@
 "use client"
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SubTask from './SubTask';
 
 
 export default function Task(){
 
-    const [subTasks, setSubTasks] = useState([])
+    const [tasks, setTasks] = useState([])
+    useEffect(() => {
 
+    })
     return(
         <div className="ml-5 mt-5 flex flex-row">
            <div>
