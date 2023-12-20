@@ -3,6 +3,7 @@ import TaskSchema from "@/app/database/schema/TaskSchema"
 export async function POST(req) {
     try {
         const {id, taskId} = await req.json()
+        console.log(id, taskId)
         let task = await TaskSchema.findByIdAndUpdate(
             taskId,
             { $push: { subTasks: {text: "", completed: false, id: id} } }, // Add the new task's ID to the project

@@ -1,7 +1,7 @@
 "use client"
+import ObjectId from 'bson-objectid';
 import React, { useEffect, useState } from 'react';
 import SubTask from './SubTask';
-import { ObjectId } from 'bson';
 
 
 export default function Task(props){
@@ -29,26 +29,30 @@ export default function Task(props){
     useEffect(() => {
         let p = []
         if(tasks.length==0) return
-        
+        console.log("tasks", tasks)
         for (let i =0; i<tasks.subTasks.length; i++) {
-            p.push(<SubTask {...subTasks[i] }/>)
+            console.log(tasks.subTasks[i])
+            p.push(<SubTask id={tasks.subTasks[i]._id} taskId={props.taskId} text={tasks.subTasks[i].text} completed={tasks.subTasks[i].completed}/>)
         }
         console.log(p)
         setSubTasks(p)
     }, [tasks])
 
     const addSubTask = () => {
+       const f = async () => {
         console.log("hi")
-        let id = new ObjectId()
-        fetch()
-        setSubTasks(i => [...i, <SubTask taskId={props.taskId} id={id.toString()} />])
-        fetch('/api/getProjects', {
+        let id = (new ObjectId()).toString()
+        console.log(id)
+        setSubTasks(i => [...i, <SubTask taskId={props.taskId} id={id} key={id} />])
+        const response = await fetch("/api/subTask", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({taskId: props.taskId, id: id}),
           });
+       }
+       f()
     }
 
 
