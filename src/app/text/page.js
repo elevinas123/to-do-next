@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Task from "../components/Task";

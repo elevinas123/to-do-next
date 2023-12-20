@@ -40,7 +40,15 @@ export default function Task(props){
     const addSubTask = () => {
         console.log("hi")
         let id = new ObjectId()
-        setSubTasks(i => [...i, <SubTask id={id.toString()} />])
+        fetch()
+        setSubTasks(i => [...i, <SubTask taskId={props.taskId} id={id.toString()} />])
+        fetch('/api/getProjects', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({taskId: props.taskId, id: id}),
+          });
     }
 
 

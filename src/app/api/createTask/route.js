@@ -21,10 +21,11 @@ export async function POST(req) {
 
   export async function PUT(req) {
     try {
-        const {name, text, completed} = await req.json()
-        console.log(name, date, parent)
-        let task = await TaskSchema.create({parent: parent, name: name, deadline: date, subTasks: []})
-
+        const {id, taskId, text, completed} = await req.json()
+        let task = await TaskSchema.updateOne(
+          { "_id": taskId, "subTasks.id": id },
+          { "$set": { "subTasks.$": {text, completed, id} } } // Overwrite the entire sub-task object
+      )
 
 
       return new Response(JSON.stringify(task))

@@ -22,14 +22,19 @@ export default function Subtask(props) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({text: text, completed: finished}),
+            body: JSON.stringify({id: props.id, taskId: props.taskId, text: text, completed: finished}),
           })
     }
 
     return(
         <div className="flex flex-col w-40vw justify-center"> 
             <div className='flex flex-row mt-2 justify-center'>
-                <div className="rounded-full border-black border text-lg h-12 bg-orange-300 flex text-center justify-center pt-2 w-12">1.</div>
+            <div class="relative border-b-2 border-gray-300 focus-within:border-blue-500">
+                <input id="field" type="text" name="field" placeholder=" " class="block w-full appearance-none focus:outline-none bg-transparent" />
+                <label for="field" class="absolute top-0 left-0 text-gray-500 duration-300 transform -translate-y-6 scale-75 origin-left focus-within:text-blue-500">
+                    Your Label
+                </label>
+            </div>
                 <input onBlur={saveData} onChange={handleTextChange} value={text} placeholder=" Subtask" className=" focus:outline-none  focus:border-4 focus:border-black  placeholder:text-gray-600 ml-2 justify-center w-64  text-center text-lg flex flex-row pt-2 border border-black h-12 bg-orange-300 p-1 rounded-full pl-2 pr-2 "></input>
                 <button className='ml-2 justify-center '><CiCircleCheck onClick={() => setFinished(i => !i)} size={"2em"} color={finished?"green":"red"} /></button>
             </div>
