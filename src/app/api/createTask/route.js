@@ -24,10 +24,10 @@ export async function POST(req) {
         const {id, taskId, text, completed} = await req.json()
         console.log("put task", id, taskId, text, completed)
         let task = await TaskSchema.updateOne(
-          { "_id": taskId, "subTasks._id": id },
-          { "$set": { "subTasks.$": {text, completed, id} } } // Overwrite the entire sub-task object
+          { "_id": taskId, "subTasks.subTaskId": id },
+          { "$set": { "subTasks.$": {text: text, completed: completed, subTaskId: id} } } // Overwrite the entire sub-task object
       )
-
+        console.log(task)
 
       return new Response(JSON.stringify(task))
     } catch (error) {

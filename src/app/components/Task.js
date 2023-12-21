@@ -32,7 +32,7 @@ export default function Task(props){
         console.log("tasks", tasks)
         for (let i =0; i<tasks.subTasks.length; i++) {
             console.log(tasks.subTasks[i])
-            p.push(<SubTask id={tasks.subTasks[i]._id} taskId={props.taskId} text={tasks.subTasks[i].text} completed={tasks.subTasks[i].completed}/>)
+            p.push(<SubTask id={tasks.subTasks[i].subTaskId} taskId={props.taskId} text={tasks.subTasks[i].text} completed={tasks.subTasks[i].completed}/>)
         }
         console.log(p)
         setSubTasks(p)

@@ -6,10 +6,10 @@ export async function POST(req) {
         console.log(id, taskId)
         let task = await TaskSchema.findByIdAndUpdate(
             taskId,
-            { $push: { subTasks: {text: "", completed: false, id: id} } }, // Add the new task's ID to the project
+            { $push: { subTasks: {text: "", completed: false, subTaskId: id} } }, // Add the new task's ID to the project
             { new: true, safe: true, upsert: true }
           );
-
+        console.log("creating", task)
 
       return new Response(JSON.stringify(task))
     } catch (error) {

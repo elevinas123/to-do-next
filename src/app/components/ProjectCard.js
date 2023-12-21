@@ -40,7 +40,7 @@ export default function ProjectCard(props) {
 
                 </div>
                 <div className="flex flex-row">
-                    <progress className="progress w-56 m-2" value={completed/subTaskLength*100} max="100"></progress>
+                    <progress className="progress progress-primary w-56 m-2" value={completed/subTaskLength*100} max="100"></progress>
                     <div className="font-semibold">{`${completed}/${subTaskLength}`}</div>
 
                 </div>

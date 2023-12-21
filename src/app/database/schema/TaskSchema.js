@@ -9,6 +9,10 @@ const SubTaskSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    subTaskId: {
+        type: String,
+        required: true
     }
 });
 
