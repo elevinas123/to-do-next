@@ -24,7 +24,7 @@ export default function ProjectTemplate(props) {
     return(
         <div className="w-1/5 border-dashed border-2 border-gray-200 h-70vh ml-4 mt-2 rounded-lg flex flex-col">
             <div className="flex flex-row justify-between m-1">
-                <div className="text-gray-400 m-2">{props.parent}({props.tasks.length})</div>
+                <div className="text-gray-400 m-2">{props.name}</div>
                 <button onClick={() => props.addNewTask(props.parent)} className="flex flex-row m-2">
                     <div   className="text-gray-400 rounded-full bg-gray-200 flex justify-center items-center h-4 w-4 mt-0.5 pb-0.5">
                         <span >+</span>

@@ -53,7 +53,7 @@ export default function Home(props) {
     console.log("propjects before passing", projects)
     console.log("ads before passing", projects[0])
     for(let i=0; i<3 && projects.length>i; i++) {
-        p.push(<ProjectTemplate changeProjects={changeProjects} tasks={projects[i].tasks}  addNewTask={addNewTask} parent={projects[i]._id} />)
+        p.push(<ProjectTemplate changeProjects={changeProjects} tasks={projects[i].tasks} name={projects[i].name}  addNewTask={addNewTask} parent={projects[i]._id} />)
     }
     for(let i=p.length; i<3; i++) {
       p.push(<EmptyProjectCard changeProjects={changeProjects} addNewTask={addNewTask} />)
