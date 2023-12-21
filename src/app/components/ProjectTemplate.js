@@ -11,7 +11,7 @@ export default function ProjectTemplate(props) {
         console.log("props", props)
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
-            p.push(<ProjectCard name={props.tasks[i].name} deadline={props.tasks[i].deadline}/>)
+            p.push(<ProjectCard {...props.tasks[i]}/>)
         }
         for(let i = props.tasks.length; i<4; i++) {
             p.push(<EmptyProjectCard addNewTask={props.addNewTask} parent={props.parent} />)

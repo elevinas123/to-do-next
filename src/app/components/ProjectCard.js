@@ -1,14 +1,18 @@
-
-
+import Link from 'next/link'
 
 
 
 export default function ProjectCard(props) {
 
 
+    const handleClick = () => {
+        console.log(props)
+    }
+
 
     return(
-        <div className="h-15vh border-2  border-gray-200  ml-3 mr-3 mt-2 rounded-lg flex flex-col p-2">
+        <div onClick={handleClick} className="hover:cursor-pointer h-15vh border-2  border-gray-200  ml-3 mr-3 mt-2 rounded-lg flex flex-col p-2">
+            <Link href={`/text?id=${props._id}`}>
             <div className="flex flex-row justify-between ml-2 mr-2">
                 <div className="flex flex-col">
                     <div className="text-black font-semibold">{props.name}</div>
@@ -35,6 +39,9 @@ export default function ProjectCard(props) {
 
                 </div>
             </div>
+            
+            
+            </Link>
         </div>
     )
 }
