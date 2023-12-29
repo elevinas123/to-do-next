@@ -14,7 +14,8 @@ export default function RootLayout({ children }) {
   const [account, setAccount] = useState(false)
   const [accountCreation, setAccountCreation] = useState(false)
     useEffect( () => {
-      fetch("api/connectToDB")
+      fetch("/api/connectToDB")
+      console.log("hi")
     }, []
     )
 
