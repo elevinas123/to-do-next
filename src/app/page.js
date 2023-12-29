@@ -1,6 +1,6 @@
 "use client"
 import Image from 'next/image'
-import Project from './components/Project'
+import ProjectMenuComponent from './components/ProjectMenuComponent'
 import ProjectTemplate from './components/ProjectTemplate'
 import handleSubmit from './functions/handleSubmit'
 import { useContext, useEffect, useState } from 'react'
@@ -102,8 +102,8 @@ export default function Home(props) {
         <div className='w-80 flex flex-col justify-between bg-slate-100'>
           <div>
             <div>Projects</div>
-            <Project />
-            <Project />
+            <ProjectMenuComponent />
+            <ProjectMenuComponent />
           </div>
           <div>
             <div>
