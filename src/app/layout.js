@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
 
   return (
     <accountContext.Provider value={{account: account}}>
-        <html lang="en">
+        <html data-theme="todoTheme" lang="en">
         <body className={myFont.className}>{loggedIn?
         children:
         accountCreation?<CreateAccount authenticate={authenticate} />:<Login startAccountCreation={startAccountCreation} authenticate={authenticate}/>

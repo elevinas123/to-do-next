@@ -56,6 +56,20 @@ module.exports = {
       rollout: 'rollout 0.3s ease-out',
     },
   },
+  daisyui: {
+    themes: [
+      {
+        todoTheme: {
+          "primary": "#d1345bff",
+          "secondary": "#3454d1ff",
+          "accent": "#070707ff",
+          "neutral": "#34d1bfff",
+          "base-100": "#efefefff",
+        },
+      },
+      
+    ],
+  },
   plugins: [require("daisyui")],
 
 }
