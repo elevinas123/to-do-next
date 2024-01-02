@@ -99,8 +99,8 @@ export default function Home(props) {
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parent={creationName} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
       : ""}
-      <div onClick={exitSellection} className="bg-primary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
-        <div className='w-15vw flex flex-col justify-between bg-slate-100'>
+      <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
+        <div className='w-15vw flex flex-col justify-between bg-secondary'>
           <div>
             <div>Projects</div>
             <ProjectMenuComponent />

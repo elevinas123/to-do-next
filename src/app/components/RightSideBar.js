@@ -47,8 +47,8 @@ export default function RightSideBar(props) {
 
 
     return(
-        <div className="w-20vw pl-2  ">
-            <div className=" flex flex-row menu border-l-2 h-100vh border-accent bg-secondary  ">
+        <div className="w-20vw pl-2   ">
+            <div className=" flex flex-row menu border-l-2 h-100vh border-accent bg-secondary shadow-md shadow-gray-400  ">
                 <div className="bg-accent rounded-xl ml-4 w-80 p-4">
                     <div className="font-semibold text-lg ">
                         Daily Tasks
