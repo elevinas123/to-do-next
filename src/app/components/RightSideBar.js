@@ -48,9 +48,9 @@ export default function RightSideBar(props) {
 
     return(
         <div className="w-20vw pl-2  ">
-            <div className=" flex flex-row menu border-l-2 h-100vh border-accent w-full bg-secondary  ">
-                <div>
-                    <div>
+            <div className=" flex flex-row menu border-l-2 h-100vh border-accent bg-secondary  ">
+                <div className="bg-accent rounded-xl ml-4 w-80 p-4">
+                    <div className="font-semibold text-lg ">
                         Daily Tasks
                     </div>
                     <div  className="flex flex-col">
@@ -60,7 +60,7 @@ export default function RightSideBar(props) {
                     <div className="flex flex-row justify-between ml-4 mt-2">
                         <div className="text-center flex items-center justify-center font-semibold text-lg ">Completed</div>
                         <div className="flex justify-center">
-                            <div className={`radial-progress  text-${progress==100&&animatedProgress==progress?"green-500":"accent"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
+                            <div className={`radial-progress  font-bold transition-colors duration-300 bg-secondary  text-${progress==100?"green-500":"black"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
                         </div>
                     </div>
                 </div>
