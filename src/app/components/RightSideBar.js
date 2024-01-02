@@ -6,7 +6,7 @@ import DailyTask from "./DailyTask";
 
 export default function RightSideBar(props) {
 
-    const [tasks, setTasks] = useState([{text:"task1", id:"123", completed: false, order:1}, {text:"task12", id:"124", completed: true, order:2}, {text:"task1", id:"125", completed: false, order:3},])
+    const [tasks, setTasks] = useState([{text:"Meditate for 15 minutes", id:"123", completed: false, order:1}, {text:"Program for 2 hours", id:"124", completed: true, order:2}, {text:"Read for 1 hour", id:"125", completed: false, order:3}, {text:"200 words of german learned", id:"126", completed: false, order:4}])
     const [progress, setProgress] = useState(0)
     const [animatedProgress, setAnimatedProgress] = useState(progress);
 
@@ -57,8 +57,11 @@ export default function RightSideBar(props) {
                         {tasks.map((i, index) => (<DailyTask handleTaskClick={handleTaskClick} {...tasks[index]} />))
 }
                     </div>
-                    <div className="flex justify-center">
-                     <div className={`radial-progress  mt-2  text-${progress==100&&animatedProgress==progress?"green-500":"accent"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
+                    <div className="flex flex-row justify-between ml-4 mt-2">
+                        <div className="text-center flex items-center justify-center font-semibold text-lg ">Completed</div>
+                        <div className="flex justify-center">
+                            <div className={`radial-progress  text-${progress==100&&animatedProgress==progress?"green-500":"accent"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
+                        </div>
                     </div>
                 </div>
                 <Calendar />
