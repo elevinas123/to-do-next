@@ -34,8 +34,8 @@ export default function ProjectMenuComponent(props) {
 
     // ProjectMenuComponent.js
 return (
-    <div onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <div className='flex flex-col w-72 ml-4 mr-4 text-gray-400 p-2'>
+    <div className="w-full" onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className='flex flex-col  ml-4 mr-4 text-gray-400 p-2'>
             <button type="button" className="flex flex-row justify-between hover:text-black font-bold ">
                 <div>Projects</div>
                 <div>down</div>

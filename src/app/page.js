@@ -10,6 +10,7 @@ import accountContext from './context/accountContext'
 import EmptyProjectCard from './components/EmptyProjectCard';
 import TaskCreation from './components/TaskCreation'
 import Navbar from './components/Navbar'
+import RightSideBar from './components/RightSideBar'
 
 export default function Home(props) {
   
@@ -98,8 +99,8 @@ export default function Home(props) {
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parent={creationName} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
       : ""}
-      <div onClick={exitSellection} className="flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
-        <div className='w-80 flex flex-col justify-between bg-slate-100'>
+      <div onClick={exitSellection} className="bg-primary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
+        <div className='w-15vw flex flex-col justify-between bg-slate-100'>
           <div>
             <div>Projects</div>
             <ProjectMenuComponent />
@@ -120,10 +121,11 @@ export default function Home(props) {
           </div>
           <button onClick={addProject} className="w-32 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Add Project</button>
 
-          <div className='flex'> 
+          <div className='flex w-60vw'> 
             {projectTemplates}
             </div>
-        </div>
+        </div >
+        <RightSideBar />
       </div>
 
     </div>

@@ -44,7 +44,12 @@ module.exports = {
         "90vh": "90vh",
         "100vh": "100vh",
       },
-      
+      textDecorationStyle: {
+        'custom': 'dashed',
+      },
+      textDecorationThickness: {
+        'custom': '4px',
+      },
     },
     keyframes: {
       rollout: {
@@ -60,16 +65,27 @@ module.exports = {
     themes: [
       {
         todoTheme: {
-          "primary": "#d1345bff",
-          "secondary": "#3454d1ff",
-          "accent": "#070707ff",
-          "neutral": "#34d1bfff",
-          "base-100": "#efefefff",
+          "primary": "#f7edf0ff",
+          "secondary": "#f4cbc6ff",
+          "accent": "#f4afabff",
+          "neutral": "#f4eea9ff",
+          "base-100": "#f4f482ff",
         },
       },
       
     ],
   },
   plugins: [require("daisyui")],
-
+  variants: {
+    extend: {
+      backgroundColor: ['after'],
+      width: ['after'],
+      height: ['after'],
+      position: ['after'],
+      inset: ['after'],
+      content: ['after'],
+      textDecorationStyle: ['responsive', 'hover'],
+      textDecorationThickness: ['responsive', 'hover'],
+    },
+  },
 }

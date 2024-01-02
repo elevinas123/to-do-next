@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+span {
+    position: relative;
+    display: inline-block;
+  }
+  
+  span::before,
+  span::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #000000;
+    top: 50%;
+    transition: width 0.5s ease;
+  }
+  
+  span::before {
+    left: 50%;
+  }
+  
+  span::after {
+    right: 50%;
+  }
+  
+  span.active::before,
+  span.active::after {
+    width: 50%;
+    transition: width 0.5s ease;
+  }
+  
