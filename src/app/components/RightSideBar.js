@@ -60,7 +60,7 @@ export default function RightSideBar(props) {
                     <div className="flex flex-row justify-between ml-4 mt-2">
                         <div className="text-center flex items-center justify-center font-semibold text-lg ">Completed</div>
                         <div className="flex justify-center">
-                            <div className={`radial-progress  font-bold transition-colors duration-300 bg-secondary  text-${progress==100?"green-500":"black"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
+                            <div className={`radial-progress  font-bold transition-colors duration-300 bg-secondary text-lg  text-${progress==100?"green-500":"black"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
                         </div>
                     </div>
                 </div>
