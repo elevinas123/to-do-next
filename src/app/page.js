@@ -11,6 +11,7 @@ import EmptyProjectCard from './components/EmptyProjectCard';
 import TaskCreation from './components/TaskCreation'
 import Navbar from './components/Navbar'
 import RightSideBar from './components/RightSideBar'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 export default function Home(props) {
   
@@ -68,9 +69,7 @@ export default function Home(props) {
     console.log("projektai end", projects)
     setChanged(i => !i)
   }
-  useEffect( () => {
-    console.log("projects", projects)
-  }, [projects, projectTemplates])
+
   
   const addNewTask = (parent) => {
     console.log(parent)
@@ -91,6 +90,43 @@ export default function Home(props) {
     console.log("hi")
     console.log(firstClick)
   }
+  const handleDragEnd = (result) => {
+    const { source, destination, draggableId } = result;
+  
+    // Do nothing if dropped outside the list
+    if (!destination) {
+      return;
+    }
+  
+    // Dropped in the same list at the same position
+    if (source.droppableId === destination.droppableId && source.index === destination.index) {
+      return;
+    }
+  
+    // Creating a new copy of projects
+    let newProjects = projects.map(project => ({...project, tasks: [...project.tasks]}));
+    let task;
+  
+    // Find and remove the task from the source project
+    for (let i = 0; i < newProjects.length; i++) {
+      if (newProjects[i]._id === source.droppableId) {
+        [task] = newProjects[i].tasks.splice(source.index, 1);
+      }
+    }
+  
+    // Insert the task into the destination project
+    for (let i = 0; i < newProjects.length; i++) {
+      if (newProjects[i]._id === destination.droppableId) {
+        newProjects[i].tasks.splice(destination.index, 0, task);
+      }
+    }
+  
+    // Update the state
+    console.log(newProjects)
+    setProjects(JSON.parse(JSON.stringify(newProjects)))
+  };
+  
+    
 
   return (
     <div className='flex flex-row'>
@@ -122,7 +158,9 @@ export default function Home(props) {
           <button onClick={addProject} className="w-32 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Add Project</button>
 
           <div className='flex w-60vw'> 
-            {projectTemplates}
+            <DragDropContext onDragEnd={handleDragEnd}>
+              {projectTemplates}
+            </DragDropContext>
             </div>
         </div >
         <RightSideBar />

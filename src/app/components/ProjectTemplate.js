@@ -2,19 +2,20 @@
 import { useEffect, useState } from 'react';
 import ProjectCard from './ProjectCard';
 import EmptyProjectCard from './EmptyProjectCard';
+import { Droppable } from 'react-beautiful-dnd';
 
 export default function ProjectTemplate(props) {
-    console.log("props from the template", props)
+    
     const [projectCards, setProjectCards] = useState([])
     useEffect( () => {
         let p = []
         console.log("props", props)
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
-            p.push(<ProjectCard {...props.tasks[i]}/>)
+            p.push(<ProjectCard index={i} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
         }
         for(let i = props.tasks.length; i<4; i++) {
-            p.push(<EmptyProjectCard addNewTask={props.addNewTask} parent={props.parent} />)
+            p.push(<EmptyProjectCard key={"empty-" + i} index={i} addNewTask={props.addNewTask} parent={props.parent} />)
         }
         setProjectCards(p)
         
@@ -34,7 +35,14 @@ export default function ProjectTemplate(props) {
                 </button>
             </div>
             <div className='flex flex-col'>
-                {projectCards}
+            <Droppable droppableId={props.parent}>
+                {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {projectCards}
+                    {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
             </div>
         </div>
     )

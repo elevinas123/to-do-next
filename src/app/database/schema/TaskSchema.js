@@ -29,7 +29,8 @@ const TaskSchemaObj = new mongoose.Schema({
     parent: {
         type: String,
         required: true
-    }
+    },
+    
 });
 
 let TaskSchema;
