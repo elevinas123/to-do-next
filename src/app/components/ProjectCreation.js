@@ -1,11 +1,15 @@
+"use client"
 import { useState, useContext } from "react";
 import ProjectSchema from "../database/schema/ProjectSchema";
 import accountContext from "../context/accountContext";
+import { useRouter } from "next/navigation";
 
 export default function ProjectCreation(props) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("")
     const {account} = useContext(accountContext)
+    const router = useRouter();
+    
     const handleNameChange = (e) => {
         setName(e.target.value);
     };
@@ -27,13 +31,12 @@ export default function ProjectCreation(props) {
             },
             body: JSON.stringify(projectObject),
           });
-        const reponseText = await response.json()
-        console.log("project response", reponseText)
-        props.setCreation(i => !i)
-        props.changeProjects()
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status}, ${response.json()}`);
-          }
+        if (!response.ok) {
+              throw new Error(`Error: ${response.status}, ${response.json()}`);
+        }
+        const responseText = await response.json()
+        router.push(`/project?projectId=${responseText._id}`);
+
     };
 
     return(

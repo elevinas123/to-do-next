@@ -5,10 +5,7 @@ const TaskSchemaObj = new mongoose.Schema({
         type: String,
         required: true
     },
-    text: {
-        type: String,
-        required: true
-    },
+    text: String,
     place: String,
     deadline: String, // Made optional by removing `required: true`
     comments: String,
@@ -24,10 +21,14 @@ const TaskSchemaObj = new mongoose.Schema({
     onModel: {
         type: String,
         required: true,
-        enum: ['Project', 'Task']  // Allowed models for the parent reference
+        enum: ['Projects', 'Task']  // Allowed models for the parent reference
     }
 });
 
-// Singleton pattern to avoid recompilation of model
-const TaskSchema = mongoose.models.TaskSchema || mongoose.model("Task", TaskSchemaObj);
-export default TaskSchema
+let Task
+try {
+    Task = mongoose.model("Task")
+} catch {
+    Task = mongoose.model("Task", TaskSchemaObj)
+}
+export default Task

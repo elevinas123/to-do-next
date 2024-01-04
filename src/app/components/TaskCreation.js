@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import ProjectSchema from "../database/schema/ProjectSchema";
 import accountContext from "../context/accountContext";
 
@@ -9,7 +9,9 @@ export default function TaskCreation(props) {
     const handleNameChange = (e) => {
         setName(e.target.value);
     };
-
+    useEffect(() => {
+        console.log("taskCreationProps", props)
+    }, [])
     const handleDateChange = (e) => {
         setDate(e.target.value);
     };
@@ -17,7 +19,7 @@ export default function TaskCreation(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(props)
-        let taskObject = {deadline: date,  name: name,  parent: props.parent}
+        let taskObject = {onModel:"Projects", deadline: date,  name: name,  parent: props.parentId, index: props.index, place: props.place, text: ""}
         
 
         const task = await fetch('/api/createTask', {
@@ -33,13 +35,12 @@ export default function TaskCreation(props) {
         
         let body = await task.json()
         let taskId = body._id
-        console.log(props.parent, taskId)
         const addTaskToProject = await fetch('/api/createProject', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({projectId: props.parent, taskId}),
+            body: JSON.stringify({projectId: props.parentId, taskId}),
           });
         if (!addTaskToProject.ok) {
             throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);

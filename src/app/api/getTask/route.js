@@ -1,5 +1,5 @@
 
-import TaskSchema from "@/app/database/schema/TaskSchema";
+import Task from "@/app/database/schema/TaskSchema";
 
 export async function GET(req) {
     try {
@@ -8,7 +8,7 @@ export async function GET(req) {
         const id = req.nextUrl.searchParams.get("id")
         console.log(id)
         console.log(req.nextUrl)
-        let response = await TaskSchema.findById(id)
+        let response = await Task.findById(id)
 
 
 

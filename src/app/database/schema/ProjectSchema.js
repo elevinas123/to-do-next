@@ -20,7 +20,7 @@ const ProjectSchemaObj = new mongoose.Schema({
     },
     onModel: {
         type: String,
-        enum: ['Project', 'Task'],
+        enum: ['Projects', 'Task'],
         required: function() { return this.parent != null; }
     },
     isRootProject: {
@@ -29,7 +29,11 @@ const ProjectSchemaObj = new mongoose.Schema({
     }
 });
 
-const Project = mongoose.models.Project || mongoose.model("Projects", ProjectSchemaObj);
-export default Project;
-
+let Project
+try {
+    Project = mongoose.model("Projects")
+} catch {
+    Project = mongoose.model("Projects", ProjectSchemaObj)
+}
+export default Project
 

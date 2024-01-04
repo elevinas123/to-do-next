@@ -12,10 +12,10 @@ export default function ProjectTemplate(props) {
         console.log("props", props)
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
-            p.push(<ProjectCard index={i} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+            p.push(<ProjectCard index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
         }
         for(let i = props.tasks.length; i<4; i++) {
-            p.push(<EmptyProjectCard key={"empty-" + i} index={i} addNewTask={props.addNewTask} parent={props.parent} />)
+            p.push(<EmptyProjectCard key={"empty-" + i} place={props.place} biggestIndex={props.biggestIndex}  addNewTask={props.addNewTask} parent={props.parent} />)
         }
         setProjectCards(p)
         
@@ -25,8 +25,11 @@ export default function ProjectTemplate(props) {
     return(
         <div className="w-1/5 border-dashed border-2 bg-accent border-gray-600 h-70vh ml-4 mt-2 rounded-lg flex flex-col">
             <div className="flex flex-row justify-between m-1">
-                <div className="text-gray-700 m-2">{props.name}</div>
-                <button onClick={() => props.addNewTask(props.parent)} className="flex flex-row m-2">
+                <div className="text-black m-2 font-bold">{props.name}</div>
+                <button onClick={() =>{
+                    console.log("visi sitie", props.parent, props.place, props.biggestIndex+1)
+                     props.addNewTask(props.parent, props.place, props.biggestIndex+1)
+                }} className="flex flex-row m-2">
                     <div   className="text-gray-400 rounded-full bg-gray-200 flex justify-center items-center h-4 w-4 mt-0.5 pb-0.5">
                         <span >+</span>
                     </div>
@@ -35,7 +38,7 @@ export default function ProjectTemplate(props) {
                 </button>
             </div>
             <div className='flex flex-col'>
-            <Droppable droppableId={props.parent}>
+            <Droppable droppableId={props.place}>
                 {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>
                     {projectCards}

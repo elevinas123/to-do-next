@@ -1,14 +1,13 @@
-
-import ProjectSchema from "@/app/database/schema/ProjectSchema";
-import TaskSchema from "@/app/database/schema/TaskSchema";
+import Project from "@/app/database/schema/ProjectSchema";
+import Task from "@/app/database/schema/TaskSchema";
 
 ;
 
 export async function POST(req) {
     try {
-        const {name, date, parent} = await req.json()
-        console.log(name, date, parent)
-        let task = await TaskSchema.create({parent: parent, name: name, deadline: date, subTasks: []})
+        const taskObj = await req.json()
+        console.log(taskObj)
+        let task = await Task.create(taskObj)
 
 
 
@@ -23,7 +22,7 @@ export async function POST(req) {
     try {
         const {id, taskId, text, completed} = await req.json()
         console.log("put task", id, taskId, text, completed)
-        let task = await TaskSchema.updateOne(
+        let task = await Task.updateOne(
           { "_id": taskId, "subTasks.subTaskId": id },
           { "$set": { "subTasks.$": {text: text, completed: completed, subTaskId: id} } } // Overwrite the entire sub-task object
       )

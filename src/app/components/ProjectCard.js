@@ -6,13 +6,6 @@ import { Draggable } from 'react-beautiful-dnd'
 
 export default function ProjectCard(props) {
 
-
-    
-    
-    
-
-    const completed = props.subTasks.reduce((count, subTask) => subTask.completed ? count + 1 : count, 0)
-    const subTaskLength = props.subTasks.length
     
     return (
         props._id &&
@@ -42,8 +35,8 @@ export default function ProjectCard(props) {
 
                             </div>
                             <div className="flex flex-row">
-                                <progress className={`progress progress-${completed/subTaskLength*100===0?"error":completed/subTaskLength*100==100?"success":"warning"} w-56 m-2 bg-primary `} value={completed/subTaskLength*100} max="100"></progress>
-                                <div className="font-semibold">{`${completed}/${subTaskLength}`}</div>
+                                <progress className={`progress progress-succes w-56 m-2 bg-primary `} value={100} max="100"></progress>
+                                <div className="font-semibold">{`1/1`}</div>
 
                             </div>
                             <div className="flex flex-row justify-between ml-2 mr-2">
