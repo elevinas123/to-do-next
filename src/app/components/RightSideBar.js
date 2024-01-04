@@ -54,7 +54,7 @@ export default function RightSideBar(props) {
                         Daily Tasks
                     </div>
                     <div  className="flex flex-col">
-                        {tasks.map((i, index) => (<DailyTask handleTaskClick={handleTaskClick} {...tasks[index]} />))
+                        {tasks.map((i, index) => (<DailyTask key={index} handleTaskClick={handleTaskClick} {...tasks[index]} />))
 }
                     </div>
                     <div className="flex flex-row justify-between ml-4 mt-2">
