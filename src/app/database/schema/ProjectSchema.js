@@ -1,21 +1,35 @@
+import mongoose from "mongoose";
 
-const TaskSchema = require('./TaskSchema'); // Assuming Task schema is defined in Task.js
-
-const mongoose = require("mongoose")
 const ProjectSchemaObj = new mongoose.Schema({
     name: {
         type: String,
-        req: true
+        required: true
     },
-    account: String,
+    account: {
+        type: String,
+        required: true
+    },
     description: String,
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }], // Array of task references
-    
-})
-let ProjectSchema
-try {
-    ProjectSchema = mongoose.model("Projects")
-} catch {
-    ProjectSchema = mongoose.model("Projects", ProjectSchemaObj)
-}
-export default ProjectSchema
+    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+    comments: String,
+    place: String,
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        refPath: 'onModel',
+        required: false // Making the parent optional
+    },
+    onModel: {
+        type: String,
+        enum: ['Project', 'Task'],
+        required: function() { return this.parent != null; }
+    },
+    isRootProject: {
+        type: Boolean,
+        default: false // Field to indicate if this is a top-level project
+    }
+});
+
+const Project = mongoose.models.Project || mongoose.model("Projects", ProjectSchemaObj);
+export default Project;
+
+

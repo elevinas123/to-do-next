@@ -1,43 +1,33 @@
 const mongoose = require("mongoose");
 
-const SubTaskSchema = new mongoose.Schema({
-    text: {
-        type: String,
-        required: true
-    },
-    completed: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    subTaskId: {
-        type: String,
-        required: true
-    }
-});
-
 const TaskSchemaObj = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    deadline: {
-        type: String,
-        required: false
-    },
-    subTasks: [SubTaskSchema], // Define subTasks as an array of SubTaskSchema
-    parent: {
+    text: {
         type: String,
         required: true
     },
-    
+    place: String,
+    deadline: String, // Made optional by removing `required: true`
+    comments: String,
+    index: {
+        type: Number,
+        required: true,
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId, // Assuming parent is a reference to a Project or another Task
+        required: true,
+        refPath: 'onModel'  // This is used for dynamic references
+    },
+    onModel: {
+        type: String,
+        required: true,
+        enum: ['Project', 'Task']  // Allowed models for the parent reference
+    }
 });
 
-let TaskSchema;
-try {
-    TaskSchema = mongoose.model("Task");
-} catch {
-    TaskSchema = mongoose.model("Task", TaskSchemaObj);
-}
-
-export default TaskSchema;
+// Singleton pattern to avoid recompilation of model
+const TaskSchema = mongoose.models.TaskSchema || mongoose.model("Task", TaskSchemaObj);
+export default TaskSchema
