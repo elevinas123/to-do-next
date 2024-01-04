@@ -20,17 +20,24 @@ export async function POST(req) {
 
   export async function PUT(req) {
     try {
-        const {id, taskId, text, completed} = await req.json()
-        console.log("put task", id, taskId, text, completed)
-        let task = await Task.updateOne(
-          { "_id": taskId, "subTasks.subTaskId": id },
-          { "$set": { "subTasks.$": {text: text, completed: completed, subTaskId: id} } } // Overwrite the entire sub-task object
-      )
-        console.log(task)
+        const tasks = await req.json(); // Assuming tasks is an array of task updates
+        console.log("Updating tasks", tasks);
 
-      return new Response(JSON.stringify(task))
+        const updateOperations = tasks.map(task => {
+            return { 
+                updateOne: {
+                    filter: { _id: task._id }, // Filter by task ID
+                    update: { $set: { place: task.place, index: task.index } } // Fields to update
+                }
+            };
+        });
+
+        const result = await Task.bulkWrite(updateOperations);
+        console.log("Bulk update result", result);
+
+        return new Response(JSON.stringify(result));
     } catch (error) {
-      console.log(error)
-      return new Response(JSON.stringify({ error: error.message }))
+        console.log(error);
+        return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
-  }
+}

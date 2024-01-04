@@ -1,17 +1,11 @@
 "use client"
-import Image from 'next/image'
 import ProjectMenuComponent from './components/ProjectMenuComponent'
-import ProjectTemplate from './components/ProjectTemplate'
-import handleSubmit from './functions/handleSubmit'
 import { useContext, useEffect, useState } from 'react'
 import ProjectCreation from './components/ProjectCreation'
-import { Fascinate_Inline } from 'next/font/google'
 import accountContext from './context/accountContext'
-import EmptyProjectCard from './components/EmptyProjectCard';
 import TaskCreation from './components/TaskCreation'
 import Navbar from './components/Navbar'
 import RightSideBar from './components/RightSideBar'
-import { DragDropContext } from 'react-beautiful-dnd'
 
 export default function Home(props) {
   

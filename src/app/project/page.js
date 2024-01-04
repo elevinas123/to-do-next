@@ -109,7 +109,7 @@ export default function Home(props) {
     console.log("hi")
     console.log(firstClick)
   }
-  const handleDragEnd = (result) => {
+  const handleDragEnd = async (result) => {
     console.log(result)
     const { source, destination, draggableId } = result;
   
@@ -125,32 +125,51 @@ export default function Home(props) {
   
     // Creating a new copy of projects
     let newTasks = JSON.parse(JSON.stringify(projects.tasks))
+    let updatedTasks = []
     for(let i=0; i<newTasks.length; i++) {
         if (newTasks[i].place === source.droppableId && newTasks[i].index === source.index) {
             newTasks[i].place = destination.droppableId
             newTasks[i].index = destination.index
+            updatedTasks.push(newTasks[i])
         } 
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index<destination.index &&  newTasks[i].index >= source.index && newTasks[i].index<=destination.index) {
             console.log("this1")
             newTasks[i].index--
+            updatedTasks.push(newTasks[i])
+
         }
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index>destination.index &&  newTasks[i].index < source.index && newTasks[i].index>=destination.index) {
             console.log("this2")
             newTasks[i].index++
+            updatedTasks.push(newTasks[i])
+
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === destination.droppableId &&newTasks[i].index>=destination.index) {
             console.log("this3")
             newTasks[i].index++
+            updatedTasks.push(newTasks[i])
+
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === source.droppableId &&newTasks[i].index>source.index) {
             console.log("this3")
             newTasks[i].index--
+            updatedTasks.push(newTasks[i])
+
         }
+      
     }
+    
   
     // Update the state
-    console.log({...projects, tasks:newTasks})
     setProjects({...projects, tasks:newTasks})
+    console.log("updatedTasks", updatedTasks)
+    await fetch(`/api/createTask`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedTasks),
+    });
   };
   
     
