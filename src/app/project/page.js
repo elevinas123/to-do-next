@@ -31,9 +31,7 @@ export default function Home(props) {
   )
 
   useEffect( () => {
-    console.log("here1");
     let f = async (projectId) => {
-        console.log(account)
         const response = await fetch(`/api/getProjects?username=${account.username}&projectId=${projectId}`, {
         method: 'GET',
         headers: {
@@ -44,7 +42,6 @@ export default function Home(props) {
         throw new Error(`Error: ${response.status}, ${response.json()}`);
       }
       const responseBody = await response.json()
-      console.log("projects got form api", responseBody)
       setProjects(responseBody)
   }
   const projectId = searchParams.get("projectId")
@@ -52,15 +49,12 @@ export default function Home(props) {
       f(projectId)
     
   } else {
-    console.log("no params")
   }
 
   }, [changed])
   
   useEffect( () => {
     let p = []
-    console.log("propjects before passing", projects)
-    console.log("ads before passing", projects[0])
     let toDo = []
     let inProgress = []
     let completed = []
@@ -74,30 +68,25 @@ export default function Home(props) {
     toDo.sort((a, b) => a.index - b.index)
     inProgress.sort((a, b) => a.index - b.index)
     completed.sort((a, b) => a.index - b.index)
-    p.push(<ProjectTemplate changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate changeProjects={changeProjects} biggestIndex={inProgress.length-1} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate changeProjects={changeProjects} biggestIndex={completed.length-1} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
 
     
     setProjectTemplates(p)
-    console.log("page projects", p)
   }, [projects])
   
   const changeProjects = () => {
-    console.log("projektai end", projects)
     setChanged(i => !i)
   }
 
   
   const addNewTask = (parentId, place, index) => {
-    console.log(parent)
-    console.log("pedofilas", {parentId, index, place})
     setCreationName({parentId, index, place})
     setWhichCreation("task")
     setCreation(i => !i)
     setFirstClick(true)
 
-    console.log("antras")
   }
   const addProject = () => {
     setWhichCreation("project")
@@ -106,11 +95,8 @@ export default function Home(props) {
   const exitSellection = () => {
     if (creation && !firstClick) setCreation(false)
     setFirstClick(i => !i)
-    console.log("hi")
-    console.log(firstClick)
   }
   const handleDragEnd = async (result) => {
-    console.log(result)
     const { source, destination, draggableId } = result;
   
     // Do nothing if dropped outside the list
@@ -133,25 +119,21 @@ export default function Home(props) {
             updatedTasks.push(newTasks[i])
         } 
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index<destination.index &&  newTasks[i].index >= source.index && newTasks[i].index<=destination.index) {
-            console.log("this1")
             newTasks[i].index--
             updatedTasks.push(newTasks[i])
 
         }
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index>destination.index &&  newTasks[i].index < source.index && newTasks[i].index>=destination.index) {
-            console.log("this2")
             newTasks[i].index++
             updatedTasks.push(newTasks[i])
 
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === destination.droppableId &&newTasks[i].index>=destination.index) {
-            console.log("this3")
             newTasks[i].index++
             updatedTasks.push(newTasks[i])
 
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === source.droppableId &&newTasks[i].index>source.index) {
-            console.log("this3")
             newTasks[i].index--
             updatedTasks.push(newTasks[i])
 
@@ -162,7 +144,6 @@ export default function Home(props) {
   
     // Update the state
     setProjects({...projects, tasks:newTasks})
-    console.log("updatedTasks", updatedTasks)
     await fetch(`/api/createTask`, {
       method: 'PUT',
       headers: {

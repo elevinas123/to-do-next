@@ -30,8 +30,7 @@ export default function Home(props) {
   const exitSellection = () => {
     if (creation && !firstClick) setCreation(false)
     setFirstClick(i => !i)
-    console.log("hi")
-    console.log(firstClick)
+    
   }
   
   

@@ -9,7 +9,6 @@ export default function ProjectTemplate(props) {
     const [projectCards, setProjectCards] = useState([])
     useEffect( () => {
         let p = []
-        console.log("props", props)
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
             p.push(<ProjectCard index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
@@ -19,7 +18,6 @@ export default function ProjectTemplate(props) {
         }
         setProjectCards(p)
         
-        console.log("projectCards", projectCards)
     }, [props])
 
     return(
