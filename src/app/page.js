@@ -6,6 +6,7 @@ import accountContext from './context/accountContext'
 import TaskCreation from './components/TaskCreation'
 import Navbar from './components/Navbar'
 import RightSideBar from './components/RightSideBar'
+import LeftHandSideProjectMenu from './components/LeftHandSideProjectMenu'
 
 export default function Home(props) {
   
@@ -21,7 +22,8 @@ export default function Home(props) {
     fetch("api/connectToDB")
   }, []
   )
-
+  
+  
 
   const addProject = () => {
     setWhichCreation("project")
@@ -45,14 +47,10 @@ export default function Home(props) {
       : ""}
       <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
         <div className='w-15vw flex flex-col justify-between bg-secondary'>
-          <div>
-            <div>Projects</div>
-            <ProjectMenuComponent />
-            <ProjectMenuComponent />
-          </div>
+            
           <div>
             <div>
-              
+              <LeftHandSideProjectMenu />
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ import RightSideBar from "../components/RightSideBar"
 import { useContext, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import accountContext from "../context/accountContext"
+import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu"
 
 
 export default function Home(props) {
@@ -42,6 +43,7 @@ export default function Home(props) {
         throw new Error(`Error: ${response.status}, ${response.json()}`);
       }
       const responseBody = await response.json()
+      console.log("projektas", responseBody )
       setProjects(responseBody)
   }
   const projectId = searchParams.get("projectId")
@@ -51,7 +53,7 @@ export default function Home(props) {
   } else {
   }
 
-  }, [changed])
+  }, [changed, searchParams.get("projectId")])
   
   useEffect( () => {
     let p = []
@@ -164,11 +166,7 @@ export default function Home(props) {
       : ""}
       <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
         <div className='w-15vw flex flex-col justify-between bg-secondary'>
-          <div>
-            <div>Projects</div>
-            <ProjectMenuComponent />
-            <ProjectMenuComponent />
-          </div>
+            <LeftHandSideProjectMenu />
           <div>
             <div>
               

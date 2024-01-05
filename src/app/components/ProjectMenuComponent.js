@@ -4,6 +4,16 @@ import TaskMenuComponent from "./TaskMenuComponent"
 export default function ProjectMenuComponent(props) {
     const [show, setShow] = useState(false)
     const [hoverTimeout, setHoverTimeout] = useState(null)
+    const [taskMenuComponents, setTaskMenuComponents] = useState([])
+    useEffect(() => {
+        let p = []
+        console.log(props)
+        if (props.rootProjects === undefined) return
+        for(let i=0; i<props.rootProjects.length; i++) {
+            p.push(<TaskMenuComponent key={props.rootProjects[i]._id} {...props.rootProjects[i]}  />)
+        }
+        setTaskMenuComponents(p)
+    }, [props.rootProjects])
 
     const handleMouseEnter = () => {
         const timeout = setTimeout(() => {
@@ -42,10 +52,7 @@ return (
             </button>
             {show ?
             <div className="flex flex-col justify-start animate-rollout">
-                <TaskMenuComponent />
-                <TaskMenuComponent />
-                <TaskMenuComponent />
-                <TaskMenuComponent />
+                {taskMenuComponents}
             </div> :
             ""}
         </div>
