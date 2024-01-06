@@ -7,7 +7,6 @@ export default function ProjectMenuComponent(props) {
     const [taskMenuComponents, setTaskMenuComponents] = useState([])
     useEffect(() => {
         let p = []
-        console.log(props)
         if (props.rootProjects === undefined) return
         for(let i=0; i<props.rootProjects.length; i++) {
             p.push(<TaskMenuComponent key={props.rootProjects[i]._id} {...props.rootProjects[i]}  />)
