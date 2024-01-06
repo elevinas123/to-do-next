@@ -173,12 +173,14 @@ export default function Home(props) {
             </div>
           </div>
         </div>
-        <div>
-          <div className='h-5vh'>
-            Virsus
-          </div>
-          <div className='h-5vh '>
-            Antra sekcija
+        <div >
+          <div className="m-2 ml-4">
+            <div className='h-5vh'>
+              Virsus
+            </div>
+            <div className='h-5vh '>
+              Antra sekcija
+            </div>
           </div>
           
           <div className='flex w-60vw'> 
