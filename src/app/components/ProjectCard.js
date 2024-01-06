@@ -17,7 +17,7 @@ export default function ProjectCard(props) {
                     {...provided.dragHandleProps}
                 >
                     
-                    <div  className=" bg-secondary hover:cursor-pointer h-15vh border-2  border-black  ml-3 mr-3 mt-2 rounded-lg flex flex-col p-2">
+                    <div  className=" bg-secondary hover:cursor-pointer h-15vh border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
                     
                         <div className="flex flex-row justify-between ml-2 mr-2">
                             <div className="flex flex-col">

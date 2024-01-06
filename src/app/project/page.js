@@ -70,9 +70,9 @@ export default function Home(props) {
     toDo.sort((a, b) => a.index - b.index)
     inProgress.sort((a, b) => a.index - b.index)
     completed.sort((a, b) => a.index - b.index)
-    p.push(<ProjectTemplate key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
 
     
     setProjectTemplates(p)

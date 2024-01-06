@@ -13,7 +13,7 @@ export default function ProjectTemplate(props) {
         for(let i=0; i<props.tasks.length && i<4; i++) {
             p.push(<ProjectCard index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
         }
-        for(let i = props.tasks.length; i<4; i++) {
+        for(let i = props.tasks.length; i<=4; i++) {
             p.push(<EmptyProjectCard key={"empty-" + i} place={props.place} biggestIndex={props.biggestIndex}  addNewTask={props.addNewTask} parent={props.parent} />)
         }
         setProjectCards(p)
@@ -35,7 +35,7 @@ export default function ProjectTemplate(props) {
                     
                 </button>
             </div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col overflow-hidden '>
             <Droppable droppableId={props.place}>
                 {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>
