@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Calendar from "./Calendar";
 import DailyTask from "./DailyTask";
 import { CgOptions } from "react-icons/cg";
 import EditingModeDailyTasks from "./EditingModeDailyTasks";
+import SetupDailyTasks from "./SetupDailyTasks";
+import accountContext from "../context/accountContext";
 
 
 export default function RightSideBar(props) {
 
-    const [tasks, setTasks] = useState([{text:"Meditate for 15 minutes", id:"121", completed: false, order:1}, {text:"Program for 2 hours", id:"122", completed: true, order:2}, {text:"Read for 1 hour", id:"123", completed: false, order:3}, {text:"200 words of german learned", id:"124", completed: false, order:4}])
+    const [tasks, setTasks] = useState([])
     const [progress, setProgress] = useState(0)
     const [animatedProgress, setAnimatedProgress] = useState(progress);
     const [editing, setEditing] = useState(false)
+    const {account} = useContext(accountContext)
+
     const handleTaskClick = (id) => {
         console.log(tasks)
         setTasks(prevTasks => {
@@ -60,6 +64,55 @@ export default function RightSideBar(props) {
         console.log("hi")
         setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
     }
+    const handleDailyTaskSetup = async (index, dailyTaskName) => {
+        console.log("labas", dailyTaskName, account)
+        let projectObject = {onModel:"Projects",  name: "DailyTasks", account:account.username, tasks:[], refernceTasks:[], isRootProject:true  }
+        const project = await fetch('/api/createRecurrentProject',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(projectObject),
+        })
+        if (!project.ok) {
+            throw new Error(`Error: ${project.status}, ${project.json()}`);
+          }
+        
+        const projectBody = await project.json()
+        const taskObject = {parent: projectBody._id, onModel: "Projects", index: 0, name: dailyTaskName, text:"", place: "toDo"}
+        const task = await fetch('/api/createTask', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskObject),
+          });
+          if (!task.ok) {
+            throw new Error(`Error: ${task.status}, ${task.json()}`);
+          }
+        
+        let taskBody = await task.json()
+        const taskId = taskBody._id
+        const projectId = taskBody.parent
+        const date = new Date()
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1
+        const day = date.getDate();
+
+        const addTaskToProject = await fetch('/api/createRecurrentProject', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({taskId, projectId, task: taskBody, date:`${year}-${month}-${day}`}),
+          });
+        if (!addTaskToProject.ok) {
+            throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
+        }
+        const newProjectBody = await addTaskToProject.json()
+        console.log("response ", newProjectBody)
+
+    }
     const handleTaskCreate = (id, text) => {
         setTasks(prevTasks => [...prevTasks, {id, text, completed: false, order:prevTasks.length+2}])
     }
@@ -78,7 +131,7 @@ export default function RightSideBar(props) {
                         </button>
                     </div>
                     <div  className="flex flex-col">
-                        {editing?<EditingModeDailyTasks handleTaskCreate={handleTaskCreate}  handleEdit={handleEdit} handleDelete={handleDelete}  tasks={tasks} />:
+                        {tasks.length==0?<SetupDailyTasks handleDailyTaskSetup={handleDailyTaskSetup} />:editing?<EditingModeDailyTasks handleTaskCreate={handleTaskCreate}  handleEdit={handleEdit} handleDelete={handleDelete}  tasks={tasks} />:
                         <div className="ml-4">
                         {tasks.map((i, index) => (<DailyTask key={index} handleTaskClick={handleTaskClick} {...tasks[index]} />))}
                         </div>

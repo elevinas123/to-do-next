@@ -1,5 +1,31 @@
 import mongoose from "mongoose";
 
+
+const TaskSchemaObj = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    text: String,
+    place: String,
+    deadline: String, // Made optional by removing `required: true`
+    comments: String,
+    index: {
+        type: Number,
+        required: true,
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId, // Assuming parent is a reference to a Project or another Task
+        required: true,
+        refPath: 'onModel'  // This is used for dynamic references
+    },
+    onModel: {
+        type: String,
+        required: true,
+        enum: ['Projects', 'Task']  // Allowed models for the parent reference
+    }
+});
+
 const RecurrentProjectSchemaObj = new mongoose.Schema({
     name: {
         type: String,
@@ -10,8 +36,11 @@ const RecurrentProjectSchemaObj = new mongoose.Schema({
         required: true
     },
     description: String,
-    dateCreated: String,
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+    tasks: {
+        type: Map,
+        of: [TaskSchemaObj] // Embedding TaskSchemaObj directly
+    },
+    referenceTasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
     comments: String,
     place: String,
     parent: {
