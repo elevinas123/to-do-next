@@ -9,6 +9,7 @@ const TaskSchemaObj = new mongoose.Schema({
     place: String,
     deadline: String, // Made optional by removing `required: true`
     comments: String,
+    type: String,
     index: {
         type: Number,
         required: true,

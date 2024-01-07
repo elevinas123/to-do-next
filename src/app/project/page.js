@@ -56,6 +56,7 @@ export default function Home(props) {
   }, [changed, searchParams.get("projectId")])
   
   useEffect( () => {
+    console.log(projects)
     let p = []
     let toDo = []
     let inProgress = []
@@ -70,6 +71,7 @@ export default function Home(props) {
     toDo.sort((a, b) => a.index - b.index)
     inProgress.sort((a, b) => a.index - b.index)
     completed.sort((a, b) => a.index - b.index)
+    
     p.push(<ProjectTemplate key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
     p.push(<ProjectTemplate key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
     p.push(<ProjectTemplate key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
@@ -114,38 +116,72 @@ export default function Home(props) {
     // Creating a new copy of projects
     let newTasks = JSON.parse(JSON.stringify(projects.tasks))
     let updatedTasks = []
+    let updatedProjects = []
     for(let i=0; i<newTasks.length; i++) {
+      console.log("hjghjghjghj", newTasks[i])
         if (newTasks[i].place === source.droppableId && newTasks[i].index === source.index) {
             newTasks[i].place = destination.droppableId
             newTasks[i].index = destination.index
-            updatedTasks.push(newTasks[i])
+            if (newTasks[i].type==="Task") {
+              updatedTasks.push(newTasks[i])
+
+            } else {
+              updatedProjects.push(newTasks[i])
+            }
         } 
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index<destination.index &&  newTasks[i].index >= source.index && newTasks[i].index<=destination.index) {
             newTasks[i].index--
-            updatedTasks.push(newTasks[i])
+            if (newTasks[i].type==="Task") {
+              updatedTasks.push(newTasks[i])
 
+            } else {
+              updatedProjects.push(newTasks[i])
+            }
         }
         else if (source.droppableId === destination.droppableId && newTasks[i].place === source.droppableId &&source.index>destination.index &&  newTasks[i].index < source.index && newTasks[i].index>=destination.index) {
             newTasks[i].index++
-            updatedTasks.push(newTasks[i])
+            if (newTasks[i].type==="Task") {
+              updatedTasks.push(newTasks[i])
+
+            } else {
+              updatedProjects.push(newTasks[i])
+            }
 
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === destination.droppableId &&newTasks[i].index>=destination.index) {
             newTasks[i].index++
-            updatedTasks.push(newTasks[i])
+            if (newTasks[i].type==="Task") {
+              updatedTasks.push(newTasks[i])
+
+            } else {
+              updatedProjects.push(newTasks[i])
+            }
 
         }
         else if (source.droppableId !== destination.droppableId && newTasks[i].place === source.droppableId &&newTasks[i].index>source.index) {
             newTasks[i].index--
-            updatedTasks.push(newTasks[i])
+            if (newTasks[i].type==="Task") {
+              updatedTasks.push(newTasks[i])
+
+            } else {
+              updatedProjects.push(newTasks[i])
+            }
 
         }
       
     }
     
-  
+    console.log("updatedProjects", updatedProjects)
+    console.log("updatedTasks", updatedTasks)
     // Update the state
     setProjects({...projects, tasks:newTasks})
+    await fetch(`/api/updateProjects`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedProjects),
+    });
     await fetch(`/api/createTask`, {
       method: 'PUT',
       headers: {
@@ -164,22 +200,15 @@ export default function Home(props) {
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parentId={creationName.parentId} place={creationName.place} index={creationName.index} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
       : ""}
-      <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1 } : {}}>
+      <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1, backgroundColor: "primary" } : {}}>
         <div className='w-15vw flex flex-col justify-between bg-secondary'>
             <LeftHandSideProjectMenu />
-          <div>
-            <div>
-              
-            </div>
-          </div>
         </div>
         <div >
           <div className="m-2 ml-4">
-            <div className='h-5vh'>
-              Virsus
-            </div>
-            <div className='h-5vh '>
-              Antra sekcija
+            
+            <div className="flex flex-row font-bold text-4xl  bg-accent text-black justify-center border-2 pt-2 pb-2 pl-2 border-gray-500 border-dashed rounded-lg ">
+              {projects.name}
             </div>
           </div>
           

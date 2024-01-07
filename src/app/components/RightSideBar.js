@@ -137,10 +137,10 @@ export default function RightSideBar(props) {
             body: JSON.stringify({taskId: id, projectId, date: fullDate}),
           })
     }
-    const handleDailyTaskSetup = async (index, dailyTaskName) => {
+    const handleDailyTaskSetup = async (dailyTaskName) => {
         console.log("labas", dailyTaskName, account)
-        let projectObject = {onModel:"Projects",  name: "DailyTasks", account:account.username, tasks:[], refernceTasks:[], isRootProject:true  }
-        const project = await fetch('/api/createRecurrentProject',{
+        let projectObject = {onModel:"Projects",  name: "DailyTasks", account:account.username, tasks:[], referenceTasks:[], isRootProject:true  }
+        const project = await fetch('/api/recurrentProject/createRecurrentProject',{
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

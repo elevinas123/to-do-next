@@ -4,8 +4,8 @@ import Project from "@/app/database/schema/ProjectSchema";
 
 export async function POST(req) {
     try {
-        const {name, description, account} = await req.json()
-        let response = await Project.create({name, isRootProject:true,  description, account, tasks: [ ]})
+        const {type, name, description, index, account, parent, isRootProject, place} = await req.json()
+        let response = await Project.create({type, onModel: [], place, index, name, isRootProject:isRootProject,  description, account, tasks: [ ], parent:parent})
         console.log(response)
 
       return new Response(JSON.stringify(response))
@@ -16,22 +16,30 @@ export async function POST(req) {
   } 
 
 
-
-export async function PUT(req) {
+  export async function PUT(req) {
     try {
-        const {projectId, taskId} = await req.json()
-        console.log("ids", projectId, taskId)
+        const { projectId, taskId, onModel } = await req.json();
+        console.log("ids", projectId, taskId);
+
         let response = await Project.findByIdAndUpdate(
             projectId,
-            { $push: { tasks: taskId } }, // Add the new task's ID to the project
+            { 
+                $push: { 
+                    tasks: taskId,  // Add the new task's ID to the tasks array
+                    onModel: onModel // Add the model name to the onModel array
+                }
+            },
             { new: true, safe: true, upsert: true }
-          );
-        let projects = await Project.findById(projectId)
-        console.log("the database response", await projects)
-      return new Response(JSON.stringify(projects))
+        );
+
+        let projects = await Project.findById(projectId);
+        console.log("the database response", projects);
+
+        return new Response(JSON.stringify(projects));
     } catch (error) {
-      console.log(error)
-      return new Response(JSON.stringify({ error: error.message }))
+        console.log(error);
+        return new Response(JSON.stringify({ error: error.message }));
     }
-  } 
+}
+
 
