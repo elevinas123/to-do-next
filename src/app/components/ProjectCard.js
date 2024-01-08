@@ -1,10 +1,23 @@
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 
 
 
 export default function ProjectCard(props) {
+
+    const [completedAmmount, setCompletedAmmount] = useState(0)
+
+    useEffect(() => {
+        console.log("propsTasks", props)
+        let cAmmount = 0
+        
+        for(let i=0; i<props.tasks.length; i++) {
+            if(props.tasks[i].place === "completed") cAmmount++
+        }
+        setCompletedAmmount(cAmmount)
+    }, [props])
+    
 
     
     return (
@@ -17,8 +30,9 @@ export default function ProjectCard(props) {
                     {...provided.dragHandleProps}
                 >
                     
+                <Link href={`/project?projectId=${props._id}`}>
                     <div  className=" bg-secondary hover:cursor-pointer h-15vh border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
-                    
+                        
                         <div className="flex flex-row justify-between ml-2 mr-2">
                             <div className="flex flex-col">
                                 <div className="text-black font-semibold">{props.name}</div>
@@ -35,22 +49,22 @@ export default function ProjectCard(props) {
 
                             </div>
                             <div className="flex flex-row">
-                                <progress className={`progress progress-succes w-56 m-2 bg-primary `} value={100} max="100"></progress>
-                                <div className="font-semibold">{`1/1`}</div>
+                                <progress className={`progress progress-succes w-56 m-2 bg-primary `} value={completedAmmount/props.tasks.length*100} max="100"></progress>
+                                <div className="font-semibold">{`${completedAmmount}/${props.tasks.length}`}</div>
 
                             </div>
                             <div className="flex flex-row justify-between ml-2 mr-2">
+                                {props.deadline?
                                 <div className="bg-gray-200 text-gray-500 font-semibold rounded-full p-1 pl-2 pr-2 text-sm">{props.deadline}</div>
-                                <div className="flex flex-row text-sm text-gray-500 font-semibold mt-1 ">
-                                    <div>c 7</div>
-                                    <div>A 2</div>
-
-                                </div>
+                                :
+                                ""
+                                }
 
                             </div>
                         </div>
                     
                     </div>
+                </Link>
 
                 </div>
             )}

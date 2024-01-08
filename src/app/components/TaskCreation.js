@@ -120,6 +120,15 @@ export default function TaskCreation(props) {
                     placeholder="Enter Task Text"
                 />
             </div>
+            <div className="w-full mb-4">
+                    <input 
+                    id="date"
+                    value={date}
+                    onChange={handleDateChange}
+                    className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
+                    placeholder="Enter Task Deadline"
+                />
+            </div>
             <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Create Task</button>
         </form>
     );
