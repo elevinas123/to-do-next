@@ -55,6 +55,76 @@ export default function Home(props) {
 
   }, [changed, searchParams.get("projectId")])
   
+  const handleEdit = async (id, newText, type) => {
+      console.log("here")
+      console.log(projects)
+        setProjects(project => ({...project, tasks: project.tasks.map(task => 
+            task._id === id ? { ...task, name: newText } : task
+        )}));
+        const task = await fetch(`/api/${type=="Task"?"recurrentProject/updateReferenceTask":"updateProjectName"}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, name: newText}),
+          });
+       console.log(task)
+        
+    };
+    
+    const handleDelete = async (id, parentId) => {
+        console.log("hi")
+        let updatedTasks = [];
+        let updatedProjects = [];
+
+        setProjects(project => {
+            const taskIndexToDelete = project.tasks.findIndex(task => task._id === id);
+            if (taskIndexToDelete === -1) return project; // Task not found, no update needed
+
+            const newTasks = project.tasks
+                .map((task, idx) => {
+                    if (idx === taskIndexToDelete) return null; // Mark for deletion
+                    if (task.index > project.tasks[taskIndexToDelete].index && task.place === project.tasks[taskIndexToDelete].place) {
+                        const updatedTask = { ...task, index: task.index - 1 };
+                        task.type === "Task" ? updatedTasks.push(updatedTask) : updatedProjects.push(updatedTask);
+                        return updatedTask; // Decrement index and add to updated list
+                    }
+                    return task; // No change
+                })
+                .filter(task => task !== null); // Remove the marked task
+
+            const newOnModel = [...project.onModel];
+            newOnModel.splice(taskIndexToDelete, 1); // Remove from onModel
+
+            return { ...project, tasks: newTasks, onModel: newOnModel };
+        });
+        await fetch("/api/deleteTaskOrProject", {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, parentId}),
+          })
+
+
+        await fetch(`/api/updateProjects`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProjects),
+        });
+        await fetch(`/api/createTask`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedTasks),
+        });
+    }
+
+
+
   useEffect( () => {
     console.log(projects)
     let p = []
@@ -72,9 +142,9 @@ export default function Home(props) {
     inProgress.sort((a, b) => a.index - b.index)
     completed.sort((a, b) => a.index - b.index)
     
-    p.push(<ProjectTemplate key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
 
     
     setProjectTemplates(p)

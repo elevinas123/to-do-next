@@ -73,6 +73,7 @@ export default function RightSideBar(props) {
         }
         setProgress((ammountCompleted/tasks.length*100).toFixed(1))
     }, [tasks])
+    
     useEffect(() => {
         const interval = setInterval(() => {
           setAnimatedProgress((currentProgress) => {

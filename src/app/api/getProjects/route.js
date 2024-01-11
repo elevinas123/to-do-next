@@ -13,7 +13,6 @@ export async function GET(req) {
             })
             .exec();
 
-        console.log(JSON.stringify(project, null, 4)); // '4' here is for pretty printing
 
         for (let task of project.tasks) {
             if (task.type === 'Project') {
@@ -25,7 +24,6 @@ export async function GET(req) {
         }
         
 
-        console.log("Populated project:", JSON.stringify(project.toObject(), null, 2));
 
         return new Response(JSON.stringify(project.toObject()));
     } catch (error) {

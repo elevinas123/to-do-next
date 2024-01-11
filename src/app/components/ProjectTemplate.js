@@ -6,14 +6,16 @@ import { Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 
 export default function ProjectTemplate(props) {
-    
     const [projectCards, setProjectCards] = useState([])
+    
+    
+
     useEffect( () => {
         let p = []
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
             if (props.tasks[i].type==="Project") {
-                p.push(<ProjectCard index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+                p.push(<ProjectCard handleEdit={props.handleEdit} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             } else {
                 p.push(<TaskCard index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             }
