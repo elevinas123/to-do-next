@@ -94,16 +94,16 @@ export default function RightSideBar(props) {
     const handleSettingsClick = () => {
         setEditing(i => !i)
     }
-    const handleEdit = async (taskId, newText) => {
+    const handleEdit = async (id, newText) => {
         setTasks(prevTasks => prevTasks.map(task => 
-            task._id === taskId ? { ...task, name: newText } : task
+            task._id === id ? { ...task, name: newText } : task
         ));
         const task = await fetch('/api/recurrentProject/updateReferenceTask', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({taskId, name: newText}),
+            body: JSON.stringify({id, name: newText}),
           });
         const taskBody = await task.json()
         console.log("taskBody", taskBody)

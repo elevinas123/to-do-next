@@ -7,7 +7,7 @@ import Task from "@/app/database/schema/TaskSchema";
 
 export async function PUT(req) {
     try {
-        const { taskId, ...updateFields } = await req.json();
+        const { id, ...updateFields } = await req.json();
 
         // Constructing the update object dynamically
         let updateObject = {};
@@ -24,7 +24,7 @@ export async function PUT(req) {
 
         // Update the task
         const response = await Task.findByIdAndUpdate(
-            taskId,
+            id,
             { $set: updateObject },
             { new: true }
         );
