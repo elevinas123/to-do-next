@@ -9,9 +9,9 @@ import { MdOutlineEdit } from "react-icons/md";
 export default function ProjectCard(props) {
     const clickRef = useRef();
     const [completedAmmount, setCompletedAmmount] = useState(0)
-    const [creation, setCreation] = useState(false)
     const [clickCount, setClickCount] = useState(0);
     const router = useRouter();
+    const [creation, setCreation] = useState(false)
     const [edit, setEdit] = useState(false)
     const [text, setText] = useState(props.name)
     useEffect(() => {
@@ -34,6 +34,9 @@ export default function ProjectCard(props) {
         setCreation(false)
     }
 
+    const handleEdit = () => {
+        setEdit(true)
+    }
     useEffect(() => {
         console.log(clickCount)
         if (clickCount === 2) {
@@ -46,9 +49,6 @@ export default function ProjectCard(props) {
         return () => clearTimeout(timer);
     }, [clickCount, router, props._id]);
 
-    const handleEdit = () => {
-        setEdit(true)
-    }
 
     return (
         props._id &&
@@ -61,12 +61,14 @@ export default function ProjectCard(props) {
                 >
                 <div ref={clickRef}>
                 {!creation?
-                <div className="relative bg-red-500">
+                <div className="relative ">
                     <EditTask setCreation={setCreation} {...props} />
-                    <div   className="bg-secondary hover:cursor-pointer h-15vh border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
-                        <div className="flex flex-row justify-between ml-2 mr-2">
-                            <div className="flex flex-col">
-                                <div className="text-black font-semibold">{props.name}</div>
+                    <div   className=" break-words bg-secondary hover:cursor-pointer  border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
+                        <div className="flex flex-row justify-between ml-2 pr-10 min-w-0 ">
+                            <div className="flex flex-col break-words min-w-0  ">
+                            <div  className="flex break-words flex-row ">
+                                <div className="min-w-0  font-bold  w-15vw flex-wrap ">{props.name}</div>
+                            </div>
                                 <div className="text-gray-400 text-sm">Dribble marketing</div>
                             </div>
                         </div>
