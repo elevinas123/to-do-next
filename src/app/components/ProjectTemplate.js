@@ -15,9 +15,9 @@ export default function ProjectTemplate(props) {
         if(props.tasks == undefined) props.tasks = []
         for(let i=0; i<props.tasks.length && i<4; i++) {
             if (props.tasks[i].type==="Project") {
-                p.push(<ProjectCard handleEdit={props.handleEdit} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+                p.push(<ProjectCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             } else {
-                p.push(<TaskCard handleEdit={props.handleEdit} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+                p.push(<TaskCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             }
         }
         for(let i = props.tasks.length; i<=4; i++) {

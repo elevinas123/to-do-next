@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import accountContext from "../context/accountContext"
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu"
+import EditMode from './../components/EditMode';
 
 
 export default function Home(props) {
@@ -25,7 +26,8 @@ export default function Home(props) {
   const [whichCreation, setWhichCreation] = useState("")
   const [changed, setChanged] = useState(false) 
   const searchParams = useSearchParams()
-
+  const [editing, setEditing] = useState(false)
+  const [editingObject, setEditingObject] = useState({})
   useEffect( () => {
     fetch("api/connectToDB")
   }, []
@@ -55,24 +57,24 @@ export default function Home(props) {
 
   }, [changed, searchParams.get("projectId")])
   
-  const handleEdit = async (id, newText, type) => {
+  const handleEdit = async (id, name, text, type) => {
       console.log("here")
       console.log(projects)
         setProjects(project => ({...project, tasks: project.tasks.map(task => 
-            task._id === id ? { ...task, name: newText } : task
+            task._id === id ? { ...task,name: name, ...(type === "Task" ? { text: text } : { description: text })} : task
         )}));
         const task = await fetch(`/api/${type=="Task"?"recurrentProject/updateReferenceTask":"updateProjectName"}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({id, name: newText}),
+            body: JSON.stringify({id: id,name: name, ...(type === "Task" ? { text: text } : { description: text })})
           });
        console.log(task)
         
     };
     
-    const handleDelete = async (id, parentId) => {
+  const handleDelete = async (id, parentId) => {
         console.log("hi")
         let updatedTasks = [];
         let updatedProjects = [];
@@ -121,7 +123,7 @@ export default function Home(props) {
           },
           body: JSON.stringify(updatedTasks),
         });
-    }
+   }
 
 
 
@@ -142,9 +144,9 @@ export default function Home(props) {
     inProgress.sort((a, b) => a.index - b.index)
     completed.sort((a, b) => a.index - b.index)
     
-    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
-    p.push(<ProjectTemplate handleEdit={handleEdit} handleDelete={handleDelete}  key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate setEditing={setEditing} handleEdit={handleEdit}  startEditing={startEditing} handleDelete={handleDelete}  key="toDo" changeProjects={changeProjects} biggestIndex={toDo.length-1} tasks={toDo} name={"To do"} place={"toDo"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate setEditing={setEditing} handleEdit={handleEdit}  startEditing={startEditing} handleDelete={handleDelete}  key="inProgress" changeProjects={changeProjects} biggestIndex={inProgress.length-1} name={"In progress"} tasks={inProgress} place={"inProgress"}  addNewTask={addNewTask} parent={projects._id} />)
+    p.push(<ProjectTemplate setEditing={setEditing} handleEdit={handleEdit}  startEditing={startEditing} handleDelete={handleDelete}  key="completed" changeProjects={changeProjects} biggestIndex={completed.length-1} name={"Completed"} tasks={completed} place={"completed"}  addNewTask={addNewTask} parent={projects._id} />)
 
     
     setProjectTemplates(p)
@@ -154,6 +156,11 @@ export default function Home(props) {
     setChanged(i => !i)
   }
 
+  const startEditing = (object) => {
+    setFirstClick(true)
+    setEditingObject(object)
+    setEditing(true)
+  }
   
   const addNewTask = (parentId, place, index) => {
     setCreationName({parentId, index, place})
@@ -162,12 +169,12 @@ export default function Home(props) {
     setFirstClick(true)
 
   }
-  const addProject = () => {
-    setWhichCreation("project")
-    setCreation(i => !i)
-  }
   const exitSellection = () => {
-    if (creation && !firstClick) setCreation(false)
+    if ((creation || editing)  && !firstClick) {
+      setCreation(false)
+      setEditing(false)
+
+    }
     setFirstClick(i => !i)
   }
   const handleDragEnd = async (result) => {
@@ -269,7 +276,10 @@ export default function Home(props) {
       {creation?
       whichCreation=="task"?<TaskCreation changeProjects={changeProjects} parentId={creationName.parentId} place={creationName.place} index={creationName.index} setCreation={setCreation} setProjects={setProjects}/>
       :<ProjectCreation changeProjects={changeProjects} setProjects={setProjects} setCreation={setCreation} />
-      : ""}
+      : editing?
+        <EditMode {...editingObject} />
+      
+      :""}
       <div onClick={exitSellection} className="bg-secondary flex flex-row"  style={creation ? { opacity: 0.1, backgroundColor: "primary" } : {}}>
         <div className='w-15vw flex flex-col justify-between bg-secondary'>
             <LeftHandSideProjectMenu />
