@@ -290,7 +290,7 @@ export default function Home(props) {
         </div >
         <RightSideBar />
       </div>
-
+      
     </div>
   )
 }

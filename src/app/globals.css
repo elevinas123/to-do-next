@@ -33,28 +33,4 @@ span {
     transition: width 0.5s ease;
   }
 
-  .your-element {
-    position: relative;
-    /* Other styling */
-  }
-  
-  .your-element::before, .your-element::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 2px dashed black;
-    animation: dash 5s linear infinite;
-  }
-  
-  @keyframes dash {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
+ 

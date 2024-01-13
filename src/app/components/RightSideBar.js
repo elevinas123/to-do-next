@@ -117,7 +117,7 @@ export default function RightSideBar(props) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({taskId, name: newText, projectId: taskBody.parent, date: fullDate}),
+            body: JSON.stringify({taskId: id, name: newText, projectId: taskBody.parent, date: fullDate}),
           });
         
     };
