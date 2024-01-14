@@ -1,5 +1,4 @@
-import Acc from "@/app/database/schema/AccSchema";
-import { connectToDatabase } from "@/app/database/schema/mongoDB";
+import AccSchema from "@/app/database/schema/AccSchema";
 
 ;
 
@@ -7,7 +6,7 @@ export async function POST(req) {
     try {
         const data = await req.json()
         console.log(data); // data should be in JSON format
-        const response = await Acc.create({...data})
+        const response = await AccSchema.create({...data})
         console.log(await response)
 
       return new Response(JSON.stringify(response))

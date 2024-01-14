@@ -55,7 +55,7 @@ export default function Home(props) {
   } else {
   }
 
-  }, [changed, searchParams.get("projectId")])
+  }, [changed])
   
   const handleEdit = async (id, name, text, type) => {
       console.log("here")
