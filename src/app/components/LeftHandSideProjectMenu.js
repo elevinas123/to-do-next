@@ -29,7 +29,7 @@ export default function LeftHandSideProjectMenu(props) {
       }, [])
 
     return(
-        <div className="border-r-1 h-100vh border-black shadow-lg">
+        <div className="border-r-1 h-100vh border-black shadow-lg z-10">
             <div className="font-semibold ml-6 mt-2 border-2 border-dashed border-black w-fit pl-2 pr-2">Your projects</div>
             <div className="bg-accent rounded-lg mr-2 ml-2 mt-2">
               <ProjectMenuComponent name="projects" rootProjects={rootProjects}/>

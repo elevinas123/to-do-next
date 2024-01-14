@@ -285,17 +285,20 @@ export default function Home(props) {
             <LeftHandSideProjectMenu />
         </div>
         <div >
-          <div className="m-2 ml-4">
+          <div className="w-60vw flex flex-col  bg-secondary border-b-2 border-accent pb-4  ">
             
-            <div className="flex flex-row font-bold text-4xl  bg-accent text-black justify-center border-2 pt-2 pb-2 pl-2 border-gray-500 border-dashed rounded-lg ">
-              {projects.name}
+          <div className="w-60vw mx-auto bg-secondary border-b-2 border-accent pb-4 ">
+            <div className="flex justify-between items-center p-4">
+              <h1 className="text-2xl font-extrabold text-black">
+                {projects.name}
+              </h1>
             </div>
-          </div>
-          
-          <div className='flex w-60vw'> 
-            <DragDropContext onDragEnd={handleDragEnd}>
-              {projectTemplates}
-            </DragDropContext>
+            </div>
+            <div className="flex flex-row ">
+              <DragDropContext onDragEnd={handleDragEnd}>
+                {projectTemplates}
+              </DragDropContext>
+            </div>
             </div>
         </div >
         <RightSideBar />

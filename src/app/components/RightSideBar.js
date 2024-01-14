@@ -5,6 +5,7 @@ import { CgOptions } from "react-icons/cg";
 import EditingModeDailyTasks from "./EditingModeDailyTasks";
 import SetupDailyTasks from "./SetupDailyTasks";
 import accountContext from "../context/accountContext";
+import ProgressBar from "./ProgressBar";
 
 
 export default function RightSideBar(props) {
@@ -15,6 +16,7 @@ export default function RightSideBar(props) {
     const [editing, setEditing] = useState(false)
     const [projectId, setProjectId] = useState("")
     const {account} = useContext(accountContext)
+    const [project, setProject] = useState({})
 
     const handleTaskClick = async (id) => {
         console.log(tasks)
@@ -53,9 +55,10 @@ export default function RightSideBar(props) {
             const month = date.getMonth() + 1
             const day = date.getDate();
             const fullDate = `${year}-${month}-${day}`
-            const response = await fetch(`/api/recurrentProject/getRecurrentProject?date=${fullDate}&name=DailyTasks`)
+            const response = await fetch(`/api/recurrentProject/getRecurrentProject?date=${fullDate}&name=DailyTasks&account=${account.username}`)
             const responseBody = await response.json()
             setProjectId(responseBody[0]._id)
+            setProject(responseBody[0])
             setTasks(responseBody[0].tasks[fullDate])
         }
         f()
@@ -74,22 +77,7 @@ export default function RightSideBar(props) {
         setProgress((ammountCompleted/tasks.length*100).toFixed(1))
     }, [tasks])
     
-    useEffect(() => {
-        const interval = setInterval(() => {
-          setAnimatedProgress((currentProgress) => {
-            if (currentProgress < progress) {
-              return Math.min(currentProgress + 1, progress); // Increment progress
-            } else if (currentProgress > progress) {
-              return Math.max(currentProgress - 1, progress); // Decrement progress
-            } else {
-              clearInterval(interval);
-              return currentProgress; // Progress reached target
-            }
-          });
-        }, 15); // Adjust the interval for smoother or faster animation
-      
-        return () => clearInterval(interval);
-      }, [progress]);
+    
 
     const handleSettingsClick = () => {
         setEditing(i => !i)
@@ -248,11 +236,11 @@ export default function RightSideBar(props) {
                     <div className="flex flex-row justify-between ml-4 mb-4">
                         <div className="text-center flex items-center justify-center font-semibold text-lg ">Completed</div>
                         <div className="flex justify-center mr-4">
-                            <div className={`radial-progress  font-bold transition-colors duration-300 bg-secondary text-lg  text-${progress==100?"green-500":"black"} `} style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }} role="progressbar">{progress}%</div>
+                          <ProgressBar progress={progress} />
                         </div>
                     </div>
                 </div>
-                <Calendar />
+                <Calendar project={project}/>
             </div>
         </div>
     )

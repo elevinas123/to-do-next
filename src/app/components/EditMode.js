@@ -25,7 +25,7 @@ export default function EditMode (props) {
     }
 
     return(
-        <form  className="h-100vh w-15vw z-10 ml-24 absolute flex flex-col items-center justify-center  bg-secondary rounded-lg shadow-lg p-6 mx-auto">
+        <form  className="z-20 h-100vh w-15vw z-10 ml-24 absolute flex flex-col items-center justify-center  bg-secondary rounded-lg shadow-lg p-6 mx-auto">
             <input onChange={(e) => setName(e.target.value)} type="text" value={name} placeholder="Type here" className="input input-bordered w-full max-w-xs bg-accent" />
             <label className="form-control w-full">
                 <div className="label">

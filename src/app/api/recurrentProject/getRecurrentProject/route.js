@@ -9,7 +9,8 @@ export async function GET(req) {
 
         const date = req.nextUrl.searchParams.get("date")
         const name = req.nextUrl.searchParams.get("name")
-        let response = await RecurrentProject.find({name: name}).populate("referenceTasks")
+        const account = req.nextUrl.searchParams.get("account")
+        let response = await RecurrentProject.find({name, account}).populate("referenceTasks")
         if (response[0].tasks.has(date)) {
           return new Response(JSON.stringify(response));
         } else {
