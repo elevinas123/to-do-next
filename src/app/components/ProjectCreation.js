@@ -20,7 +20,6 @@ export default function ProjectCreation(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(account)
         let projectObject = {name, description, account: account.username, isRootProject: true}
         
 

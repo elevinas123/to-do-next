@@ -13,14 +13,14 @@ export default function ProjectTemplate(props) {
     useEffect( () => {
         let p = []
         if(props.tasks == undefined) props.tasks = []
-        for(let i=0; i<props.tasks.length && i<4; i++) {
+        for(let i=0; i<props.tasks.length; i++) {
             if (props.tasks[i].type==="Project") {
                 p.push(<ProjectCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             } else {
                 p.push(<TaskCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
             }
         }
-        for(let i = props.tasks.length; i<=4; i++) {
+        for(let i = props.tasks.length; i<4; i++) {
             p.push(<EmptyProjectCard key={"empty-" + i} place={props.place} biggestIndex={props.biggestIndex}  addNewTask={props.addNewTask} parent={props.parent} />)
         }
         setProjectCards(p)
@@ -28,7 +28,7 @@ export default function ProjectTemplate(props) {
     }, [props])
 
     return(
-        <div className="w-1/5 border-dashed border-2 bg-accent border-gray-600 h-70vh ml-4 mt-2 rounded-lg flex flex-col">
+        <div className="w-1/5 border-dashed border-2 bg-accent border-gray-600 h-70vh ml-4 mt-2 rounded-lg flex flex-col pr-1">
             <div className="flex flex-row justify-between m-1">
                 <div className="text-black m-2 font-bold">{props.name}</div>
                 <button onClick={() =>{
@@ -42,7 +42,7 @@ export default function ProjectTemplate(props) {
                     
                 </button>
             </div>
-            <div className='flex flex-col overflow-hidden '>
+            <div className='flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 '>
             <Droppable droppableId={props.place}>
                 {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>

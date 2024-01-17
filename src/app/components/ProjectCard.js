@@ -11,7 +11,6 @@ export default function ProjectCard(props) {
     const router = useRouter();
    
     useEffect(() => {
-        console.log("propsTasks", props)
         let cAmmount = 0
         
         for(let i=0; i<props.tasks.length; i++) {
@@ -26,7 +25,6 @@ export default function ProjectCard(props) {
     };
     
     useEffect(() => {
-        console.log(clickCount)
         if (clickCount === 2) {
         router.push(`/project?projectId=${props._id}`);
         setClickCount(0);
@@ -51,12 +49,12 @@ export default function ProjectCard(props) {
                 >
                     <div className="relative ">
                         <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit}  {...props} />
-                        <div   className=" break-words bg-secondary hover:cursor-pointer  border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
-                            <div className="flex flex-row justify-between ml-2 pr-10 mt-3  min-w-0 ">
+                        <div   className=" h-15vh break-words bg-secondary hover:cursor-pointer  border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
+                            <div className="flex flex-row justify-between ml-2 pr-10 mt-2  min-w-0 ">
                                 <div className="flex flex-col break-words min-w-0  ">
-                                <div  className="flex break-words flex-row ">
-                                    <div className="min-w-0  font-bold  w-15vw flex-wrap ">{props.name}</div>
-                                </div>
+                                    <div  className="flex break-words flex-row ">
+                                        <div className="min-w-0  font-bold  w-15vw flex-wrap ">{props.name}</div>
+                                    </div>
                                     <div className="text-gray-400 text-sm">{props.description}</div>
                                 </div>
                             </div>

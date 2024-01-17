@@ -71,9 +71,8 @@ export default function Calendar(props) {
 
     useEffect(() => {
         let dates = generateDates(selectedYear, selectedMonth)
-        console.log(dates)
         setMonthDays(dates)
-    }, [props])
+    }, [selectedYear, selectedMonth])
 
     const handleMonthChangeClick = (e) => {
         e.preventDefault();

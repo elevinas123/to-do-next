@@ -4,8 +4,8 @@ import Project from "@/app/database/schema/ProjectSchema";
 
 export async function POST(req) {
     try {
-        const {type, name, description, index, account, parent, isRootProject, place} = await req.json()
-        let response = await Project.create({type, onModel: [], place, index, name, isRootProject:isRootProject,  description, account, tasks: [ ], parent:parent})
+        const {name, description, index, account, parent, isRootProject, place} = await req.json()
+        let response = await Project.create({type: "Project", onModel: [], place, index, name, isRootProject:isRootProject,  description, account, tasks: [ ], parent:parent})
         console.log(response)
 
       return new Response(JSON.stringify(response))

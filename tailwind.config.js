@@ -28,6 +28,15 @@ module.exports = {
         "90vw": "90vw",
         "100vw": "100vw",
       },
+      minHeight: {
+        "10vh": "10vh",  // This sets the 'min-h-10vh' class
+        "15vh": "15vh",  // This sets the 'min-h-15vh' class
+        "20vh": "20vh",  // This sets the 'min-h-20vh' class
+        "30vh": "30vh",  // This sets the 'min-h-30vh' class
+        "40vh": "40vh",  // This sets the 'min-h-40vh' class
+        "50vh": "50vh",  // This sets the 'min-h-50vh' class
+        "60vh": "60vh",  // This sets the 'min-h-60vh' class
+      },
       height: {
         "1/4": "25vh",  // This sets the 'w-1/4' class to use 25% width
         "1/5": "20vh",  // This sets the 'w-1/4' class to use 25% width

@@ -9,7 +9,6 @@ export default function Task(props){
     const [tasks, setTasks] = useState([])
     const [subTasks, setSubTasks] = useState([])
     useEffect(() => {
-        console.log(props)
        const f = async () => {
             const response = await fetch(`/api/getTask?id=${props.taskId}`, {
                 method: 'GET',
@@ -19,7 +18,6 @@ export default function Task(props){
                 
               })
             const body = await response.json()
-            console.log("body", body)
             setTasks({...body})
         }
         if (props.taskId!=null){
@@ -29,20 +27,15 @@ export default function Task(props){
     useEffect(() => {
         let p = []
         if(tasks.length==0) return
-        console.log("tasks", tasks)
         for (let i =0; i<tasks.subTasks.length; i++) {
-            console.log(tasks.subTasks[i])
             p.push(<SubTask id={tasks.subTasks[i].subTaskId} taskId={props.taskId} text={tasks.subTasks[i].text} completed={tasks.subTasks[i].completed}/>)
         }
-        console.log(p)
         setSubTasks(p)
     }, [tasks])
 
     const addSubTask = () => {
        const f = async () => {
-        console.log("hi")
         let id = (new ObjectId()).toString()
-        console.log(id)
         setSubTasks(i => [...i, <SubTask taskId={props.taskId} id={id} key={id} />])
         const response = await fetch("/api/subTask", {
             method: 'POST',

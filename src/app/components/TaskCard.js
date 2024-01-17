@@ -24,8 +24,8 @@ export default function TaskCard (props) {
                     
                     <div className="relative">
                         <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit}  {...props} />
-                        <div  className="flex break-words flex-row justify-between bg-secondary hover:cursor-pointer h-15vh border-2  border-black  ml-3 mr-3  mt-2 rounded-lg p-2">
-                            <div className="min-w-0 m-2  font-bold  w-15vw flex-wrap ">{props.name}</div>
+                        <div  className="flex break-words flex-row justify-between bg-secondary hover:cursor-pointer  min-h-15vh border-2  border-black  ml-3 mr-3  mt-2 rounded-lg p-2">
+                            <div className=" min-w-0 m-2  font-bold  w-15vw flex-wrap ">{props.text}</div>
                         </div>
                     </div>
                 </div>

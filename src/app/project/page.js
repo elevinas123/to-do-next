@@ -35,7 +35,7 @@ export default function Home(props) {
 
   useEffect( () => {
     let f = async (projectId) => {
-        const response = await fetch(`/api/getProjects?username=${account.username}&projectId=${projectId}`, {
+        const response = await fetch(`/api/getProjects?username=${account.username}&projectId=${projectId}&populateSecond=true`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function Home(props) {
   } else {
   }
 
-  }, [changed])
+  }, [changed, searchParams.get("projectId")])
   
   const handleEdit = async (id, name, text, type) => {
       console.log("here")

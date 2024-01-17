@@ -19,7 +19,6 @@ export default function RightSideBar(props) {
     const [project, setProject] = useState({})
 
     const handleTaskClick = async (id) => {
-        console.log(tasks)
         let state = null
         setTasks(prevTasks => {
             return prevTasks.map(task => 
@@ -27,8 +26,6 @@ export default function RightSideBar(props) {
             );
         });
         for(let i=0; i<tasks.length; i++) {
-            console.log("T", tasks[i])
-            console.log("T", id)
             if (tasks[i]._id === id) {
                 state = tasks[i].place==="completed"?"toDo":"completed"
             }
@@ -38,7 +35,6 @@ export default function RightSideBar(props) {
         const month = date.getMonth() + 1
         const day = date.getDate();
         const fullDate = `${year}-${month}-${day}`
-        console.log("state,", state)
         await fetch('/api/recurrentProject/editRecurrentTask', {
             method: 'PUT',
             headers: {
@@ -64,7 +60,6 @@ export default function RightSideBar(props) {
         f()
     }, [])
     useEffect(() => {
-        console.log("projektas useefekte", projectId)
     }, [projectId])
 
     useEffect(() => {
@@ -94,7 +89,6 @@ export default function RightSideBar(props) {
             body: JSON.stringify({id, name: newText}),
           });
         const taskBody = await task.json()
-        console.log("taskBody", taskBody)
         const date = new Date()
         const year = date.getFullYear();
         const month = date.getMonth() + 1
@@ -111,7 +105,6 @@ export default function RightSideBar(props) {
     };
     
     const handleDelete = async (id) => {
-        console.log("hi")
         const date = new Date()
         const year = date.getFullYear();
         const month = date.getMonth() + 1
@@ -127,7 +120,6 @@ export default function RightSideBar(props) {
           })
     }
     const handleDailyTaskSetup = async (dailyTaskName) => {
-        console.log("labas", dailyTaskName, account)
         let projectObject = {onModel:"Projects",  name: "DailyTasks", account:account.username, tasks:[], referenceTasks:[], isRootProject:true  }
         const project = await fetch('/api/recurrentProject/createRecurrentProject',{
             method: 'POST',
@@ -172,11 +164,9 @@ export default function RightSideBar(props) {
             throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
         }
         const newProjectBody = await addTaskToProject.json()
-        console.log("response ", newProjectBody)
 
     }
     const handleTaskCreate = async (text) => {
-        console.log("projectId", projectId)
         const taskObject = {parent: projectId, onModel: "Projects", index: tasks.length+1, name: text, text:"", place: "toDo"}
         const task = await fetch('/api/createTask', {
             method: 'POST',
@@ -190,7 +180,6 @@ export default function RightSideBar(props) {
         }
         
         let taskBody = await task.json()
-        console.log("taskBody", taskBody)
         setTasks(prevTasks => [...prevTasks, taskBody])
         const taskId = taskBody._id
         const date = new Date()
@@ -208,7 +197,6 @@ export default function RightSideBar(props) {
         if (!addTaskToProject.ok) {
             throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
         }
-        console.log("All done")
     }
     
     

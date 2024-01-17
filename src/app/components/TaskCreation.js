@@ -12,7 +12,6 @@ export default function TaskCreation(props) {
         setName(e.target.value);
     };
     useEffect(() => {
-        console.log("taskCreationProps", props)
     }, [])
     const handleDateChange = (e) => {
         setDate(e.target.value);
@@ -20,7 +19,6 @@ export default function TaskCreation(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(props)
         if (selectValue === "Task") {
             let taskObject = {type:"Task", onModel:"Projects", text, deadline: date,  name: name,  parent: props.parentId, index: props.index, place: props.place}
         
@@ -89,7 +87,6 @@ export default function TaskCreation(props) {
             value = "Project"
         }
         setSelectValue(value)
-        console.log(value)
     }
 
     return(
