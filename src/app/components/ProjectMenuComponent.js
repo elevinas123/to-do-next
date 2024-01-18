@@ -1,5 +1,6 @@
-import { useEffect, useState, useContext } from "react"
+import { useEffect, useState, useContext} from "react"
 import accountContext from "../context/accountContext"
+import { useRouter } from 'next/navigation';
 
 export default function ProjectMenuComponent(props) {
     const [show, setShow] = useState(false)
@@ -7,6 +8,8 @@ export default function ProjectMenuComponent(props) {
     const [taskMenuComponents, setTaskMenuComponents] = useState([])
     const {account} = useContext(accountContext)
     const [childrenProjects, setChildrenProjects] = useState([])
+    const [clickCount, setClickCount] = useState(0);
+    const router = useRouter();
     useEffect( () => {
         let f = async () => {
             console.log("cia yra useEffect", props)
@@ -35,7 +38,10 @@ export default function ProjectMenuComponent(props) {
         console.log("cia yra ten kur daro", props)
         if (childrenProjects === undefined) return
         for(let i=0; i<childrenProjects.length; i++) {
-            p.push(<ProjectMenuComponent level={props.level+1}  key={childrenProjects[i]._id} {...childrenProjects[i]}  />)
+            if (childrenProjects[i].type === "Project") {
+                p.push(<ProjectMenuComponent level={props.level+1}  key={childrenProjects[i]._id} {...childrenProjects[i]}  />)
+
+            }
         }
         setTaskMenuComponents(p)
     }, [childrenProjects])
@@ -45,11 +51,27 @@ export default function ProjectMenuComponent(props) {
     
 
     const handleClick = () => {
-        console.log("clickas", childrenProjects)
-        console.log("clickas", props)
-        console.log("clickas", taskMenuComponents)
+        setClickCount(i=> i+1)
         setShow(i=> !i)
+
     }
+    useEffect(() => {
+        console.log(clickCount)
+        if (clickCount === 2) {
+            router.push(`/project?projectId=${props._id}`);
+            setClickCount(0);
+            return
+        } 
+
+            const timer = setTimeout(() => {
+                setClickCount(0)
+    
+            }, 250);
+            return () => clearTimeout(timer);
+
+        // Reset click count if not double clicked within a short time
+        
+    }, [clickCount, router, props._id]);
 
     
 

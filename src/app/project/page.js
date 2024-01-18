@@ -33,29 +33,29 @@ export default function Home(props) {
   }, []
   )
 
-  useEffect( () => {
-    let f = async (projectId) => {
-        const response = await fetch(`/api/getProjects?username=${account.username}&projectId=${projectId}&populateSecond=true`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}, ${response.json()}`);
-      }
-      const responseBody = await response.json()
-      console.log("projektas", responseBody )
-      setProjects(responseBody)
-  }
-  const projectId = searchParams.get("projectId")
-  if (projectId) {
-      f(projectId)
-    
-  } else {
-  }
+    useEffect( () => {
+      let f = async (projectId) => {
+          const response = await fetch(`/api/getProjects?username=${account.username}&projectId=${projectId}&populateSecond=true`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}, ${response.json()}`);
+        }
+        const responseBody = await response.json()
+        console.log("projektas", responseBody )
+        setProjects(responseBody)
+    }
+    const projectId = searchParams.get("projectId")
+    if (projectId) {
+        f(projectId)
+      
+    } else {
+    }
 
-  }, [changed, searchParams.get("projectId")])
+    }, [changed, searchParams.get("projectId")])
   
   const handleEdit = async (id, name, text, type) => {
       console.log("here")
