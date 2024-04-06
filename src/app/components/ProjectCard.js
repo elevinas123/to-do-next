@@ -39,48 +39,39 @@ export default function ProjectCard(props) {
         props.startEditing(props)
     }
     return (
-        props._id &&
-        <Draggable draggableId={props._id} index={props.index}>
-            {(provided) => (
-                <div onClick={handleClick}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                >
-                    <div className="relative ">
-                        <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit}  {...props} />
-                        <div   className=" h-15vh break-words bg-secondary hover:cursor-pointer  border-2  border-black  ml-3 mr-3  mt-2 rounded-lg flex flex-col p-2">
-                            <div className="flex flex-row justify-between ml-2 pr-10 mt-2  min-w-0 ">
-                                <div className="flex flex-col break-words min-w-0  ">
-                                    <div  className="flex break-words flex-row ">
-                                        <div className="min-w-0  font-bold  w-15vw flex-wrap ">{props.name}</div>
-                                    </div>
-                                    <div className="text-gray-400 text-sm">{props.description}</div>
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <div className="flex flex-row justify-between mt-3 text-sm ml-2 mr-2 break-words" >
-                                    <div className="text-gray-400">Progress</div>
-                                    
-                                </div>
-                                <div className="flex flex-row">
-                                    <progress className={`progress progress-succes w-56 m-2 bg-primary `} value={completedAmmount/props.tasks.length*100} max="100"></progress>
-                                    <div className="font-semibold">{`${completedAmmount}/${props.tasks.length}`}</div>
-                                </div>
-                                <div className="flex flex-row justify-between ml-2 mr-2">
-                                    {props.deadline?
-                                    <div className="bg-gray-200 text-gray-500 font-semibold rounded-full p-1 pl-2 pr-2 text-sm">{props.deadline}</div>
-                                    :
-                                    ""
-                                    }
-                                </div>
-                            </div>
+        props._id && (
+            <Draggable draggableId={props._id} index={props.index}>
+                {(provided) => (
+                    <div
+                        onClick={handleClick}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="relative p-4 m-3 bg-white rounded-lg shadow border border-gray-300 cursor-pointer"
+                    >
+                        <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit} {...props} />
+                        <h3 className="text-lg font-semibold text-gray-800">{props.name}</h3>
+                        <p className="text-gray-600 text-sm">{props.description}</p>
+                        <div className="mt-2">
+                            <label className="text-gray-500 text-xs">Progress</label>
+                            <progress
+                                className="progress progress-success w-full h-1 bg-gray-300"
+                                value={(completedAmmount / props.tasks.length) * 100}
+                                max="100"
+                            ></progress>
+                            <div className="text-xs font-semibold text-gray-800">{`${completedAmmount}/${props.tasks.length}`}</div>
                         </div>
+                        {props.deadline && (
+                            <div className="mt-1 bg-gray-200 text-gray-600 font-semibold rounded-full px-2 py-1 text-xs">
+                                {props.deadline}
+                            </div>
+                        )}
                     </div>
-                </div>
-            )}
-        </Draggable>
+                )}
+            </Draggable>
+        )
     );
+
     
 }
 

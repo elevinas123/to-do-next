@@ -10,13 +10,21 @@ export default function EmptyDailyTask(props) {
     const handleChange = (e) => {
         setText(e.target.value)
     }
-    return(
-        <div onClick={() => setCreating(true)} className={`justify-center text-center select-none   text-lg font-semibold shadow-md bg-secondary border-2 rounded-lg w-15vw h-12 flex  items-center mt-2  transition duration-300 ease-in-out border-gray-500 border-dashed`}>
-            {creating?<input onChange={handleChange} onBlur={() => {props.handleBlur(text); setCreating(false)}} placeHolder="writeTask" />:
-            <span className="flex text-gray-600 cursor-pointer ">
-                Add new task
-                </span>}
-                    
-        </div>
-    )
+    return (
+    <div onClick={() => setCreating(true)} className="flex justify-center items-center w-full h-12 bg-gray-100 hover:bg-gray-200 rounded-md mt-2 cursor-pointer transition-colors duration-300">
+        {creating ? (
+            <input
+                type="text"
+                onChange={handleChange}
+                onBlur={() => {props.handleBlur(text); setCreating(false);}}
+                placeholder="Add new task"
+                className="w-full p-2 text-lg font-medium text-gray-700 focus:outline-none"
+                autoFocus
+            />
+        ) : (
+            <span>Add new task</span>
+        )}
+    </div>
+);
+
 }

@@ -12,20 +12,24 @@ export default function EditingModeDailyTasks(props) {
     
     useEffect(() => {
         let p = []
+        console.log("props tasks", props.tasks)
         for(let i=0; i<props.tasks.length; i++) {
             p.push(<EditableDailyTask key={i} {...props.tasks[i]} handleEdit={props.handleEdit} handleDelete={props.handleDelete}  />)
         }
         setEditableTasks(p)
     }, [props.tasks])
 
+    useEffect(() => {
+        console.log("editabeTask", editableTasks)
+    }, [editableTasks])
+
 
 
     return (
-        <div className=" border-gray-600 border-dashed border-2 rounded-lg ml-3 pb-1  " style={{ width: '300px' }} >
-            <div className="pl-1">
-                {editableTasks}
-                <EmptyDailyTask handleBlur={props.handleTaskCreate} index={editableTasks.length} />
-            </div>
-        </div>
-    )
+    <div className="bg-white shadow-md rounded-lg p-4 mt-4">
+        {editableTasks}
+        <EmptyDailyTask handleBlur={props.handleTaskCreate} index={editableTasks.length} />
+    </div>
+);
+
 }

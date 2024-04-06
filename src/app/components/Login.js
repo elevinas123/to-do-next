@@ -43,31 +43,55 @@ export default function Login(props) {
 
 
     return (
-        <div className="h-100vh w-15vw z-10 ml-24 absolute flex flex-col items-center justify-center  bg-white rounded-lg shadow-lg p-6 mx-auto">
-            <form onSubmit={handleSubmit} className="w-full">
-                <div className="w-full mb-4">
-                    <input 
-                        id="username"
-                        value={username}
-                        onChange={handleNameChange}
-                        className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
-                        placeholder="Enter username"
-                    />
+        <div className="h-screen flex items-center justify-center bg-gray-100">
+            <div className="w-96 bg-white p-8 rounded-xl shadow-lg">
+                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label htmlFor="username" className="text-sm font-medium text-gray-600 block mb-2">
+                            Username
+                        </label>
+                        <input
+                            id="username"
+                            value={username}
+                            onChange={handleNameChange}
+                            className="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 focus:outline-none transition duration-200"
+                            placeholder="Enter your username"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="text-sm font-medium text-gray-600 block mb-2">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={handlePasswordChange}
+                            className="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 focus:outline-none transition duration-200"
+                            placeholder="Enter your password"
+                        />
+                    </div>
+                    <button
+                        className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"
+                        type="submit"
+                    >
+                        Login
+                    </button>
+                </form>
+                <div className="text-center mt-4 text-sm font-medium text-gray-600">
+                    Don't have an account?{" "}
+                    <button
+                        onClick={props.startAccountCreation}
+                        className="text-blue-500 hover:text-blue-600 transition duration-200"
+                    >
+                        Create one
+                    </button>
                 </div>
-                <div className="w-full mb-4">
-                    <input 
-                        id="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        type="text"
-                        className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
-                    />
-                </div>
-                <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Login</button>
-            </form>
-            <div className="mt-2 font-semibold ">Or</div>
-            <button className="w-full mt-2 bg-blue-300 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit" onClick={props.startAccountCreation} >Create account</button>
+            </div>
         </div>
-    )
+    );
+
+
+
 }

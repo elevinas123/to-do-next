@@ -89,44 +89,73 @@ export default function TaskCreation(props) {
         setSelectValue(value)
     }
 
-    return(
-        <form onSubmit={handleSubmit} className="h-100vh w-15vw z-10 ml-24 absolute flex flex-col items-center justify-center  bg-secondary rounded-lg shadow-lg p-6 mx-auto">
-            <div className="w-full">
-                <select onClick={handleSelection}  className="font-semibold text-lg select select-secondary select-md bg-accent w-full mb-4 ">
-                    <option  disabled selected>Type to add</option>
-                    <option  >Project</option>
-                    <option >Task</option>
-                    
-                </select>
-            </div>
-            <div className="w-full mb-4">
-                <input 
-                    id="name"
-                    value={name}
-                    onChange={handleNameChange}
-                    className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
-                    placeholder="Enter Task Name"
-                />
-            </div>
-            <div className="w-full mb-4">
-                    <input 
-                    id="text"
-                    value={text}
-                    onChange={handleTextChange}
-                    className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
-                    placeholder="Enter Task Text"
-                />
-            </div>
-            <div className="w-full mb-4">
-                    <input 
-                    id="date"
-                    value={date}
-                    onChange={handleDateChange}
-                    className="w-full p-2 border rounded-md focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition duration-200"
-                    placeholder="Enter Task Deadline"
-                />
-            </div>
-            <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200" type="submit">Create Task</button>
-        </form>
+    return (
+        <div className="w-full h-screen flex justify-center items-center">
+            <form onSubmit={handleSubmit} className="w-1/4 bg-white p-4 rounded-lg shadow-lg">
+                <h2 className="text-lg font-semibold text-center text-gray-700 mb-4">Create New</h2>
+                <div className="mb-3">
+                    <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                        Type
+                    </label>
+                    <select
+                        id="type"
+                        onChange={handleSelection}
+                        className="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
+                        defaultValue=""
+                    >
+                        <option value="" disabled>
+                            Select type
+                        </option>
+                        <option value="Project">Project</option>
+                        <option value="Task">Task</option>
+                    </select>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                        Name
+                    </label>
+                    <input
+                        id="name"
+                        value={name}
+                        onChange={handleNameChange}
+                        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter the name"
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="text" className="block text-sm font-medium text-gray-700">
+                        Description
+                    </label>
+                    <input
+                        id="text"
+                        value={text}
+                        onChange={handleTextChange}
+                        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Details about the task/project"
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                        Deadline
+                    </label>
+                    <input
+                        id="date"
+                        type="date"
+                        value={date}
+                        onChange={handleDateChange}
+                        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <button
+                    className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    type="submit"
+                >
+                    Create
+                </button>
+            </form>
+        </div>
     );
+
+
+
 }
