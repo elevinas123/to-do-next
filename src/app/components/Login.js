@@ -19,6 +19,7 @@ export default function Login(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let taskObject = {username: username}
+        console.log("submit", taskObject)
         const response = await fetch('/api/checkAccount', {
             method: 'POST',
             headers: {

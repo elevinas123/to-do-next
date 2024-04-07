@@ -1,6 +1,6 @@
 
 
-import mongoose from "mongoose"
+
 import AccSchema from './../../database/schema/AccSchema';
 
 
