@@ -31,7 +31,7 @@ export default function Calendar(props) {
         // Add buttons for the remaining days of the previous month
         for (let i = lastDayOfLastMonth - firstDayOfMonth + 1; i <= lastDayOfLastMonth; i++) {
             dates.push(
-                <button className="flex items-center justify-center w-9 h-9 rounded-md font-semibold text-gray-400 border-transparent border focus:outline-none focus:text-neutral focus:border-blue-200">
+                <button className="flex items-center justify-center w-9 h-9 rounded-md font-semibold text-gray-400 border-transparent border focus:outline-none focus:text-black focus:border-blue-200">
                     {i}
                 </button>
             );
@@ -40,7 +40,7 @@ export default function Calendar(props) {
         // Add buttons for the current month's days
         for (let i = 1; i <= lastDayOfMonth; i++) {
             dates.push(
-                <button className="flex items-center justify-center w-9 h-9 rounded-md font-semibold text-black border-transparent border focus:outline-none focus:text-neutral focus:border-blue-200">
+                <button className="flex items-center justify-center w-9 h-9 rounded-md font-semibold text-black border-transparent border focus:outline-none focus:text-black focus:border-blue-200">
                     {i}
                 </button>
             );
@@ -87,9 +87,12 @@ export default function Calendar(props) {
         setSelectedYear(year);
         setSelectedMonth(month);
     };
+    const handleDayClick = () => {
+        return
+    }
 
     return (
-        <div className="flex flex-col items-center justify-center w-64 bg-gray-100 rounded-lg shadow-lg p-4 w-80">
+        <div className="flex flex-col items-center justify-center w-80 bg-gray-100 rounded-lg shadow-lg p-4">
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={handleMonthChangeClick}
