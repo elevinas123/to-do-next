@@ -11,13 +11,11 @@ export default function ProjectMenuComponent(props) {
     useEffect(() => {
         const fetchProjects = async () => {
             if (!props.isRoot && props._id) {
-                const response = await fetch(
-                    `/api/getProjects?username=${account.username}&projectId=${props._id}&populateSecond=true`,
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                    }
-                );
+                const response = await fetch(`/api/getProjects`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ projectId: props._id }),
+                });
                 if (!response.ok) {
                     console.error(`Error fetching child projects: HTTP status ${response.status}`);
                     return;

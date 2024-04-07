@@ -27,20 +27,20 @@ export default function Home(props) {
     const [editing, setEditing] = useState(false);
     const [editingObject, setEditingObject] = useState({});
     useEffect(() => {
-        fetch("api/connectToDB");
+        fetch("api/connectToDB", {
+            method: "POST"
+        });
     }, []);
 
     useEffect(() => {
         let f = async (projectId) => {
-            const response = await fetch(
-                `/api/getProjects?username=${account.username}&projectId=${projectId}&populateSecond=true`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`/api/getProjects`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ projectId: projectId }),
+            });
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}, ${response.json()}`);
             }
@@ -369,6 +369,4 @@ export default function Home(props) {
             </div>
         </div>
     );
-
-
 }
