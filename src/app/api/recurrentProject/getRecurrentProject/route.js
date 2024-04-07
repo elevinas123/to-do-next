@@ -3,13 +3,10 @@
 import RecurrentProject from "@/app/database/schema/RecurrentProjectShema";
 import Task from "@/app/database/schema/TaskSchema";
 
-export async function GET(req) {
+export async function POST(req) {
     try {
 
-
-        const date = req.nextUrl.searchParams.get("date")
-        const name = req.nextUrl.searchParams.get("name")
-        const account = req.nextUrl.searchParams.get("account")
+      const {date, name, account} = await req.json()
         let response = await RecurrentProject.find({name, account}).populate("referenceTasks")
         if (response[0].tasks.has(date)) {
           return new Response(JSON.stringify(response));

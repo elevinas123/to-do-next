@@ -55,7 +55,14 @@ export default function RightSideBar(props) {
             const day = date.getDate();
             const fullDate = `${year}-${month}-${day}`;
             const response = await fetch(
-                `/api/recurrentProject/getRecurrentProject?date=${fullDate}&name=DailyTasks&account=${account.username}`
+                `/api/recurrentProject/getRecurrentProject?date=${fullDate}&name=DailyTasks&account=${account.username}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ date: fullDate, name: "DailyTasks", account: account.username }),
+                }
             );
             const responseBody = await response.json();
             console.log("resposnebody", responseBody);
