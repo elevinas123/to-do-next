@@ -31,7 +31,7 @@ export default function LeftHandSideProjectMenu() {
     }, [account.username]);
 
     return (
-        <div className="bg-gray-900 text-white w-64 h-screen shadow-xl overflow-hidden">
+        <div className="bg-gray-900 text-white w-15vw h-screen shadow-xl overflow-hidden">
             <div className="p-5 border-b border-gray-700">
                 <h1 className="text-lg font-semibold">Your Projects</h1>
             </div>

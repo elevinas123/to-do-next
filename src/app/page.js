@@ -18,9 +18,15 @@ export default function Home(props) {
     const [whichCreation, setWhichCreation] = useState("");
     const [changed, setChanged] = useState(false);
     useEffect(() => {
-        fetch("api/connectToDB", {
-            method: "POST"
-        });
+        const f = async () => {
+            await fetch("api/connectToDB", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        };
+        f();
     }, []);
 
     const addProject = () => {

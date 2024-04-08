@@ -229,8 +229,8 @@ export default function RightSideBar(props) {
     };
 
     return (
-        <div className="pl-2">
-            <div className="flex flex-col border-l-2 h-full border-blue-300 bg-white shadow-md justify-between">
+        <div className="pl-2 w-full">
+            <div className="flex flex-col border-l-2 w-full h-full border-blue-300 bg-white shadow-md justify-between">
                 <div>
                     <div className="bg-gray-100 rounded-xl m-4 p-4 space-y-4">
                         <div className="flex justify-between items-center">

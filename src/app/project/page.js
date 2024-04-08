@@ -27,9 +27,15 @@ export default function Home(props) {
     const [editing, setEditing] = useState(false);
     const [editingObject, setEditingObject] = useState({});
     useEffect(() => {
-        fetch("api/connectToDB", {
-            method: "POST"
+        const f = async() => {
+            await fetch("api/connectToDB", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
+        }
+        f()
     }, []);
 
     useEffect(() => {
@@ -355,7 +361,7 @@ export default function Home(props) {
                 <div className=" flex flex-col justify-between bg-white shadow-md">
                     <LeftHandSideProjectMenu />
                 </div>
-                <div className="flex-grow">
+                <div className="">
                     <div className="flex flex-col border-b-2 border-gray-300 pb-4 mx-4">
                         <div className="px-4 py-2">
                             <h1 className="text-2xl font-extrabold text-gray-700">{projects.name}</h1>
