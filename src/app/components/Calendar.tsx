@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 
-export default function Calendar(props) {
-    const [projectDates, setProjectDates] = useState({});
+export default function Calendar() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-    const [monthDays, setMonthDays] = useState([]);
+    const [monthDays, setMonthDays] = useState<JSX.Element[]>([]);
     const months = {
         0: "January",
         1: "February",
@@ -20,13 +19,13 @@ export default function Calendar(props) {
         11: "December",
     };
 
-    const generateDates = (year, month) => {
+    const generateDates = (year: number, month: number) => {
         const firstDayOfMonth = new Date(year, month, 1).getDay();
         const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
         const lastDayOfLastMonth = new Date(year, month, 0).getDate();
         const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-        let dates = [];
+        let dates: JSX.Element[] = [];
 
         // Add buttons for the remaining days of the previous month
         for (let i = lastDayOfLastMonth - firstDayOfMonth + 1; i <= lastDayOfLastMonth; i++) {
@@ -67,8 +66,9 @@ export default function Calendar(props) {
         setMonthDays(dates);
     }, [selectedYear, selectedMonth]);
 
-    const handleMonthChangeClick = (e) => {
+    const handleMonthChangeClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
+        if(!e.target.id) throw new Error("Id must Exist")
         let year = selectedYear;
         let month = selectedMonth;
 
@@ -88,8 +88,8 @@ export default function Calendar(props) {
         setSelectedMonth(month);
     };
     const handleDayClick = () => {
-        return
-    }
+        return;
+    };
 
     return (
         <div className="flex flex-col items-center justify-center w-80 bg-gray-100 rounded-lg shadow-lg p-4">

@@ -7,11 +7,13 @@ import accountContext from "../context/accountContext";
 import ProjectMenuComponent from "./ProjectMenuComponent";
 
 export default function LeftHandSideProjectMenu() {
-    const { account } = useContext(accountContext);
+    const context = useContext(accountContext);
     const [rootProjects, setRootProjects] = useState([]);
 
     useEffect(() => {
-        const fetchProjects = async (username) => {
+        if (!context) return
+        const {account} = context
+        const fetchProjects = async (username: string) => {
             console.log("username", username);
             const response = await fetch(`/api/getAllProjectsByUsername`, {
                 method: "POST",
@@ -28,7 +30,7 @@ export default function LeftHandSideProjectMenu() {
             setRootProjects(data);
         };
         fetchProjects(account.username);
-    }, [account.username]);
+    }, [context]);
 
     return (
         <div className="bg-gray-900 text-white w-15vw h-screen shadow-xl overflow-hidden">

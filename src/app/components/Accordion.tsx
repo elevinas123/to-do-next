@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 
-const Accordion = ({ title, content, level = 0 }) => {
+
+type AccordionProps = {
+    title: string
+
+    level: number
+}
+
+
+const Accordion = ({ title, content, level = 0 }: AccordionProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleAccordion = () => {

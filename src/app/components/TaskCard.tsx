@@ -1,17 +1,21 @@
-"use client"
-import { useEffect, useState } from 'react'
-import { Draggable } from 'react-beautiful-dnd'
-import EditTask from './EditTask';
-import { IoIosRemoveCircleOutline } from "react-icons/io";
-import { MdOutlineEdit } from "react-icons/md";
+"use client";
+import { Draggable } from "react-beautiful-dnd";
+import EditTask from "./EditTask";
 
 
+type TaskCardProps = {
+    index: number;
+    _id: string;
+    setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+    handleEdit: () => void
+    text: string
+};
 
-export default function TaskCard (props) {
 
+export default function TaskCard(props: TaskCardProps) {
     const edit = () => {
-        props.startEditing(props)
-    }
+        props.startEditing(props);
+    };
     return (
         props._id && (
             <Draggable draggableId={props._id} index={props.index}>
@@ -27,7 +31,6 @@ export default function TaskCard (props) {
                                 edit={edit}
                                 setEditing={props.setEditing}
                                 handleEdit={props.handleEdit}
-                                {...props}
                             />
                             <div className="text-gray-800 font-semibold truncate">{props.text}</div>
                         </div>
@@ -36,7 +39,4 @@ export default function TaskCard (props) {
             </Draggable>
         )
     );
-
-    
 }
-

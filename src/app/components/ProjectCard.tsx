@@ -5,29 +5,33 @@ import EditTask from './EditTask'
 import { useRouter } from 'next/navigation';
 
 
-export default function ProjectCard(props) {
-    const [completedAmmount, setCompletedAmmount] = useState(0)
+type ProjectCardProps = {
+    
+}
+
+
+export default function ProjectCard(props: ProjectCardProps) {
+    const [completedAmmount, setCompletedAmmount] = useState(0);
     const [clickCount, setClickCount] = useState(0);
     const router = useRouter();
-   
+
     useEffect(() => {
-        let cAmmount = 0
-        
-        for(let i=0; i<props.tasks.length; i++) {
-            if(props.tasks[i].place === "completed") cAmmount++
+        let cAmmount = 0;
+
+        for (let i = 0; i < props.tasks.length; i++) {
+            if (props.tasks[i].place === "completed") cAmmount++;
         }
-        setCompletedAmmount(cAmmount)
-    }, [props])
-      
+        setCompletedAmmount(cAmmount);
+    }, [props]);
 
     const handleClick = () => {
-        setClickCount(prev => prev + 1);
+        setClickCount((prev) => prev + 1);
     };
-    
+
     useEffect(() => {
         if (clickCount === 2) {
-        router.push(`/project?projectId=${props._id}`);
-        setClickCount(0);
+            router.push(`/project?projectId=${props._id}`);
+            setClickCount(0);
         }
 
         // Reset click count if not double clicked within a short time
@@ -36,8 +40,8 @@ export default function ProjectCard(props) {
     }, [clickCount, router, props._id]);
 
     const edit = () => {
-        props.startEditing(props)
-    }
+        props.startEditing(props);
+    };
     return (
         props._id && (
             <Draggable draggableId={props._id} index={props.index}>
@@ -71,7 +75,5 @@ export default function ProjectCard(props) {
             </Draggable>
         )
     );
-
-    
 }
 

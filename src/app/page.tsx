@@ -1,22 +1,16 @@
 "use client";
-import ProjectMenuComponent from "./components/ProjectMenuComponent";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCreation from "./components/ProjectCreation";
-import accountContext from "./context/accountContext";
 import TaskCreation from "./components/TaskCreation";
-import Navbar from "./components/Navbar";
 import RightSideBar from "./components/RightSideBar";
 import LeftHandSideProjectMenu from "./components/LeftHandSideProjectMenu";
 
-export default function Home(props) {
+export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
     const [creationName, setCreationName] = useState("");
-    const [projectTemplates, setProjectTemplates] = useState([]);
-    const { account } = useContext(accountContext);
     const [projects, setProjects] = useState([]);
     const [whichCreation, setWhichCreation] = useState("");
-    const [changed, setChanged] = useState(false);
     useEffect(() => {
         const f = async () => {
             await fetch("api/connectToDB", {

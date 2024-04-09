@@ -1,13 +1,39 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const TaskSchemaObj = new mongoose.Schema({
+// Define an interface to represent a Task document.
+export interface ITaskSchema extends Document {
+    name: string;
+    text?: string;
+    place?: string;
+    deadline?: string;
+    comments?: string;
+    type?: string;
+    index: number;
+    parent: mongoose.Types.ObjectId;
+    onModel: "Projects" | "Task";
+}
+export interface ITask {
+    _id: string
+    name: string;
+    text?: string;
+    place?: string;
+    deadline?: string;
+    comments?: string;
+    type?: string;
+    index: number;
+    parent: mongoose.Types.ObjectId;
+    onModel: "Projects" | "Task";
+}
+
+// Define the Task schema with typed fields.
+const TaskSchema = new Schema<ITaskSchema>({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     text: String,
     place: String,
-    deadline: String, // Made optional by removing `required: true`
+    deadline: String,
     comments: String,
     type: String,
     index: {
@@ -15,21 +41,23 @@ const TaskSchemaObj = new mongoose.Schema({
         required: true,
     },
     parent: {
-        type: mongoose.Schema.Types.ObjectId, // Assuming parent is a reference to a Project or another Task
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        refPath: 'onModel'  // This is used for dynamic references
+        refPath: "onModel", // This points to a field in the same doc that determines the ref model.
     },
     onModel: {
         type: String,
         required: true,
-        enum: ['Projects', 'Task']  // Allowed models for the parent reference
-    }
+        enum: ["Projects", "Task"], // Specifies allowed models for dynamic referencing.
+    },
 });
 
-let Task
+// Try to get the already registered 'Task' model, or create a new one if it doesn't exist.
+let TaskModel: Model<ITaskSchema>;
 try {
-    Task = mongoose.model("Task")
-} catch {
-    Task = mongoose.model("Task", TaskSchemaObj)
+    TaskModel = mongoose.model<ITaskSchema>("Task");
+} catch (error) {
+    TaskModel = mongoose.model<ITaskSchema>("Task", TaskSchema);
 }
-export default Task
+
+export default TaskModel;

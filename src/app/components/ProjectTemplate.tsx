@@ -5,27 +5,58 @@ import EmptyProjectCard from './EmptyProjectCard';
 import { Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 
-export default function ProjectTemplate(props) {
-    const [projectCards, setProjectCards] = useState([])
-    
-    
 
-    useEffect( () => {
-        let p = []
-        if(props.tasks == undefined) props.tasks = []
-        for(let i=0; i<props.tasks.length; i++) {
-            if (props.tasks[i].type==="Project") {
-                p.push(<ProjectCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+type ProjectTemplateProps = {
+    
+}
+
+
+export default function ProjectTemplate(props: ProjectTemplateProps) {
+    const [projectCards, setProjectCards] = useState([]);
+
+    useEffect(() => {
+        let p = [];
+        if (props.tasks == undefined) props.tasks = [];
+        for (let i = 0; i < props.tasks.length; i++) {
+            if (props.tasks[i].type === "Project") {
+                p.push(
+                    <ProjectCard
+                        setEditing={props.setEditing}
+                        handleEdit={props.handleEdit}
+                        startEditing={props.startEditing}
+                        handleDelete={props.handleDelete}
+                        index={props.index}
+                        key={props.tasks[i]._id + "-" + i}
+                        {...props.tasks[i]}
+                    />
+                );
             } else {
-                p.push(<TaskCard setEditing={props.setEditing} handleEdit={props.handleEdit}  startEditing={props.startEditing} handleDelete={props.handleDelete} index={props.index} key={props.tasks[i]._id + "-" + i} {...props.tasks[i]}/>)
+                p.push(
+                    <TaskCard
+                        setEditing={props.setEditing}
+                        handleEdit={props.handleEdit}
+                        startEditing={props.startEditing}
+                        handleDelete={props.handleDelete}
+                        index={props.index}
+                        key={props.tasks[i]._id + "-" + i}
+                        {...props.tasks[i]}
+                    />
+                );
             }
         }
-        for(let i = props.tasks.length; i<4; i++) {
-            p.push(<EmptyProjectCard key={"empty-" + i} place={props.place} biggestIndex={props.biggestIndex}  addNewTask={props.addNewTask} parent={props.parent} />)
+        for (let i = props.tasks.length; i < 4; i++) {
+            p.push(
+                <EmptyProjectCard
+                    key={"empty-" + i}
+                    place={props.place}
+                    biggestIndex={props.biggestIndex}
+                    addNewTask={props.addNewTask}
+                    parent={props.parent}
+                />
+            );
         }
-        setProjectCards(p)
-        
-    }, [props])
+        setProjectCards(p);
+    }, [props]);
 
     return (
         <div className="w-1/5 border-dashed border-2 bg-gray-100 border-gray-300 h-70vh ml-4 mt-2 rounded-lg shadow-lg flex flex-col p-4">
@@ -57,6 +88,4 @@ export default function ProjectTemplate(props) {
             </div>
         </div>
     );
-
-
 }

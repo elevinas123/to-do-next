@@ -1,5 +1,4 @@
 import Project from "@/app/database/schema/ProjectSchema";
-import Task from "@/app/components/Task";
 export async function POST(req) {
     try {
         const { account } = await req.json();

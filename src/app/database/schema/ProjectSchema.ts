@@ -1,41 +1,79 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
+import { ITask } from "./TaskSchema";
 
-const ProjectSchemaObj = new mongoose.Schema({
+// Define an interface that extends mongoose's Document to type the model's expected properties
+export interface IProjectSchema extends Document {
+    name: string;
+    account: string;
+    description?: string;
+    tasks: Map<ITask, mongoose.Types.ObjectId[]>;
+    onModel: ("Projects" | "Task")[];
+    index?: number;
+    type?: string;
+    comments?: string;
+    place?: string;
+    parent?: mongoose.Types.ObjectId;
+    isRootProject: boolean;
+}
+export interface IProject  {
+    _id: string
+    name: string;
+    account: string;
+    description?: string;
+    tasks: ITask[]
+    onModel: ("Projects" | "Task")[];
+    index?: number;
+    type?: string;
+    comments?: string;
+    place?: string;
+    parent?: mongoose.Types.ObjectId;
+    isRootProject: boolean;
+}
+
+// Create a new mongoose schema for projects with typed properties
+const ProjectSchema = new Schema<IProject>({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     account: {
         type: String,
-        required: true
+        required: true,
     },
     description: String,
-    tasks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'onModel' 
-        
-    }],
-    onModel: [{ type: String, enum: ['Projects', 'Task'] }],
+    tasks: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            refPath: "onModel",
+        },
+    ],
+    onModel: [
+        {
+            type: String,
+            enum: ["Projects", "Task"],
+        },
+    ],
     index: Number,
     type: String,
     comments: String,
     place: String,
     parent: {
         type: mongoose.Schema.Types.ObjectId,
-        required: false // Making the parent optional
+        required: false, // Making the parent optional
     },
-    
     isRootProject: {
         type: Boolean,
-        default: false // Field to indicate if this is a top-level project
-    }
+        default: false, // Field to indicate if this is a top-level project
+    },
 });
 
-let Project
+let ProjectModel: Model<IProject>;
 try {
-    Project = mongoose.model("Projects")
+    // Trying to get the model if it already exists
+    ProjectModel = mongoose.model<IProject>("Projects");
 } catch {
-    Project = mongoose.model("Projects", ProjectSchemaObj)
+    // If it does not exist, create it
+    ProjectModel = mongoose.model<IProject>("Projects", ProjectSchema);
 }
-export default Project
 
+export default ProjectModel;

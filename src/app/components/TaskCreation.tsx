@@ -1,93 +1,115 @@
 import { useState, useEffect, useContext } from "react";
-import ProjectSchema from "../database/schema/ProjectSchema";
 import accountContext from "../context/accountContext";
 
-export default function TaskCreation(props) {
+type TaskCreationProps = {
+    parentId: string;
+    index: number;
+    place: string;
+    setCreation: React.Dispatch<React.SetStateAction<boolean>>;
+    changeProjects: () => void;
+};
+
+export default function TaskCreation(props: TaskCreationProps) {
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
-    const [text, setText] = useState("")
-    const {account} = useContext(accountContext)
-    const [selectValue, setSelectValue] = useState("Task")
-    const handleNameChange = (e) => {
+    const [text, setText] = useState("");
+    const context = useContext(accountContext);
+    const [selectValue, setSelectValue] = useState("Task");
+    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setName(e.target.value);
     };
-    useEffect(() => {
-    }, [])
-    const handleDateChange = (e) => {
+    useEffect(() => {}, []);
+    const handleDateChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setDate(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit: React.ChangeEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
+        if (context === null) throw new Error("accountContext cant be null");
+        const { account } = context;
         if (selectValue === "Task") {
-            let taskObject = {type:"Task", onModel:"Projects", text, deadline: date,  name: name,  parent: props.parentId, index: props.index, place: props.place}
-        
+            let taskObject = {
+                type: "Task",
+                onModel: "Projects",
+                text,
+                deadline: date,
+                name: name,
+                parent: props.parentId,
+                index: props.index,
+                place: props.place,
+            };
 
-            const task = await fetch('/api/createTask', {
-                method: 'POST',
+            const task = await fetch("/api/createTask", {
+                method: "POST",
                 headers: {
-                'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(taskObject),
             });
             if (!task.ok) {
                 throw new Error(`Error: ${task.status}, ${task.json()}`);
             }
-            
-            let body = await task.json()
-            let taskId = body._id
-            const addTaskToProject = await fetch('/api/createProject', {
-                method: 'PUT',
+
+            let body = await task.json();
+            let taskId = body._id;
+            const addTaskToProject = await fetch("/api/createProject", {
+                method: "PUT",
                 headers: {
-                'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({projectId: props.parentId, taskId, onModel:"Task"}),
+                body: JSON.stringify({ projectId: props.parentId, taskId, onModel: "Task" }),
             });
             if (!addTaskToProject.ok) {
                 throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
             }
         } else {
-
-            const project = await fetch('/api/createProject', {
-                method: 'POST',
+            const project = await fetch("/api/createProject", {
+                method: "POST",
                 headers: {
-                'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({type: "Project", index: props.index, place: props.place, name, description: text, account:account.username, parent: props.parentId, isRootProject: false}),
+                body: JSON.stringify({
+                    type: "Project",
+                    index: props.index,
+                    place: props.place,
+                    name,
+                    description: text,
+                    account: account.username,
+                    parent: props.parentId,
+                    isRootProject: false,
+                }),
             });
 
             if (!project.ok) {
                 throw new Error(`Error: ${project.status}, ${project.json()}`);
             }
-            const pr = await project.json()
-            const addTaskToProject = await fetch('/api/createProject', {
-                method: 'PUT',
+            const pr = await project.json();
+            const addTaskToProject = await fetch("/api/createProject", {
+                method: "PUT",
                 headers: {
-                'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({projectId: props.parentId, taskId: pr._id, onModel:"Projects"}),
+                body: JSON.stringify({ projectId: props.parentId, taskId: pr._id, onModel: "Projects" }),
             });
             if (!addTaskToProject.ok) {
                 throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
             }
         }
-        props.setCreation(i => !i)
-        props.changeProjects()
-
-        
+        props.setCreation((i) => !i);
+        props.changeProjects();
     };
-    const handleTextChange = (e) => {
-        setText(e.target.value)
-    }
-    const handleSelection = (e) => {
-        let value = e.target.value
-        if (value ==="Type to add" || value === "Task") {
-            value = "Task"
+    const handleTextChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setText(event.target.value);
+    };
+    const handleSelection: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+        let value = event.target.value;
+        if (value === "Type to add" || value === "Task") {
+            value = "Task";
         } else {
-            value = "Project"
+            value = "Project";
         }
-        setSelectValue(value)
-    }
+        setSelectValue(value);
+    };
 
     return (
         <div className="w-full h-screen flex justify-center items-center">
@@ -155,7 +177,4 @@ export default function TaskCreation(props) {
             </form>
         </div>
     );
-
-
-
 }

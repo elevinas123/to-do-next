@@ -1,26 +1,32 @@
 import { useState } from "react";
+import { IAccount } from "../database/schema/AccSchema";
 
-export default function CreateAccount(props) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [accountExist, setAccountExists] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
 
-    const handleNameChange = (e) => {
+interface CreateAccountProps {
+    authenticate: (user: IAccount) => void; // Adjust the type of user based on what authenticate expects
+}
+
+export default function CreateAccount(props: CreateAccountProps) {
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [accountExist, setAccountExists] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+
+    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setUsername(e.target.value);
     };
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setPassword(e.target.value);
     };
 
-    const handleConfirmPasswordChange = (e) => {
+    const handleConfirmPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setConfirmPassword(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             setError("Passwords do not match");
@@ -41,7 +47,7 @@ export default function CreateAccount(props) {
             setError(`Error: ${response.status}`);
             return;
         }
-        const responseBody = await response.json();
+        const responseBody: IAccount | "Account exists"  = await response.json();
         if (responseBody === "Account exists") {
             setAccountExists(true);
             setError("Username already exists");

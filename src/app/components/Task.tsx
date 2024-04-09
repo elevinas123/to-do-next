@@ -1,13 +1,29 @@
-"use client";
-import ObjectId from "bson-objectid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactElement } from "react";
 import SubTask from "./SubTask";
+import ObjectId from "bson-objectid";
 
-export default function Task(props) {
-    const [tasks, setTasks] = useState([]);
-    const [subTasks, setSubTasks] = useState([]);
+// Define the type for the props of the Task component
+type TaskProps = {
+    taskId: string;
+};
+
+// Define the structure of the task data expected from the API
+interface TaskData {
+    subTasks: {
+        subTaskId: string;
+        text: string;
+        completed: boolean;
+    }[];
+}
+
+export default function Task(props: TaskProps) {
+    // Use state with specific types for tasks and subTasks
+    const [tasks, setTasks] = useState<TaskData | null>(null);
+    const [subTasks, setSubTasks] = useState<ReactElement[]>([]);
+
+    // Fetch task data from API
     useEffect(() => {
-        const f = async () => {
+        const fetchTasks = async () => {
             const response = await fetch(`/api/getTask`, {
                 method: "POST",
                 headers: {
@@ -15,42 +31,43 @@ export default function Task(props) {
                 },
                 body: JSON.stringify({ id: props.taskId }),
             });
-            const body = await response.json();
-            setTasks({ ...body });
+            const body: TaskData = await response.json();
+            setTasks(body);
         };
-        if (props.taskId != null) {
-            f();
+
+        if (props.taskId) {
+            fetchTasks();
         }
     }, [props.taskId]);
-    useEffect(() => {
-        let p = [];
-        if (tasks.length == 0) return;
-        for (let i = 0; i < tasks.subTasks.length; i++) {
-            p.push(
-                <SubTask
-                    id={tasks.subTasks[i].subTaskId}
-                    taskId={props.taskId}
-                    text={tasks.subTasks[i].text}
-                    completed={tasks.subTasks[i].completed}
-                />
-            );
-        }
-        setSubTasks(p);
-    }, [tasks]);
 
-    const addSubTask = () => {
-        const f = async () => {
-            let id = new ObjectId().toString();
-            setSubTasks((i) => [...i, <SubTask taskId={props.taskId} id={id} key={id} />]);
-            const response = await fetch("/api/subTask", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ taskId: props.taskId, id: id }),
-            });
-        };
-        f();
+    // Update subTasks based on the tasks data
+    useEffect(() => {
+        if (tasks && tasks.subTasks.length > 0) {
+            const preparedSubTasks = tasks.subTasks.map((subTask) => (
+                <SubTask
+                    key={subTask.subTaskId}
+                    id={subTask.subTaskId}
+                    taskId={props.taskId}
+                    text={subTask.text}
+                    completed={subTask.completed}
+                />
+            ));
+            setSubTasks(preparedSubTasks);
+        }
+    }, [tasks, props.taskId]);
+
+    // Function to add a new subTask
+    const addSubTask = async () => {
+        const id = new ObjectId().toString();
+        setSubTasks((currentSubTasks) => [...currentSubTasks, <SubTask taskId={props.taskId} id={id} key={id} />]);
+
+        await fetch("/api/subTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ taskId: props.taskId, id: id }),
+        });
     };
 
     return (

@@ -2,27 +2,31 @@ import { useEffect, useState } from "react";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { MdOutlineEdit } from "react-icons/md";
 
-export default function EditableDailyTask(props) {
+type EditableDailyTask = {
+    name: string
+    _id: string
+}
 
-    const [editing, setEditing] = useState(false)
-    const [text, setText] = useState("")
+
+export default function EditableDailyTask(props: EditableDailyTask) {
+    const [editing, setEditing] = useState(false);
+    const [text, setText] = useState("");
     useEffect(() => {
-        setText(props.name)
-    }, [props])
+        setText(props.name);
+    }, [props]);
 
     const handleEdit = () => {
-        setEditing(true)
-    }
+        setEditing(true);
+    };
     const handleChange = (e) => {
-        setText(e.target.value)
-        console.log(text)
-    }
+        setText(e.target.value);
+        console.log(text);
+    };
 
     const handleBlur = () => {
-        props.handleEdit(props._id, text)
-        setEditing(false)
-    }
-
+        props.handleEdit(props._id, text);
+        setEditing(false);
+    };
 
     return (
         <div className="select-none text-lg font-medium bg-white shadow-sm border rounded-md w-full h-12 flex items-center mt-2 transition duration-300 ease-in-out overflow-hidden">
@@ -53,5 +57,4 @@ export default function EditableDailyTask(props) {
             )}
         </div>
     );
-
 }

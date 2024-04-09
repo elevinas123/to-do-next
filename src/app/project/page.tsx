@@ -13,6 +13,7 @@ import { useSearchParams } from "next/navigation";
 import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
 import EditMode from "../components/EditMode";
+import { IProject } from "../database/schema/ProjectSchema";
 
 export default function Home(props) {
     const [creation, setCreation] = useState(false);
@@ -20,7 +21,7 @@ export default function Home(props) {
     const [creationName, setCreationName] = useState({});
     const [projectTemplates, setProjectTemplates] = useState([]);
     const { account } = useContext(accountContext);
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState<IProject[]>([]);
     const [whichCreation, setWhichCreation] = useState("");
     const [changed, setChanged] = useState(false);
     const searchParams = useSearchParams();
@@ -39,7 +40,7 @@ export default function Home(props) {
     }, []);
 
     useEffect(() => {
-        let f = async (projectId) => {
+        let f = async (projectId: string) => {
             const response = await fetch(`/api/getProjects`, {
                 method: "POST",
                 headers: {
@@ -50,7 +51,7 @@ export default function Home(props) {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}, ${response.json()}`);
             }
-            const responseBody = await response.json();
+            const responseBody: IProject[] = await response.json();
             console.log("projektas", responseBody);
             setProjects(responseBody);
         };
@@ -61,7 +62,9 @@ export default function Home(props) {
         }
     }, [changed, searchParams.get("projectId")]);
 
-    const handleEdit = async (id, name, text, type) => {
+    const handleEdit = async (id: string, name: string, text: string, type: "Task" | "Project") => {
+        /*
+        NIFIGA NESUPRANTU KA CIA PADARIAU TAISYSIM
         console.log("here");
         console.log(projects);
         setProjects((project) => ({
@@ -87,6 +90,7 @@ export default function Home(props) {
             }
         );
         console.log(task);
+        */
     };
 
     const handleDelete = async (id, parentId) => {

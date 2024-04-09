@@ -1,6 +1,11 @@
 // MyContext.js
 import React from 'react';
+import { IAccount } from '../database/schema/AccSchema';
 
-const accountContext = React.createContext(null);
+type AccountContext = {
+    account: IAccount
+}
+
+const accountContext = React.createContext<AccountContext | null>(null);
 
 export default accountContext;

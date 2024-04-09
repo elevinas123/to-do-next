@@ -1,6 +1,6 @@
 
-import AccSchema from "@/app/database/schema/AccSchema"
 import mongoose from "mongoose"
+import AccSchema from "../../database/schema/AccSchema"
 
 
 export async function POST(req) {

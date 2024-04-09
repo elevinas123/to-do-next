@@ -3,45 +3,46 @@ import { useState } from "react";
 
 
 
-export default function Login(props) {
+type LoginProps = {
 
+}
+
+
+export default function Login(props: LoginProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleNameChange = (e) => {
         setUsername(e.target.value);
     };
-    
+
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let taskObject = {username: username}
-        console.log("submit", taskObject)
-        const response = await fetch('/api/checkAccount', {
-            method: 'POST',
+        let taskObject = { username: username };
+        console.log("submit", taskObject);
+        const response = await fetch("/api/checkAccount", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(taskObject),
-          });
-        const responseBody = await response.json()
-          if (!response.ok) {
+        });
+        const responseBody = await response.json();
+        if (!response.ok) {
             throw new Error(`Error: ${response.status}, ${response.json()}`);
-          }
-          if(responseBody[0].password === password) {
+        }
+        if (responseBody[0].password === password) {
             console.log("authenticated");
-           props.authenticate(responseBody[0])
-          } else {
-            console.log("not allowed")
-          }
-        console.log("response from server", responseBody)
+            props.authenticate(responseBody[0]);
+        } else {
+            console.log("not allowed");
+        }
+        console.log("response from server", responseBody);
     };
-
-
-
 
     return (
         <div className="h-screen flex items-center justify-center bg-gray-100">
@@ -92,7 +93,4 @@ export default function Login(props) {
             </div>
         </div>
     );
-
-
-
 }

@@ -2,8 +2,17 @@ import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Updated to use the new Next.js 13 navigation
 import accountContext from "../context/accountContext";
 
-export default function ProjectMenuComponent(props) {
-    const { account } = useContext(accountContext);
+
+type ProjectMenuComponentProps = {
+    isRoot: boolean;
+    _id: string;
+    childrenProjects: []
+    name: string
+    level: number
+};
+
+export default function ProjectMenuComponent(props: ProjectMenuComponentProps) {
+    const context = useContext(accountContext);
     const [expanded, setExpanded] = useState(false);
     const [childrenProjects, setChildrenProjects] = useState([]);
     const router = useRouter(); // Updated to useAppRouter hook from Next.js 13
@@ -27,7 +36,7 @@ export default function ProjectMenuComponent(props) {
             }
         };
         fetchProjects();
-    }, [props._id, props.isRoot, props.childrenProjects, account.username]);
+    }, [props._id, props.isRoot, props.childrenProjects, context]);
 
     const handleToggle = () => setExpanded(!expanded);
 

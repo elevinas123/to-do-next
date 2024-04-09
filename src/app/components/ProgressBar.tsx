@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 
-export default function ProgressBar(props) {
+
+type ProgressProps = {
+    progress: number
+    
+ }
+
+export default function ProgressBar(props: ProgressProps) {
     const [animatedProgress, setAnimatedProgress] = useState(props.progress);
 
     useEffect(() => {
