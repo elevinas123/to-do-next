@@ -4,11 +4,23 @@ import ProjectCard from './ProjectCard';
 import EmptyProjectCard from './EmptyProjectCard';
 import { Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
+import { IProject } from '../database/schema/ProjectSchema';
+import { ITask } from '../database/schema/TaskSchema';
 
 
 type ProjectTemplateProps = {
-    
-}
+    setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+    handleEdit: (id: string, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    startEditing: (object: any) => void;
+    handleDelete: (id: string, parentId: string) => Promise<void>;
+    changeProjects: () => void;
+    biggestIndex: number;
+    name: string;
+    tasks: (ITask | IProject)[];
+    place: string;
+    addNewTask: (parentId: string, place: string, index: string) => void;
+    parent: string
+};
 
 
 export default function ProjectTemplate(props: ProjectTemplateProps) {

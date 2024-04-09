@@ -20,10 +20,10 @@ export interface IProject  {
     name: string;
     account: string;
     description?: string;
-    tasks: ITask[]
+    tasks: (ITask | IProject)[]
     onModel: ("Projects" | "Task")[];
-    index?: number;
-    type?: string;
+    index: number;
+    type: string;
     comments?: string;
     place?: string;
     parent?: mongoose.Types.ObjectId;
