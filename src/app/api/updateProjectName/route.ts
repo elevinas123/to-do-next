@@ -1,5 +1,5 @@
+import ProjectModel from "../../database/schema/ProjectSchema";
 
-import  Project  from '@/app/database/schema/ProjectSchema';
 
 
 
@@ -21,7 +21,7 @@ export async function PUT(req) {
         }
 
         // Update the task
-        const response = await Project.findByIdAndUpdate(
+        const response = await ProjectModel.findByIdAndUpdate(
             id,
             { $set: updateObject },
             { new: true }

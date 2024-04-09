@@ -1,4 +1,4 @@
-import AccSchema from "@/app/database/schema/AccSchema";
+import AccSchema from "../../database/schema/AccSchema";
 
 ;
 

@@ -1,13 +1,12 @@
+import RecurrentProjectModel from "../../../database/schema/RecurrentProjectShema";
 
 
-import RecurrentProject from "@/app/database/schema/RecurrentProjectShema";
-import Task from "@/app/database/schema/TaskSchema";
 
 export async function POST(req) {
     try {
 
       const {date, name, account} = await req.json()
-        let response = await RecurrentProject.find({name, account}).populate("referenceTasks")
+        let response = await RecurrentProjectModel.find({name, account}).populate("referenceTasks")
         if (response[0].tasks.has(date)) {
           return new Response(JSON.stringify(response));
         } else {
@@ -18,7 +17,7 @@ export async function POST(req) {
       
         console.log("response", refTasks)
         const taskPath = `tasks.${date}`;
-        let project = await RecurrentProject.findByIdAndUpdate(
+        let project = await RecurrentProjectModel.findByIdAndUpdate(
             response[0]._id,
             { 
               $push: { 
@@ -28,7 +27,7 @@ export async function POST(req) {
             { new: true, safe: true, upsert: true }
         );
         console.log("next", project)
-        let fullUpdatedProject = await RecurrentProject.findById(response[0]._id)
+        let fullUpdatedProject = await RecurrentProjectModel.findById(response[0]._id)
         return new Response(JSON.stringify([fullUpdatedProject])) 
             
         }

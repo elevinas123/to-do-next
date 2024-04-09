@@ -1,9 +1,10 @@
-import Project from "@/app/database/schema/ProjectSchema";
+import ProjectModel from "../../database/schema/ProjectSchema";
+
 export async function POST(req) {
     try {
         const { account } = await req.json();
         console.log("account", account)
-        let projects = await Project.find({ account: account, isRootProject: true })
+        let projects = await ProjectModel.find({ account: account, isRootProject: true })
             .populate({
                 path: "tasks",
                 refPath: "onModel",

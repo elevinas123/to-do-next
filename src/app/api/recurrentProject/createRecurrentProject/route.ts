@@ -1,9 +1,9 @@
-import RecurrentProject from "@/app/database/schema/RecurrentProjectShema"
+import RecurrentProjectModel from "../../../database/schema/RecurrentProjectShema"
 
 export async function POST(req) {
     try {
         const project = await req.json()
-        let response = await RecurrentProject.create(project)
+        let response = await RecurrentProjectModel.create(project)
         console.log(response)
 
       return new Response(JSON.stringify(response))
@@ -23,13 +23,13 @@ export async function PUT(req) {
       // Update path for the tasks map
       const taskPath = `tasks.${date}`;
 
-      let project = await RecurrentProject.findByIdAndUpdate(
+      let project = await RecurrentProjectModel.findByIdAndUpdate(
           projectId,
-          { 
-            $push: { 
-                referenceTasks: taskId, // Add task ID to referenceTasks
-                [taskPath]: task // Add task object to the specific date in tasks map
-            } 
+          {
+              $push: {
+                  referenceTasks: taskId, // Add task ID to referenceTasks
+                  [taskPath]: task, // Add task object to the specific date in tasks map
+              },
           },
           { new: true, safe: true, upsert: true }
       );

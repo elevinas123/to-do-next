@@ -1,12 +1,11 @@
-import Task from "@/app/components/Task";
-import Project from "@/app/database/schema/ProjectSchema";
+import ProjectModel from "../../database/schema/ProjectSchema";
 
 export async function POST(req) {
     try {
         const { projectId } = await req.json();
         console.log("projectID", projectId)
         // First level of population
-        let project = await Project.findById(projectId)
+        let project = await ProjectModel.findById(projectId)
             .populate({
                 path: "tasks",
                 refPath: "onModel",

@@ -31,7 +31,7 @@ export interface IProject  {
 }
 
 // Create a new mongoose schema for projects with typed properties
-const ProjectSchema = new Schema<IProject>({
+const ProjectSchema = new Schema<IProjectSchema>({
     name: {
         type: String,
         required: true,
@@ -67,13 +67,13 @@ const ProjectSchema = new Schema<IProject>({
     },
 });
 
-let ProjectModel: Model<IProject>;
+let ProjectModel: Model<IProjectSchema>;
 try {
     // Trying to get the model if it already exists
-    ProjectModel = mongoose.model<IProject>("Projects");
+    ProjectModel = mongoose.model<IProjectSchema>("Projects");
 } catch {
     // If it does not exist, create it
-    ProjectModel = mongoose.model<IProject>("Projects", ProjectSchema);
+    ProjectModel = mongoose.model<IProjectSchema>("Projects", ProjectSchema);
 }
 
 export default ProjectModel;

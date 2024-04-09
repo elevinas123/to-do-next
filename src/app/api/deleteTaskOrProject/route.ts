@@ -1,4 +1,4 @@
-import Project from "@/app/database/schema/ProjectSchema";
+import ProjectModel from "../../database/schema/ProjectSchema";
 
 
 export async function DELETE(req) {
@@ -6,7 +6,7 @@ export async function DELETE(req) {
         const { parentId, id} = await req.json();
 
         // Retrieve the project document
-        const project = await Project.findById(parentId);
+        const project = await ProjectModel.findById(parentId);
         if (!project) {
             throw new Error('Project not found');
         }

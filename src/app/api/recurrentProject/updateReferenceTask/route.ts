@@ -1,7 +1,8 @@
 
 
 
-import Task from "@/app/database/schema/TaskSchema";
+import TaskModel from "../../../database/schema/TaskSchema";
+import Task  "@/app/database/schema/TaskSchema";
 
 
 
@@ -23,7 +24,7 @@ export async function PUT(req) {
         }
 
         // Update the task
-        const response = await Task.findByIdAndUpdate(
+        const response = await TaskModel.findByIdAndUpdate(
             id,
             { $set: updateObject },
             { new: true }

@@ -1,11 +1,11 @@
+import ProjectModel from "../../database/schema/ProjectSchema"
 
-import Project from "@/app/database/schema/ProjectSchema";
 ;
 
 export async function POST(req) {
     try {
         const {name, description, index, account, parent, isRootProject, place} = await req.json()
-        let response = await Project.create({type: "Project", onModel: [], place, index, name, isRootProject:isRootProject,  description, account, tasks: [ ], parent:parent})
+        let response = await ProjectModel.create({type: "Project", onModel: [], place, index, name, isRootProject:isRootProject,  description, account, tasks: [ ], parent:parent})
         console.log(response)
 
       return new Response(JSON.stringify(response))
@@ -21,7 +21,7 @@ export async function POST(req) {
         const { projectId, taskId, onModel } = await req.json();
         console.log("ids", projectId, taskId);
 
-        let response = await Project.findByIdAndUpdate(
+        let response = await ProjectModel.findByIdAndUpdate(
             projectId,
             { 
                 $push: { 
@@ -32,7 +32,7 @@ export async function POST(req) {
             { new: true, safe: true, upsert: true }
         );
 
-        let projects = await Project.findById(projectId);
+        let projects = await ProjectModel.findById(projectId);
         console.log("the database response", projects);
 
         return new Response(JSON.stringify(projects));

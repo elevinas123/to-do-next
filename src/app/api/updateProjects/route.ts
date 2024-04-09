@@ -1,5 +1,4 @@
-
-import Project from '../../database/schema/ProjectSchema';
+import ProjectModel from "../../database/schema/ProjectSchema";
 
 
 export async function PUT(req) {
@@ -16,7 +15,7 @@ export async function PUT(req) {
             };
         });
 
-        const result = await Project.bulkWrite(updateOperations);
+        const result = await ProjectModel.bulkWrite(updateOperations);
         console.log("Bulk update result of projets", result);
 
         return new Response(JSON.stringify(result));

@@ -1,5 +1,4 @@
-import Project from "@/app/database/schema/ProjectSchema";
-import Task from "@/app/database/schema/TaskSchema";
+import TaskModel from "../../database/schema/TaskSchema"
 
 ;
 
@@ -7,7 +6,7 @@ export async function POST(req) {
     try {
         const taskObj = await req.json()
         console.log(taskObj)
-        let task = await Task.create(taskObj)
+        let task = await TaskModel.create(taskObj)
 
 
 
@@ -32,7 +31,7 @@ export async function POST(req) {
             };
         });
 
-        const result = await Task.bulkWrite(updateOperations);
+        const result = await TaskModel.bulkWrite(updateOperations);
         console.log("Bulk update result", result);
 
         return new Response(JSON.stringify(result));

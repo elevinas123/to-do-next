@@ -1,12 +1,11 @@
-import RecurrentProject from "@/app/database/schema/RecurrentProjectShema";
-import Task from "@/app/database/schema/TaskSchema"; // Assuming this is how you import the Task model
+import RecurrentProjectModel from "../../../database/schema/RecurrentProjectShema";
 
 export async function DELETE(req) {
     try {
         const { projectId, taskId, date } = await req.json();
 
         // Retrieve the project document
-        const project = await RecurrentProject.findById(projectId);
+        const project = await RecurrentProjectModel.findById(projectId);
         if (!project) {
             throw new Error('Project not found');
         }

@@ -14,6 +14,7 @@ import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
 import EditMode from "../components/EditMode";
 import { IProject } from "../database/schema/ProjectSchema";
+import { ITask } from "../database/schema/TaskSchema";
 
 export default function Home(props) {
     const [creation, setCreation] = useState(false);
@@ -93,10 +94,10 @@ export default function Home(props) {
         */
     };
 
-    const handleDelete = async (id, parentId) => {
+    const handleDelete = async (id: string, parentId: string) => {
         console.log("hi");
-        let updatedTasks = [];
-        let updatedProjects = [];
+        let updatedTasks: ITask[] = [];
+        let updatedProjects: IProject[] = [];
 
         setProjects((project) => {
             const taskIndexToDelete = project.tasks.findIndex((task) => task._id === id);

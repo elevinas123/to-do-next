@@ -1,4 +1,4 @@
-import RecurrentProject from "@/app/database/schema/RecurrentProjectShema";
+import RecurrentProjectModel from "../../../database/schema/RecurrentProjectShema";
 
 export async function PUT(req) {
     try {
@@ -6,7 +6,7 @@ export async function PUT(req) {
         console.log("task", taskId, projectId, date);
 
         // Retrieve the project document
-        let project = await RecurrentProject.findById(projectId);
+        let project = await RecurrentProjectModel.findById(projectId);
         if (!project) {
             throw new Error('Project not found');
         }
