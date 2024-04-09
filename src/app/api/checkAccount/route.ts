@@ -1,7 +1,7 @@
 
 
 
-import AccSchema from './../../database/schema/AccSchema';
+import AccSchema from '../../database/schema/AccSchema';
 
 
 export async function POST(req) {

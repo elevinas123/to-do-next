@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
-import EditMode from "./../components/EditMode";
+import EditMode from "../components/EditMode";
 
 export default function Home(props) {
     const [creation, setCreation] = useState(false);
