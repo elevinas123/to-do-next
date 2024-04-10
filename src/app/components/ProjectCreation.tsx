@@ -1,41 +1,40 @@
 "use client"
 import { useState, useContext } from "react";
-import ProjectSchema from "../database/schema/ProjectSchema";
+import ProjectSchema, { IProject } from "../database/schema/ProjectSchema";
 import accountContext from "../context/accountContext";
 import { useRouter } from "next/navigation";
 
-export default function ProjectCreation(props) {
+export default function ProjectCreation() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("")
-    const {account} = useContext(accountContext)
+    const context = useContext(accountContext)
     const router = useRouter();
     
-    const handleNameChange = (e) => {
+    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setName(e.target.value);
     };
 
-    const handleDescriptionChange = (e) => {
+    const handleDescriptionChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setDescription(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        let projectObject = {name, description, account: account.username, isRootProject: true}
-        
+        if (!context) throw new Error("account must not be null");
+        let projectObject = { name, description, account: context.account.username, isRootProject: true };
 
-        const response = await fetch('/api/createProject', {
-            method: 'POST',
+        const response = await fetch("/api/createProject", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(projectObject),
-          });
+        });
         if (!response.ok) {
-              throw new Error(`Error: ${response.status}, ${response.json()}`);
+            throw new Error(`Error: ${response.status}, ${response.json()}`);
         }
-        const responseText = await response.json()
+        const responseText: IProject = await response.json();
         router.push(`/project?projectId=${responseText._id}`);
-
     };
 
     return(

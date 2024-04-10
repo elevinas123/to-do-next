@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import accountContext from "../context/accountContext";
+import { IProject } from "../database/schema/ProjectSchema";
 
 type TaskCreationProps = {
     parentId: string;
@@ -7,6 +8,7 @@ type TaskCreationProps = {
     place: string;
     setCreation: React.Dispatch<React.SetStateAction<boolean>>;
     changeProjects: () => void;
+    setProject: React.Dispatch<React.SetStateAction<IProject | null>>;
 };
 
 export default function TaskCreation(props: TaskCreationProps) {

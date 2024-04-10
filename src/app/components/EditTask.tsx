@@ -1,8 +1,8 @@
 import React from "react";
 
 type EditTaskProps = {
-
-}
+    edit: () => void;
+};
 
 export default function EditTask(props: EditTaskProps) {
     return (

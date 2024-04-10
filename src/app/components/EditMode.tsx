@@ -8,6 +8,7 @@ type EditModeProps = {
     type: "Task" | "Project"
     _id: string
     parent: string
+    handle
 };
 
 export default function EditMode(props: EditModeProps) {

@@ -1,14 +1,13 @@
 "use client";
 import { Draggable } from "react-beautiful-dnd";
 import EditTask from "./EditTask";
+import { ITask } from "../database/schema/TaskSchema";
 
 
-type TaskCardProps = {
-    index: number;
-    _id: string;
+interface  TaskCardProps extends ITask{
     setEditing: React.Dispatch<React.SetStateAction<boolean>>;
     handleEdit: () => void
-    text: string
+    startEditing: (result: any) => void
 };
 
 
@@ -29,8 +28,6 @@ export default function TaskCard(props: TaskCardProps) {
                         <div className="bg-white hover:bg-gray-50 cursor-pointer border border-gray-300 rounded-lg shadow-sm p-4 flex justify-between items-center">
                             <EditTask
                                 edit={edit}
-                                setEditing={props.setEditing}
-                                handleEdit={props.handleEdit}
                             />
                             <div className="text-gray-800 font-semibold truncate">{props.text}</div>
                         </div>

@@ -3,11 +3,11 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 // Define an interface to represent a Task document.
 export interface ITaskSchema extends Document {
     name: string;
-    text?: string;
-    place?: string;
+    text: string;
+    place: string;
     deadline?: string;
     comments?: string;
-    type?: string;
+    type: string;
     index: number;
     parent: mongoose.Types.ObjectId;
     onModel: "Projects" | "Task";
@@ -15,11 +15,11 @@ export interface ITaskSchema extends Document {
 export interface ITask {
     _id: string
     name: string;
-    text?: string;
-    place?: string;
+    text: string;
+    place: string;
     deadline?: string;
     comments?: string;
-    type?: string;
+    type: string;
     index: number;
     parent: mongoose.Types.ObjectId;
     onModel: "Projects" | "Task";

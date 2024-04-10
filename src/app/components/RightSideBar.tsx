@@ -7,7 +7,7 @@ import SetupDailyTasks from "./SetupDailyTasks";
 import accountContext from "../context/accountContext";
 import ProgressBar from "./ProgressBar";
 
-export default function RightSideBar(props) {
+export default function RightSideBar() {
     const [tasks, setTasks] = useState([]);
     const [progress, setProgress] = useState(0);
     const [animatedProgress, setAnimatedProgress] = useState(progress);

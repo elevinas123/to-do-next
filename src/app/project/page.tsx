@@ -1,6 +1,6 @@
 "use client";
 
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 import ProjectCreation from "../components/ProjectCreation";
 import ProjectTemplate from "../components/ProjectTemplate";
 import TaskCreation from "../components/TaskCreation";
@@ -12,12 +12,19 @@ import EditMode from "../components/EditMode";
 import { IProject } from "../database/schema/ProjectSchema";
 import { ITask } from "../database/schema/TaskSchema";
 
+type CreationName = {
+    place: string
+    index: number
+    parentId: string
+}
+
+
 export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
-    const [creationName, setCreationName] = useState({});
+    const [creationName, setCreationName] = useState<CreationName | null>(null);
     const [projectTemplates, setProjectTemplates] = useState<JSX.Element[]>([]);
-    const [project, setProject] = useState<IProject | null>();
+    const [project, setProject] = useState<IProject | null>(null);
     const [whichCreation, setWhichCreation] = useState("");
     const [changed, setChanged] = useState(false);
     const searchParams = useSearchParams();
@@ -229,7 +236,7 @@ export default function Home() {
         setEditing(true);
     };
 
-    const addNewTask = (parentId: string, place: string, index: string) => {
+    const addNewTask = (parentId: string, place: string, index: number) => {
         setCreationName({ parentId, index, place });
         setWhichCreation("task");
         setCreation((i) => !i);
@@ -348,7 +355,7 @@ export default function Home() {
     return (
         <div className="flex flex-row bg-gray-100">
             {/* Conditional rendering for task or project creation, and edit mode */}
-            {creation ? (
+            {creation && creationName? (
                 whichCreation === "task" ? (
                     <TaskCreation
                         changeProjects={changeProjects}
@@ -359,11 +366,7 @@ export default function Home() {
                         setProject={setProject}
                     />
                 ) : (
-                    <ProjectCreation
-                        changeProjects={changeProjects}
-                        setProject={setProject}
-                        setCreation={setCreation}
-                    />
+                    <ProjectCreation />
                 )
             ) : editing ? (
                 <EditMode {...editingObject} />

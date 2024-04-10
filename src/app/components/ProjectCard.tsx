@@ -3,12 +3,13 @@ import { useEffect, useState, useRef } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import EditTask from './EditTask'
 import { useRouter } from 'next/navigation';
+import { IProject } from '../database/schema/ProjectSchema';
 
 
-type ProjectCardProps = {
-    
+interface ProjectCardProps extends IProject {
+    startEditing: (object: any) => void;
+    // You can add more custom properties here if needed
 }
-
 
 export default function ProjectCard(props: ProjectCardProps) {
     const [completedAmmount, setCompletedAmmount] = useState(0);
@@ -53,7 +54,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                         {...provided.dragHandleProps}
                         className="relative p-4 m-3 bg-white rounded-lg shadow border border-gray-300 cursor-pointer"
                     >
-                        <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit} {...props} />
+                        <EditTask edit={edit} />
                         <h3 className="text-lg font-semibold text-gray-800">{props.name}</h3>
                         <p className="text-gray-600 text-sm">{props.description}</p>
                         <div className="mt-2">
@@ -65,11 +66,6 @@ export default function ProjectCard(props: ProjectCardProps) {
                             ></progress>
                             <div className="text-xs font-semibold text-gray-800">{`${completedAmmount}/${props.tasks.length}`}</div>
                         </div>
-                        {props.deadline && (
-                            <div className="mt-1 bg-gray-200 text-gray-600 font-semibold rounded-full px-2 py-1 text-xs">
-                                {props.deadline}
-                            </div>
-                        )}
                     </div>
                 )}
             </Draggable>
