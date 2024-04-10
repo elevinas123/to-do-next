@@ -1,8 +1,10 @@
+import { IProject } from "../database/schema/ProjectSchema";
+import { IRecurrentProject } from "../database/schema/RecurrentProjectShema";
+import { ITask } from "../database/schema/TaskSchema";
 
-type DailyTaskProps = {
-    place: "completed" | "inProgress"
-    name: string
-}
+interface DailyTaskProps extends IRecurrentProject {
+    handleTaskClick: (id: string) => Promise<void>;
+};
 
 export default function DailyTask(props: DailyTaskProps) {
     return (

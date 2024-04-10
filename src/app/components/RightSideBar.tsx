@@ -6,22 +6,24 @@ import EditingModeDailyTasks from "./EditingModeDailyTasks";
 import SetupDailyTasks from "./SetupDailyTasks";
 import accountContext from "../context/accountContext";
 import ProgressBar from "./ProgressBar";
+import { IRecurrentProject } from "../database/schema/RecurrentProjectShema";
+import { IAccount } from "../database/schema/AccSchema";
 
 export default function RightSideBar() {
-    const [tasks, setTasks] = useState([]);
-    const [progress, setProgress] = useState(0);
-    const [animatedProgress, setAnimatedProgress] = useState(progress);
+    const [tasks, setTasks] = useState<IRecurrentProject[]>([]);
+    const [progress, setProgress] = useState("0");
     const [editing, setEditing] = useState(false);
     const [projectId, setProjectId] = useState("");
-    const { account } = useContext(accountContext);
+    const context = useContext(accountContext);
     const [project, setProject] = useState({});
 
     const logout = () => {
+    if (!context) throw new Error("account cant be null")
     localStorage.removeItem("acc")
-    account.setLoggedIn(false)
+    context.account.setLoggedIn(false)
   }
 
-    const handleTaskClick = async (id) => {
+    const handleTaskClick = async (id:string) => {
         let state = null;
         setTasks((prevTasks) => {
             return prevTasks.map((task) =>
@@ -48,7 +50,8 @@ export default function RightSideBar() {
     };
 
     useEffect(() => {
-        const f = async () => {
+        const f = async (account: IAccount) => {
+
             const date = new Date();
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
@@ -70,7 +73,8 @@ export default function RightSideBar() {
             setProject(responseBody[0]);
             setTasks(responseBody[0].tasks[fullDate]);
         };
-        f();
+        if (!context) return
+        f(context.account);
     }, []);
     useEffect(() => {}, [projectId]);
 
@@ -187,7 +191,7 @@ export default function RightSideBar() {
         }
         const newProjectBody = await addTaskToProject.json();
     };
-    const handleTaskCreate = async (text) => {
+    const handleTaskCreate = async (text: string) => {
         console.log("text", text)
         const taskObject = {
             parent: projectId,

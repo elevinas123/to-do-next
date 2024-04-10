@@ -4,8 +4,8 @@ import { useState } from "react"
 
 
 type EmptyDailyTask = {
-
-}
+    handleBlur: (dailyTaskName: any) => Promise<void>;
+};
 
 
 export default function EmptyDailyTask(props: EmptyDailyTask) {

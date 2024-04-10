@@ -4,8 +4,8 @@ import TaskCreation from './TaskCreation';
 
 
 type SetupDailyTasksProps = {
-    
-}   
+    handleSetup: (dailyTaskName: any) => Promise<void>;
+};   
 
 
 export default function SetupDailyTasks(props: SetupDailyTasksProps) {
