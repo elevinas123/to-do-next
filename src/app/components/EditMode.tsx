@@ -1,35 +1,43 @@
-import {  useState } from "react";
+import { SetStateAction, useState } from "react";
+import { IProject, ItemId, ParentId } from "../database/schema/ProjectSchema";
+import { ITask } from "../database/schema/TaskSchema";
 
+export type EditingObject = (ITask | IProject) & {
+    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
+};
 
 type EditModeProps = {
-    name: string;
-    text: string;
-    description: string;
-    type: "Task" | "Project"
-    _id: string
-    parent: string
+    editingObject: EditingObject | null;
 };
 
 export default function EditMode(props: EditModeProps) {
     console.log(props);
-    const [name, setName] = useState(props.name);
-    const [text, setText] = useState(props.type == "Task" ? props.text : props.description);
-    const handleSubmit: React.ChangeEventHandler<HTMLButtonElement> = (e) => {
+    const [name, setName] = useState(props.editingObject?.name ?? "");
+    const [text, setText] = useState(
+        props.editingObject?.type === "Task" ? props.editingObject.text : props.editingObject.description ?? ""
+    );
+
+    const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        props.handleEdit(props._id, name, text, props.type);
-        props.setEditing(false);
+        if (!props.editingObject) throw new Error("Editing object cant be null");
+        props.editingObject.handleEdit(props.editingObject._id, name, text, props.editingObject.type);
+        props.editingObject.setEditing(false);
     };
-    const handleDeleteStart: React.ChangeEventHandler<HTMLButtonElement> = (e) => {
+    const handleDeleteStart: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
+
         const modal: HTMLElement | HTMLDialogElement | null = document.getElementById("my_modal_1");
+        if (!modal) return;
         modal.showModal();
     };
-    const handleDeletion = (e) => {
+    const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        props.handleDelete(props._id, props.parent);
-        props.setEditing(false);
+        if (!props.editingObject) throw new Error("Editing object cant be null");
+        props.editingObject.handleDelete(props.editingObject._id, props.editingObject.parent);
+        props.editingObject.setEditing(false);
     };
-
+    if (!props.editingObject) throw new Error("Editing object cant be null");
     return (
         <form className="z-20 h-100vh w-15vw  ml-24 absolute flex flex-col items-center justify-center  bg-secondary rounded-lg shadow-lg p-6 mx-auto">
             <input
@@ -55,14 +63,14 @@ export default function EditMode(props: EditModeProps) {
             </button>
             <div className="divider">OR</div>
             <button className="w-full border-2 border-black  rounded-md bg-error" onClick={handleDeleteStart}>
-                {`Delete ${props.type}`}{" "}
+                {`Delete ${props.editingObject.type}`}{" "}
             </button>
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box bg-secondary">
-                    <h3 className="font-bold text-lg text-red-500">{`${props.type} deletion!`}</h3>
+                    <h3 className="font-bold text-lg text-red-500">{`${props.editingObject.type} deletion!`}</h3>
                     <p className="mt-2">
-                        {`You are about to delete a ${props.type} named `}
-                        <span className="font-bold underline">{props.name}</span>
+                        {`You are about to delete a ${props.editingObject.type} named `}
+                        <span className="font-bold underline">{props.editingObject.name}</span>
                     </p>
 
                     <p className="font-bold mt-2">{`Are you sure you want to proceed?`}</p>

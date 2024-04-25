@@ -8,35 +8,39 @@ import ProjectMenuComponent from "../components/ProjectMenuComponent";
 import ProjectTemplate from "../components/ProjectTemplate";
 import TaskCreation from "../components/TaskCreation";
 import RightSideBar from "../components/RightSideBar";
-import { useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
-import EditMode from "../components/EditMode";
-import { IProject } from "../database/schema/ProjectSchema";
+import EditMode, { EditingObject } from "../components/EditMode";
+import { IProject, ItemId, ParentId } from "../database/schema/ProjectSchema";
+import { ITask } from "../database/schema/TaskSchema";
 
-export default function Home(props) {
+export function ProjectNullError(): never {
+    throw new Error("Project cant be null");
+}
+
+export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
     const [creationName, setCreationName] = useState({});
-    const [projectTemplates, setProjectTemplates] = useState([]);
-    const { account } = useContext(accountContext);
-    const [projects, setProjects] = useState<IProject[]>([]);
+    const [projectTemplates, setProjectTemplates] = useState<ReactElement[]>([]);
+    const [project, setProject] = useState<IProject | null>(null);
     const [whichCreation, setWhichCreation] = useState("");
     const [changed, setChanged] = useState(false);
     const searchParams = useSearchParams();
-    const [editing, setEditing] = useState(false);
-    const [editingObject, setEditingObject] = useState({});
+    const [editing, setEditing] = useState<true| false>(false);
+    const [editingObject, setEditingObject] = useState<EditingObject | null>(null);
     useEffect(() => {
-        const f = async() => {
+        const f = async () => {
             await fetch("api/connectToDB", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        }
-        f()
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        };
+        f();
     }, []);
 
     useEffect(() => {
@@ -51,9 +55,9 @@ export default function Home(props) {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}, ${response.json()}`);
             }
-            const responseBody: IProject[] = await response.json();
+            const responseBody: IProject = await response.json();
             console.log("projektas", responseBody);
-            setProjects(responseBody);
+            setProject(responseBody);
         };
         const projectId = searchParams.get("projectId");
         if (projectId) {
@@ -62,19 +66,20 @@ export default function Home(props) {
         }
     }, [changed, searchParams.get("projectId")]);
 
-    const handleEdit = async (id: string, name: string, text: string, type: "Task" | "Project") => {
-        /*
-        NIFIGA NESUPRANTU KA CIA PADARIAU TAISYSIM
+    const handleEdit = async (id: ItemId, name: string, text: string, type: "Task" | "Project") => {
         console.log("here");
-        console.log(projects);
-        setProjects((project) => ({
-            ...project,
-            tasks: project.tasks.map((task) =>
-                task._id === id
-                    ? { ...task, name: name, ...(type === "Task" ? { text: text } : { description: text }) }
-                    : task
-            ),
-        }));
+        console.log(project);
+        setProject((project) => {
+            if (!project) ProjectNullError();
+            return {
+                ...project,
+                tasks: project.tasks.map((task) =>
+                    task._id === id
+                        ? { ...task, name: name, ...(type === "Task" ? { text: text } : { description: text }) }
+                        : task
+                ),
+            };
+        });
         const task = await fetch(
             `/api/${type == "Task" ? "recurrentProject/updateReferenceTask" : "updateProjectName"}`,
             {
@@ -90,15 +95,15 @@ export default function Home(props) {
             }
         );
         console.log(task);
-        */
     };
 
-    const handleDelete = async (id, parentId) => {
+    const handleDelete = async (id: ItemId, parentId: ParentId) => {
         console.log("hi");
-        let updatedTasks = [];
-        let updatedProjects = [];
+        let updatedTasks: ITask[] = [];
+        let updatedProjects: IProject[] = [];
 
-        setProjects((project) => {
+        setProject((project) => {
+            if (!project) return project;
             const taskIndexToDelete = project.tasks.findIndex((task) => task._id === id);
             if (taskIndexToDelete === -1) return project; // Task not found, no update needed
 
@@ -147,16 +152,17 @@ export default function Home(props) {
     };
 
     useEffect(() => {
-        console.log(projects);
+        console.log(project);
+        if (!project) throw new Error("Project cant be null");
         let p = [];
         let toDo = [];
         let inProgress = [];
         let completed = [];
-        if (projects.tasks != undefined) {
-            for (let i = 0; i < projects.tasks.length; i++) {
-                if (projects.tasks[i].place == "toDo") toDo.push(projects.tasks[i]);
-                if (projects.tasks[i].place == "inProgress") inProgress.push(projects.tasks[i]);
-                if (projects.tasks[i].place == "completed") completed.push(projects.tasks[i]);
+        if (project.tasks != undefined) {
+            for (let i = 0; i < project.tasks.length; i++) {
+                if (project.tasks[i].place == "toDo") toDo.push(project.tasks[i]);
+                if (project.tasks[i].place == "inProgress") inProgress.push(project.tasks[i]);
+                if (project.tasks[i].place == "completed") completed.push(project.tasks[i]);
             }
         }
         toDo.sort((a, b) => a.index - b.index);
@@ -165,55 +171,55 @@ export default function Home(props) {
 
         p.push(
             <ProjectTemplate
+                key="toDo"
                 setEditing={setEditing}
                 handleEdit={handleEdit}
                 startEditing={startEditing}
                 handleDelete={handleDelete}
-                key="toDo"
                 changeProjects={changeProjects}
                 biggestIndex={toDo.length - 1}
                 tasks={toDo}
                 name={"To do"}
                 place={"toDo"}
                 addNewTask={addNewTask}
-                parent={projects._id}
+                parent={project._id}
             />
         );
         p.push(
             <ProjectTemplate
+                key="inProgress"
                 setEditing={setEditing}
                 handleEdit={handleEdit}
                 startEditing={startEditing}
                 handleDelete={handleDelete}
-                key="inProgress"
                 changeProjects={changeProjects}
                 biggestIndex={inProgress.length - 1}
                 name={"In progress"}
                 tasks={inProgress}
                 place={"inProgress"}
                 addNewTask={addNewTask}
-                parent={projects._id}
+                parent={project._id}
             />
         );
         p.push(
             <ProjectTemplate
+                key="completed"
                 setEditing={setEditing}
                 handleEdit={handleEdit}
                 startEditing={startEditing}
                 handleDelete={handleDelete}
-                key="completed"
                 changeProjects={changeProjects}
                 biggestIndex={completed.length - 1}
                 name={"Completed"}
                 tasks={completed}
                 place={"completed"}
                 addNewTask={addNewTask}
-                parent={projects._id}
+                parent={project._id}
             />
         );
 
         setProjectTemplates(p);
-    }, [projects]);
+    }, [project]);
 
     const changeProjects = () => {
         setChanged((i) => !i);
@@ -225,7 +231,7 @@ export default function Home(props) {
         setEditing(true);
     };
 
-    const addNewTask = (parentId, place, index) => {
+    const addNewTask = (parentId: ParentId, place: string, index: number) => {
         setCreationName({ parentId, index, place });
         setWhichCreation("task");
         setCreation((i) => !i);
@@ -239,6 +245,7 @@ export default function Home(props) {
         setFirstClick((i) => !i);
     };
     const handleDragEnd = async (result) => {
+        if (!project) ProjectNullError();
         const { source, destination, draggableId } = result;
 
         // Do nothing if dropped outside the list
@@ -251,8 +258,8 @@ export default function Home(props) {
             return;
         }
 
-        // Creating a new copy of projects
-        let newTasks = JSON.parse(JSON.stringify(projects.tasks));
+        // Creating a new copy of project
+        let newTasks = JSON.parse(JSON.stringify(project.tasks));
         let updatedTasks = [];
         let updatedProjects = [];
         for (let i = 0; i < newTasks.length; i++) {
@@ -319,7 +326,7 @@ export default function Home(props) {
         console.log("updatedProjects", updatedProjects);
         console.log("updatedTasks", updatedTasks);
         // Update the state
-        setProjects({ ...projects, tasks: newTasks });
+        setProject({ ...project, tasks: newTasks });
         await fetch(`/api/updateProjects`, {
             method: "PUT",
             headers: {
@@ -347,17 +354,17 @@ export default function Home(props) {
                         place={creationName.place}
                         index={creationName.index}
                         setCreation={setCreation}
-                        setProjects={setProjects}
+                        setProject={setProject}
                     />
                 ) : (
                     <ProjectCreation
                         changeProjects={changeProjects}
-                        setProjects={setProjects}
+                        setProject={setProject}
                         setCreation={setCreation}
                     />
                 )
             ) : editing ? (
-                <EditMode {...editingObject} />
+                <EditMode editingObject={editingObject} />
             ) : null}
 
             {/* Main content area, possibly dimmed based on 'creation' state */}
@@ -368,7 +375,7 @@ export default function Home(props) {
                 <div className="">
                     <div className="flex flex-col border-b-2 border-gray-300 pb-4 mx-4">
                         <div className="px-4 py-2">
-                            <h1 className="text-2xl font-extrabold text-gray-700">{projects.name}</h1>
+                            <h1 className="text-2xl font-extrabold text-gray-700">{project && project.name}</h1>
                         </div>
                         <div className="flex flex-row">
                             <DragDropContext onDragEnd={handleDragEnd}>{projectTemplates}</DragDropContext>

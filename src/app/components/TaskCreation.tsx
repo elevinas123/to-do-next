@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import accountContext from "../context/accountContext";
+import { ParentId } from "../database/schema/ProjectSchema";
 
 type TaskCreationProps = {
-    parentId: string;
+    parentId: ParentId;
     index: number;
     place: string;
     setCreation: React.Dispatch<React.SetStateAction<boolean>>;

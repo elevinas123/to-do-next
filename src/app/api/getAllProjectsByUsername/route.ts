@@ -1,4 +1,5 @@
-import Project from "@/app/database/schema/ProjectSchema";
+import Project from "../../database/schema/ProjectSchema";
+
 export async function POST(req) {
     try {
         const { account } = await req.json();

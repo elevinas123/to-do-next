@@ -5,31 +5,34 @@ import { ITask } from "./TaskSchema";
 export interface IProjectSchema extends Document {
     name: string;
     account: string;
-    description?: string;
+    description: string;
     tasks: Map<ITask, mongoose.Types.ObjectId[]>;
     onModel: ("Projects" | "Task")[];
-    index?: number;
-    type?: string;
-    comments?: string;
-    place?: string;
-    parent?: mongoose.Types.ObjectId;
+    index: number;
+    type: string;
+    comments: string;
+    place: string;
+    parent: mongoose.Types.ObjectId;
     isRootProject: boolean;
 }
-export interface IProject  {
-    _id: string
+export interface IProject {
+    _id: ItemId;
     name: string;
     account: string;
-    description?: string;
-    tasks: ITask[]
+    description: string;
+    tasks: Tasks;
     onModel: ("Projects" | "Task")[];
-    index?: number;
-    type?: string;
-    comments?: string;
-    place?: string;
-    parent?: mongoose.Types.ObjectId;
+    index: number;
+    type: "Project" | "Task";
+    comments: string;
+    place: string;
+    parent: ParentId;
     isRootProject: boolean;
 }
 
+export type ParentId = mongoose.Types.ObjectId | null;
+export type ItemId = mongoose.Types.ObjectId;
+export type Tasks = (ITask | IProject)[];
 // Create a new mongoose schema for projects with typed properties
 const ProjectSchema = new Schema<IProject>({
     name: {
@@ -40,7 +43,10 @@ const ProjectSchema = new Schema<IProject>({
         type: String,
         required: true,
     },
-    description: String,
+    description: {
+        type: String,
+        required: true,
+    },
     tasks: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -53,10 +59,22 @@ const ProjectSchema = new Schema<IProject>({
             enum: ["Projects", "Task"],
         },
     ],
-    index: Number,
-    type: String,
-    comments: String,
-    place: String,
+    index: {
+        type: Number,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+    },
+    comments: {
+        type: String,
+        required: true,
+    },
+    place: {
+        type: String,
+        required: true,
+    },
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         required: false, // Making the parent optional
@@ -67,13 +85,13 @@ const ProjectSchema = new Schema<IProject>({
     },
 });
 
-let ProjectModel: Model<IProject>;
+let Project: Model<IProject>;
 try {
     // Trying to get the model if it already exists
-    ProjectModel = mongoose.model<IProject>("Projects");
+    Project = mongoose.model<IProject>("Projects");
 } catch {
     // If it does not exist, create it
-    ProjectModel = mongoose.model<IProject>("Projects", ProjectSchema);
+    Project = mongoose.model<IProject>("Projects", ProjectSchema);
 }
 
-export default ProjectModel;
+export default Project;

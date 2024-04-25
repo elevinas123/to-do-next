@@ -1,11 +1,12 @@
 "use client";
 import { Draggable } from "react-beautiful-dnd";
 import EditTask from "./EditTask";
+import { ItemId } from "../database/schema/ProjectSchema";
 
 
 type TaskCardProps = {
     index: number;
-    _id: string;
+    _id: ItemId;
     setEditing: React.Dispatch<React.SetStateAction<boolean>>;
     handleEdit: () => void
     text: string

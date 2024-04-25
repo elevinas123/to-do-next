@@ -20,7 +20,7 @@ export default function ProjectCreation(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let projectObject = {name, description, account: account.username, isRootProject: true}
+        let projectObject = {name, description, account: account.username, isRootProject: true, place: "none", index: 0, parent: null}
         
 
         const response = await fetch('/api/createProject', {

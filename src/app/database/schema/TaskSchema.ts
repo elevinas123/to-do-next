@@ -1,27 +1,28 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { ItemId, ParentId } from "./ProjectSchema";
 
 // Define an interface to represent a Task document.
 export interface ITaskSchema extends Document {
     name: string;
-    text?: string;
-    place?: string;
-    deadline?: string;
-    comments?: string;
-    type?: string;
+    text: string;
+    place: string;
+    deadline: string;
+    comments: string;
+    type: string;
     index: number;
-    parent: mongoose.Types.ObjectId;
+    parent: ParentId;
     onModel: "Projects" | "Task";
 }
 export interface ITask {
-    _id: string
+    _id: ItemId;    
     name: string;
-    text?: string;
-    place?: string;
-    deadline?: string;
-    comments?: string;
-    type?: string;
+    text: string;
+    place: string;
+    deadline: string;
+    comments: string;
+    type: "Project" | "Task";
     index: number;
-    parent: mongoose.Types.ObjectId;
+    parent: ParentId;
     onModel: "Projects" | "Task";
 }
 
@@ -31,11 +32,26 @@ const TaskSchema = new Schema<ITaskSchema>({
         type: String,
         required: true,
     },
-    text: String,
-    place: String,
-    deadline: String,
-    comments: String,
-    type: String,
+    text: {
+        type: String,
+        required: true,
+    },
+    place: {
+        type: String,
+        required: true,
+    },
+    deadline: {
+        type: String,
+        required: true,
+    },
+    comments: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+    },
     index: {
         type: Number,
         required: true,
@@ -53,11 +69,11 @@ const TaskSchema = new Schema<ITaskSchema>({
 });
 
 // Try to get the already registered 'Task' model, or create a new one if it doesn't exist.
-let TaskModel: Model<ITaskSchema>;
+let Task: Model<ITaskSchema>;
 try {
-    TaskModel = mongoose.model<ITaskSchema>("Task");
+    Task = mongoose.model<ITaskSchema>("Task");
 } catch (error) {
-    TaskModel = mongoose.model<ITaskSchema>("Task", TaskSchema);
+    Task = mongoose.model<ITaskSchema>("Task", TaskSchema);
 }
 
-export default TaskModel;
+export default Task;

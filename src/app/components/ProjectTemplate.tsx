@@ -1,15 +1,24 @@
-
-import { useEffect, useState } from 'react';
-import ProjectCard from './ProjectCard';
-import EmptyProjectCard from './EmptyProjectCard';
-import { Droppable } from 'react-beautiful-dnd';
-import TaskCard from './TaskCard';
-
+import { SetStateAction, useEffect, useState } from "react";
+import ProjectCard from "./ProjectCard";
+import EmptyProjectCard from "./EmptyProjectCard";
+import { Droppable } from "react-beautiful-dnd";
+import TaskCard from "./TaskCard";
+import { ItemId, ParentId, Tasks } from "../database/schema/ProjectSchema";
+import { ITask } from "../database/schema/TaskSchema";
 
 type ProjectTemplateProps = {
-    
-}
-
+    setEditing: React.Dispatch<SetStateAction<boolean>>;
+    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
+    startEditing: (object: any) => void;
+    changeProjects: () => void;
+    biggestIndex: number;
+    name: string;
+    tasks: Tasks;
+    place: string;
+    addNewTask: (parentId: ParentId, place: string, index: number) => void;
+    parent: ParentId;
+};
 
 export default function ProjectTemplate(props: ProjectTemplateProps) {
     const [projectCards, setProjectCards] = useState([]);
@@ -21,25 +30,25 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
             if (props.tasks[i].type === "Project") {
                 p.push(
                     <ProjectCard
+                        {...props.tasks[i]}
                         setEditing={props.setEditing}
                         handleEdit={props.handleEdit}
                         startEditing={props.startEditing}
                         handleDelete={props.handleDelete}
                         index={props.index}
                         key={props.tasks[i]._id + "-" + i}
-                        {...props.tasks[i]}
                     />
                 );
             } else {
                 p.push(
                     <TaskCard
+                        {...props.tasks[i]}
                         setEditing={props.setEditing}
                         handleEdit={props.handleEdit}
                         startEditing={props.startEditing}
                         handleDelete={props.handleDelete}
                         index={props.index}
                         key={props.tasks[i]._id + "-" + i}
-                        {...props.tasks[i]}
                     />
                 );
             }

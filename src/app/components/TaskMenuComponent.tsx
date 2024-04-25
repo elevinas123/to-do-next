@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { ItemId } from "../database/schema/ProjectSchema";
 
 type TaskMenuComponentProps = {
-    _id: string;
+    _id: ItemId;
     name: string;
 };
 
