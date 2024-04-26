@@ -1,21 +1,21 @@
-import TaskModel from "../../database/schema/TaskSchema";
+import TaskModel, { ITask } from "../../database/schema/TaskSchema";
 
-export async function POST(req) {
+export async function POST(req: Request) {
     try {
         const taskObj = await req.json();
         console.log(taskObj);
         let task = await TaskModel.create(taskObj);
 
         return new Response(JSON.stringify(task));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         return new Response(JSON.stringify({ error: error.message }));
     }
 }
 
-export async function PUT(req) {
+export async function PUT(req: Request) {
     try {
-        const tasks = await req.json(); // Assuming tasks is an array of task updates
+        const tasks: ITask[] = await req.json(); // Assuming tasks is an array of task updates
         console.log("Updating tasks", tasks);
 
         const updateOperations = tasks.map((task) => {
@@ -31,7 +31,7 @@ export async function PUT(req) {
         console.log("Bulk update result", result);
 
         return new Response(JSON.stringify(result));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }

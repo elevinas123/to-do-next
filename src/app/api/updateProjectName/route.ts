@@ -3,10 +3,10 @@ import Project from "../../database/schema/ProjectSchema";
 
 
 
-export async function PUT(req) {
+export async function PUT(req: Request) {
     try {
-        const {id, ...updateFields } = await req.json();
-        console.log("cia turetum tu prinint", {id, ...updateFields })
+        const { id, ...updateFields } = await req.json();
+        console.log("cia turetum tu prinint", { id, ...updateFields });
         // Constructing the update object dynamically
         let updateObject = {};
         for (let key in updateFields) {
@@ -14,18 +14,14 @@ export async function PUT(req) {
                 updateObject[key] = updateFields[key];
             }
         }
-        console.log(updateObject)
+        console.log(updateObject);
         // If updateObject is empty, throw an error or return a message
         if (Object.keys(updateObject).length === 0) {
-            throw new Error('No update fields provided');
+            throw new Error("No update fields provided");
         }
 
         // Update the task
-        const response = await Project.findByIdAndUpdate(
-            id,
-            { $set: updateObject },
-            { new: true }
-        );
+        const response = await Project.findByIdAndUpdate(id, { $set: updateObject }, { new: true });
 
         console.log("Updated task", response);
 

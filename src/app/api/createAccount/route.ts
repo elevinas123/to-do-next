@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 import AccSchema from "../../database/schema/AccSchema"
 
 
-export async function POST(req) {
+export async function POST(req: Request) {
     try {
         const details = await req.json()
         console.log("username sent to api", details)
@@ -17,7 +17,7 @@ export async function POST(req) {
 
         }
 
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
       return new Response(JSON.stringify({ error: error.message }))
     }

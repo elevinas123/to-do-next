@@ -1,27 +1,27 @@
 import Project from "../../database/schema/ProjectSchema";
 
 
-export async function DELETE(req) {
+export async function DELETE(req: Request) {
     try {
-        const { parentId, id} = await req.json();
+        const { parentId, id } = await req.json();
 
         // Retrieve the project document
         const project = await Project.findById(parentId);
         if (!project) {
-            throw new Error('Project not found');
+            throw new Error("Project not found");
         }
         // Find the index of the task with the given taskId
-        const index = project.tasks.findIndex(task => task._id.toString() === id);
-        console.log(project)
+        const index = project.tasks.findIndex((task) => task._id.toString() === id);
+        console.log(project);
         if (index !== -1) {
             // If the task was found, you can use the index here
             console.log("Index of the filtered out task:", index);
 
             // Then filter out the task from the array
-            project.tasks.splice(index, 1)
-            project.onModel.splice(index, 1)
+            project.tasks.splice(index, 1);
+            project.onModel.splice(index, 1);
         }
-        console.log(project)
+        console.log(project);
         // Save the updated project
         await project.save();
 
@@ -30,7 +30,7 @@ export async function DELETE(req) {
 
         console.log("Task deleted successfully");
         return new Response(JSON.stringify({ message: "Task deleted successfully" }));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }

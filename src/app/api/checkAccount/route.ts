@@ -4,14 +4,12 @@
 import AccSchema from '../../database/schema/AccSchema';
 
 
-export async function POST(req) {
+export async function POST(req: Request) {
     try {
         const {username} = await req.json()
-        console.log("username sent to api", username)
         let response = await AccSchema.find({username: username})
-        
         return new Response(JSON.stringify(response))
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         return new Response(JSON.stringify({ error: error.message }))
     }

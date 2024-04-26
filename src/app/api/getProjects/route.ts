@@ -1,7 +1,7 @@
 import Project from "../../database/schema/ProjectSchema";
 
 
-export async function POST(req) {
+export async function POST(req: Request) {
     try {
         const { projectId } = await req.json();
         console.log("projectID", projectId)
@@ -23,8 +23,7 @@ export async function POST(req) {
         }
 
         return new Response(JSON.stringify(project.toObject()));
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }
