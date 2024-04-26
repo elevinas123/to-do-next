@@ -1,20 +1,20 @@
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Updated to use the new Next.js 13 navigation
 import accountContext from "../context/accountContext";
-
+import { IProject, ItemId } from "../database/schema/ProjectSchema";
 
 type ProjectMenuComponentProps = {
-    isRoot: boolean;
-    _id: string;
-    childrenProjects: []
-    name: string
-    level: number
+    isRoot?: boolean;
+    _id: ItemId | string;
+    childrenProjects?: IProject[];
+    name: string;
+    level: number;
 };
 
 export default function ProjectMenuComponent(props: ProjectMenuComponentProps) {
     const context = useContext(accountContext);
     const [expanded, setExpanded] = useState(false);
-    const [childrenProjects, setChildrenProjects] = useState([]);
+    const [childrenProjects, setChildrenProjects] = useState<IProject[]>([]);
     const router = useRouter(); // Updated to useAppRouter hook from Next.js 13
 
     useEffect(() => {
@@ -31,8 +31,10 @@ export default function ProjectMenuComponent(props: ProjectMenuComponentProps) {
                 }
                 const responseBody = await response.json();
                 setChildrenProjects(responseBody.tasks);
-            } else {
+            } else if (props.childrenProjects) {
                 setChildrenProjects(props.childrenProjects);
+            } else {
+                throw new Error ("kazkas negerai")
             }
         };
         fetchProjects();
@@ -56,8 +58,8 @@ export default function ProjectMenuComponent(props: ProjectMenuComponentProps) {
             </button>
             {expanded && childrenProjects.length > 0 && (
                 <div className="mt-2 bg-gray-800 shadow-inner rounded-lg p-2 animate-fade-in-down overflow-y-auto space-y-2">
-                    {childrenProjects.map((child) => (
-                        <ProjectMenuComponent key={child._id} {...child} level={props.level + 1} />
+                    {childrenProjects.map((child, index) => (
+                        <ProjectMenuComponent key={index} {...child} isRoot={false} level={props.level + 1} />
                     ))}
                 </div>
             )}

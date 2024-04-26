@@ -69,11 +69,11 @@ const TaskSchema = new Schema<ITaskSchema>({
 });
 
 // Try to get the already registered 'Task' model, or create a new one if it doesn't exist.
-let Task: Model<ITaskSchema>;
+let TaskModel: Model<ITaskSchema>;
 try {
-    Task = mongoose.model<ITaskSchema>("Task");
+    TaskModel = mongoose.model<ITaskSchema>("Task");
 } catch (error) {
-    Task = mongoose.model<ITaskSchema>("Task", TaskSchema);
+    TaskModel = mongoose.model<ITaskSchema>("Task", TaskSchema);
 }
 
-export default Task;
+export default TaskModel;

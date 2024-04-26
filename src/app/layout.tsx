@@ -1,67 +1,72 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import localFont from 'next/font/local'
-import './globals.css';
-import accountContext from './context/accountContext';
-import Login from './components/Login';
-import CreateAccount from './components/CreateAccount';
+"use client";
+import React, { ReactNode, useEffect, useState } from "react";
+import localFont from "next/font/local";
+import "./globals.css";
+import accountContext from "./context/accountContext";
+import Login from "./components/Login";
+import CreateAccount from "./components/CreateAccount";
+import { IAccount } from "./database/schema/AccSchema";
 
-const myFont = localFont({ src: '../Work_Sans/static/WorkSans-Medium.ttf' })
- 
-export default function RootLayout({ children }) {
+const myFont = localFont({ src: "../Work_Sans/static/WorkSans-Medium.ttf" });
+interface RootLayoutProps {
+    children: ReactNode; // Using ReactNode to type the children prop, which can accept any valid React element
+}
+interface Acc extends IAccount {
+    setLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+export default function RootLayout({ children }: RootLayoutProps) {
+    const [account, setAccount] = useState<Acc | false>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+    const [accountCreation, setAccountCreation] = useState<boolean>(false);
+    useEffect(() => {
+        const f = async () => {
+            await fetch("api/connectToDB", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log("fetched");
+        };
+        f();
+    }, []);
 
-  const [loggedIn, setLoggedIn] = useState(null)
-  const [account, setAccount] = useState(false)
-  const [accountCreation, setAccountCreation] = useState(false)
-    useEffect( () => {
-      const f = async () => {
-          await fetch("api/connectToDB", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          });
-          console.log("fetched")
-      };
-      f();
-    }, []
-    )
+    useEffect(() => {
+        const storedAccount = localStorage.getItem("acc");
+        if (storedAccount !== null) {
+            let acc: IAccount = JSON.parse(storedAccount);
+            setAccount({ ...acc, setLoggedIn });
 
-    useEffect( () => {
-        if (localStorage.getItem('acc') !== null) {
-          let acc = JSON.parse(localStorage.getItem('acc'))
-          setAccount({...acc, setLoggedIn})
-          
-          setLoggedIn(true)
-      } 
-    }, [])
+            setLoggedIn(true);
+        }
+    }, []);
 
-  const authenticate = async (acc) => {
-    console.log("authenticated", acc)
-    localStorage.setItem('acc', JSON.stringify(acc));
-    console.log(localStorage.getItem("acc"))
-    setAccount({...acc, setLoggedIn})
+    const authenticate = async (acc: IAccount) => {
+        console.log("authenticated", acc);
+        localStorage.setItem("acc", JSON.stringify(acc));
+        console.log(localStorage.getItem("acc"));
+        setAccount({ ...acc, setLoggedIn });
 
-    setLoggedIn(true)
-    
-  }
+        setLoggedIn(true);
+    };
 
-  const startAccountCreation = () => {
-    setAccountCreation(true)
-  }
+    const startAccountCreation = () => {
+        setAccountCreation(true);
+    };
 
-  
-  
-
-  return (
-    <accountContext.Provider value={{account: account}}>
-        <html data-theme="todoTheme" lang="en">
-        <body className={myFont.className}>{loggedIn?
-        children:
-        accountCreation?<CreateAccount authenticate={authenticate} />:<Login startAccountCreation={startAccountCreation} authenticate={authenticate}/>
-        
-        }</body>
-        </html>
-    </accountContext.Provider>
-  )
+    return (
+        <accountContext.Provider value={account? { account: account }: null}>
+            <html data-theme="todoTheme" lang="en">
+                <body className={myFont.className}>
+                    {loggedIn ? (
+                        children
+                    ) : accountCreation ? (
+                        <CreateAccount authenticate={authenticate} />
+                    ) : (
+                        <Login startAccountCreation={startAccountCreation} authenticate={authenticate} />
+                    )}
+                </body>
+            </html>
+        </accountContext.Provider>
+    );
 }

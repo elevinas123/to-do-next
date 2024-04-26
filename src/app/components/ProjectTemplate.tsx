@@ -22,7 +22,7 @@ type ProjectTemplateProps = {
 };
 
 export default function ProjectTemplate(props: ProjectTemplateProps) {
-    const [projectCards, setProjectCards] = useState([]);
+    const [projectCards, setProjectCards] = useState<React.JSX.Element[]>([]);
 
     useEffect(() => {
         let p = [];

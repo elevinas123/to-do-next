@@ -38,7 +38,7 @@ export default function LeftHandSideProjectMenu() {
                 <h1 className="text-lg font-semibold">Your Projects</h1>
             </div>
             <div className="overflow-y-auto p-2 space-y-2">
-                <ProjectMenuComponent level={1} name="Projects" isRoot={true} childrenProjects={rootProjects} />
+                <ProjectMenuComponent _id={"root"} level={1} name="Projects" isRoot={true} childrenProjects={rootProjects} />
             </div>
         </div>
     );

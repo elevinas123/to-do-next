@@ -28,7 +28,7 @@ export default function TaskCard(props: TaskCardProps) {
                         className="m-3"
                     >
                         <div className="bg-white hover:bg-gray-50 cursor-pointer border border-gray-300 rounded-lg shadow-sm p-4 flex justify-between items-center">
-                            <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit} />
+                            <EditTask edit={edit}/>
                             <div className="text-gray-800 font-semibold truncate">{props.text}</div>
                         </div>
                     </div>

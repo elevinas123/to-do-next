@@ -4,7 +4,7 @@ import { IProject, ParentId } from "../database/schema/ProjectSchema";
 
 type TaskCreationProps = {
     changeProjects: () => void;
-    parentId: ParentId;
+    parentId: ParentId | string;
     index: number;
     place: string;
     setCreation: React.Dispatch<React.SetStateAction<boolean>>;

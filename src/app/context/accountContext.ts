@@ -3,8 +3,8 @@ import React from 'react';
 import { IAccount } from '../database/schema/AccSchema';
 
 type AccountContext = {
-    account: IAccount
-}
+    account: IAccount;
+};
 
 const accountContext = React.createContext<AccountContext | null>(null);
 

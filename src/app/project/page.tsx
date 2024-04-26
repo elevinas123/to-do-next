@@ -1,16 +1,12 @@
 "use client";
 
 import { DragDropContext, DropResult, OnDragEndResponder } from "react-beautiful-dnd";
-import EmptyProjectCard from "../components/EmptyProjectCard";
-import Navbar from "../components/Navbar";
 import ProjectCreation from "../components/ProjectCreation";
-import ProjectMenuComponent from "../components/ProjectMenuComponent";
 import ProjectTemplate from "../components/ProjectTemplate";
 import TaskCreation from "../components/TaskCreation";
 import RightSideBar from "../components/RightSideBar";
 import { ReactElement, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
 import EditMode, { EditingObject, isTask } from "../components/EditMode";
 import { IProject, ItemId, ParentId } from "../database/schema/ProjectSchema";
@@ -362,11 +358,7 @@ export default function Home() {
                         />
                     )
                 ) : (
-                    <ProjectCreation
-                        changeProjects={changeProjects}
-                        setProject={setProject}
-                        setCreation={setCreation}
-                    />
+                    <ProjectCreation />
                 )
             ) : editing ? (
                 <EditMode editingObject={editingObject} />

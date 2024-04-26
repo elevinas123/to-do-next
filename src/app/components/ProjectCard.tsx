@@ -57,7 +57,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                         {...provided.dragHandleProps}
                         className="relative p-4 m-3 bg-white rounded-lg shadow border border-gray-300 cursor-pointer"
                     >
-                        <EditTask edit={edit} setEditing={props.setEditing} />
+                        <EditTask edit={edit}  />
                         <h3 className="text-lg font-semibold text-gray-800">{props.name}</h3>
                         <p className="text-gray-600 text-sm">{props.description}</p>
                         <div className="mt-2">

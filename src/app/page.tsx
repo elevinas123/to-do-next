@@ -4,12 +4,13 @@ import ProjectCreation from "./components/ProjectCreation";
 import TaskCreation from "./components/TaskCreation";
 import RightSideBar from "./components/RightSideBar";
 import LeftHandSideProjectMenu from "./components/LeftHandSideProjectMenu";
+import { IProject } from "./database/schema/ProjectSchema";
 
 export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
     const [creationName, setCreationName] = useState("");
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState<IProject | null>(null);
     const [whichCreation, setWhichCreation] = useState("");
     useEffect(() => {
         const f = async () => {
@@ -37,14 +38,11 @@ export default function Home() {
             {/* Conditional Rendering for Task or Project Creation */}
             {creation &&
                 (whichCreation === "task" ? (
-                    <TaskCreation
-                        changeProjects={changeProjects}
-                        parent={creationName}
-                        setCreation={setCreation}
-                        setProjects={setProjects}
-                    />
+                    (() => {
+                        throw new Error("Cannot create a task here.");
+                    })()
                 ) : (
-                    <ProjectCreation setCreation={setCreation} />
+                    <ProjectCreation />
                 ))}
 
             {/* Main Interaction Area with Conditional Opacity */}

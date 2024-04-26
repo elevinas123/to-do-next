@@ -1,11 +1,15 @@
+import { ParentId } from "../database/schema/ProjectSchema";
 
 
 
 
 
 type EmptyProjectCardProps = {
-    
-}
+    place: string;
+    biggestIndex: number;
+    addNewTask: (parentId: ParentId, place: string, index: number) => void;
+    parent: ParentId;
+};
 
 export default function EmptyProjectCard(props: EmptyProjectCardProps) {
     return (

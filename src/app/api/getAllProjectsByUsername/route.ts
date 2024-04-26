@@ -1,16 +1,17 @@
 import Project from "../../database/schema/ProjectSchema";
+import TaskModel from "../../database/schema/TaskSchema";
 
 export async function POST(req) {
     try {
         const { account } = await req.json();
-        console.log("account", account)
+        console.log("accountasasd", account)
         let projects = await Project.find({ account: account, isRootProject: true })
             .populate({
                 path: "tasks",
                 refPath: "onModel",
             })
             .exec();
-
+        console.log("projects", projects)
         for (let i = 0; i < projects.length; i++) {
             for (let task of projects[i].tasks) {
                 console.log(task);

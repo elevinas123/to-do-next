@@ -4,20 +4,20 @@ export default function Calendar() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [monthDays, setMonthDays] = useState<JSX.Element[]>([]);
-    const months = {
-        0: "January",
-        1: "February",
-        2: "March",
-        3: "April",
-        4: "May",
-        5: "June",
-        6: "July",
-        7: "August",
-        8: "September",
-        9: "October",
-        10: "November",
-        11: "December",
-    };
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
 
     const generateDates = (year: number, month: number) => {
         const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -68,11 +68,14 @@ export default function Calendar() {
 
     const handleMonthChangeClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        if(!e.target.id) throw new Error("Id must Exist")
+        const target = e.target as HTMLButtonElement;
+
+        if (!target.id) throw new Error("Id must exist");
+
         let year = selectedYear;
         let month = selectedMonth;
 
-        if (e.target.id === "monthUp") {
+        if (target.id === "monthUp") {
             month = (month + 1) % 12; // Increment the month and wrap around at December (12)
             if (month === 0) {
                 year++;
@@ -87,9 +90,7 @@ export default function Calendar() {
         setSelectedYear(year);
         setSelectedMonth(month);
     };
-    const handleDayClick = () => {
-        return;
-    };
+
 
     return (
         <div className="flex flex-col items-center justify-center w-80 bg-gray-100 rounded-lg shadow-lg p-4">
@@ -120,7 +121,6 @@ export default function Calendar() {
                     <button
                         key={index}
                         className="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-700 bg-transparent rounded-full hover:bg-gray-200 focus:bg-gray-300"
-                        onClick={() => handleDayClick(day)}
                     >
                         {day}
                     </button>

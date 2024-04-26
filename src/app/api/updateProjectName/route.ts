@@ -1,5 +1,5 @@
+import Project from "../../database/schema/ProjectSchema";
 
-import  Project  from '@/app/database/schema/ProjectSchema';
 
 
 

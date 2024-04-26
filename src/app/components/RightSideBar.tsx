@@ -5,16 +5,15 @@ import accountContext from "../context/accountContext";
 import ProgressBar from "./ProgressBar";
 import { IProject } from "../database/schema/ProjectSchema";
 
-
-
 export default function RightSideBar() {
-    const { account } = useContext(accountContext);
+    const context = useContext(accountContext);
 
     const logout = () => {
-    localStorage.removeItem("acc")
-    account.setLoggedIn(false)
-  }
-
+        if (!context) throw new Error("context must not be null");
+        const { account } = context;
+        localStorage.removeItem("acc");
+        account.setLoggedIn(false);
+    };
 
     return (
         <div className="pl-2 w-full">
@@ -36,5 +35,4 @@ export default function RightSideBar() {
             </div>
         </div>
     );
-
 }

@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 
+interface CustomCSSProperties extends CSSProperties {
+    "--value"?: number;
+    "--size"?: string;
+    "--thickness"?: string;
+}
 
 type ProgressProps = {
-    progress: number
-    
- }
+    progress: number;
+};
 
 export default function ProgressBar(props: ProgressProps) {
     const [animatedProgress, setAnimatedProgress] = useState(props.progress);
@@ -26,15 +30,21 @@ export default function ProgressBar(props: ProgressProps) {
         return () => clearInterval(interval);
     }, [props.progress]);
 
+    const style: CustomCSSProperties = {
+        "--value": animatedProgress,
+        "--size": "6rem",
+        "--thickness": "0.75rem",
+    };
+
     return (
         <div
             className={`radial-progress font-bold transition-colors duration-300 bg-gray-200 text-lg text-${
-                Math.ceil(props.progress) === 100 ? "green-500" : "gray-700"
+                Math.ceil(animatedProgress) === 100 ? "green-500" : "gray-700"
             } rounded-full`}
-            style={{ "--value": animatedProgress, "--size": "6rem", "--thickness": "0.75rem" }}
+            style={style}
             role="progressbar"
         >
-            {props.progress}%
+            {`${animatedProgress}%`}
         </div>
     );
 }

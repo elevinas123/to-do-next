@@ -2,7 +2,6 @@ import React from "react";
 
 type EditTaskProps = {
     edit: () => void;
-    setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function EditTask(props: EditTaskProps) {

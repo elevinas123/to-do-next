@@ -6,7 +6,7 @@ export interface IProjectSchema extends Document {
     name: string;
     account: string;
     description: string;
-    tasks: Map<ITask, mongoose.Types.ObjectId[]>;
+    tasks: Map<ITask |IProject, mongoose.Types.ObjectId[]>;
     onModel: ("Projects" | "Task")[];
     index: number;
     type: string;

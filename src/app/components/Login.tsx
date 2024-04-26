@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { IAccount } from "../database/schema/AccSchema";
 
 
 
 
 type LoginProps = {
-
-}
+    startAccountCreation: () => void;
+    authenticate: (acc: any) => Promise<void>;
+};
 
 
 export default function Login(props: LoginProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleNameChange = (e) => {
+    const handleNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setUsername(e.target.value);
     };
 
-    const handlePasswordChange = (e) => {
+    const handlePasswordChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         let taskObject = { username: username };
         console.log("submit", taskObject);
@@ -31,7 +33,9 @@ export default function Login(props: LoginProps) {
             },
             body: JSON.stringify(taskObject),
         });
-        const responseBody = await response.json();
+        const responseBody: IAccount[] = await response.json();
+        
+        console.log("acount kuri gauni as nzn", responseBody)
         if (!response.ok) {
             throw new Error(`Error: ${response.status}, ${response.json()}`);
         }
