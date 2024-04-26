@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Updated to use the new Next.js 13 navigation
 import accountContext from "../context/accountContext";
 import { IProject, ItemId } from "../database/schema/ProjectSchema";
+import { makeRequest } from "../project/page";
+import { ITask } from "../database/schema/TaskSchema";
 
 type ProjectMenuComponentProps = {
     isRoot?: boolean;
@@ -14,23 +16,14 @@ type ProjectMenuComponentProps = {
 export default function ProjectMenuComponent(props: ProjectMenuComponentProps) {
     const context = useContext(accountContext);
     const [expanded, setExpanded] = useState(false);
-    const [childrenProjects, setChildrenProjects] = useState<IProject[]>([]);
+    const [childrenProjects, setChildrenProjects] = useState<(IProject | ITask)[]>([]);
     const router = useRouter(); // Updated to useAppRouter hook from Next.js 13
 
     useEffect(() => {
         const fetchProjects = async () => {
             if (!props.isRoot && props._id) {
-                const response = await fetch(`/api/getProjects`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ projectId: props._id }),
-                });
-                if (!response.ok) {
-                    console.error(`Error fetching child projects: HTTP status ${response.status}`);
-                    return;
-                }
-                const responseBody = await response.json();
-                setChildrenProjects(responseBody.tasks);
+                const project: IProject = await makeRequest("getProjects", "POST", { projectId: props._id });
+                setChildrenProjects(project.tasks);
             } else if (props.childrenProjects) {
                 setChildrenProjects(props.childrenProjects);
             } else {

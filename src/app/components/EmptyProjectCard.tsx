@@ -1,9 +1,5 @@
 import { ParentId } from "../database/schema/ProjectSchema";
 
-
-
-
-
 type EmptyProjectCardProps = {
     place: string;
     biggestIndex: number;

@@ -1,5 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { IAccount } from "../database/schema/AccSchema";
+import { makeRequest } from "../project/page";
 
 
 
@@ -26,26 +27,15 @@ export default function Login(props: LoginProps) {
         e.preventDefault();
         let taskObject = { username: username };
         console.log("submit", taskObject);
-        const response = await fetch("/api/checkAccount", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(taskObject),
-        });
-        const responseBody: IAccount[] = await response.json();
-        
-        console.log("acount kuri gauni as nzn", responseBody)
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}, ${response.json()}`);
-        }
-        if (responseBody[0].password === password) {
+        const accountGood: IAccount[] = await makeRequest("checkAccount", "POST", taskObject);
+   
+        if (accountGood[0].password === password) {
             console.log("authenticated");
-            props.authenticate(responseBody[0]);
+            props.authenticate(accountGood[0]);
         } else {
             console.log("not allowed");
         }
-        console.log("response from server", responseBody);
+        console.log("response from server", accountGood);
     };
 
     return (

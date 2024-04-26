@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IAccount } from "../database/schema/AccSchema";
-
+import { makeRequest } from "../project/page";
 
 interface CreateAccountProps {
     authenticate: (user: IAccount) => void; // Adjust the type of user based on what authenticate expects
@@ -35,24 +35,15 @@ export default function CreateAccount(props: CreateAccountProps) {
         setError("");
         setLoading(true);
         let taskObject = { username: username, password: password };
-        const response = await fetch("/api/createAccount", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(taskObject),
-        });
+        const accountCreated: IAccount | "Account exists" = await makeRequest("createAccount", "POST", taskObject);
+
         setLoading(false);
-        if (!response.ok) {
-            setError(`Error: ${response.status}`);
-            return;
-        }
-        const responseBody: IAccount | "Account exists"  = await response.json();
-        if (responseBody === "Account exists") {
+
+        if (accountCreated === "Account exists") {
             setAccountExists(true);
             setError("Username already exists");
         } else {
-            props.authenticate(responseBody);
+            props.authenticate(accountCreated);
         }
     };
 

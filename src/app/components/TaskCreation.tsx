@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, SetStateAction } from "react";
 import accountContext from "../context/accountContext";
 import { IProject, ParentId } from "../database/schema/ProjectSchema";
+import { makeRequest } from "../project/page";
 
 type TaskCreationProps = {
     changeProjects: () => void;
@@ -8,7 +9,7 @@ type TaskCreationProps = {
     index: number;
     place: string;
     setCreation: React.Dispatch<React.SetStateAction<boolean>>;
-    setProject: React.Dispatch<SetStateAction<IProject | null>>
+    setProject: React.Dispatch<SetStateAction<IProject | null>>;
 };
 
 export default function TaskCreation(props: TaskCreationProps) {
@@ -40,62 +41,30 @@ export default function TaskCreation(props: TaskCreationProps) {
                 index: props.index,
                 place: props.place,
             };
+            const task = await makeRequest("createTask", "POST", taskObject);
 
-            const task = await fetch("/api/createTask", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(taskObject),
+            let taskId = task._id;
+            await makeRequest("createProject", "PUT", {
+                projectId: props.parentId,
+                taskId,
+                onModel: "Task",
             });
-            if (!task.ok) {
-                throw new Error(`Error: ${task.status}, ${task.json()}`);
-            }
-
-            let body = await task.json();
-            let taskId = body._id;
-            const addTaskToProject = await fetch("/api/createProject", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ projectId: props.parentId, taskId, onModel: "Task" }),
-            });
-            if (!addTaskToProject.ok) {
-                throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
-            }
         } else {
-            const project = await fetch("/api/createProject", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    type: "Project",
-                    index: props.index,
-                    place: props.place,
-                    name,
-                    description: text,
-                    account: account.username,
-                    parent: props.parentId,
-                    isRootProject: false,
-                }),
+            const project = await makeRequest("createProject", "POST", {
+                type: "Project",
+                index: props.index,
+                place: props.place,
+                name,
+                description: text,
+                account: account.username,
+                parent: props.parentId,
+                isRootProject: false,
             });
-
-            if (!project.ok) {
-                throw new Error(`Error: ${project.status}, ${project.json()}`);
-            }
-            const pr = await project.json();
-            const addTaskToProject = await fetch("/api/createProject", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ projectId: props.parentId, taskId: pr._id, onModel: "Projects" }),
+            await makeRequest("createProject", "PUT", {
+                projectId: props.parentId,
+                taskId: project._id,
+                onModel: "Projects",
             });
-            if (!addTaskToProject.ok) {
-                throw new Error(`Error: ${addTaskToProject.status}, ${addTaskToProject.json()}`);
-            }
         }
         props.setCreation((i) => !i);
         props.changeProjects();

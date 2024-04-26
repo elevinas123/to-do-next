@@ -2,6 +2,7 @@
 import { useState, useContext, ChangeEventHandler, FormEventHandler } from "react";
 import accountContext from "../context/accountContext";
 import { useRouter } from "next/navigation";
+import { makeRequest } from "../project/page";
 
 export default function ProjectCreation() {
     const [name, setName] = useState("");
@@ -30,19 +31,8 @@ export default function ProjectCreation() {
             index: 0,
             parent: null,
         };
-
-        const response = await fetch("/api/createProject", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(projectObject),
-        });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}, ${response.json()}`);
-        }
-        const responseText = await response.json();
-        router.push(`/project?projectId=${responseText._id}`);
+        const createdProject = await makeRequest("createProject", "POST", projectObject);
+        router.push(`/project?projectId=${createdProject._id}`);
     };
 
     return (

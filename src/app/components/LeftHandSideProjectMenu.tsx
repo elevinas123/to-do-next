@@ -5,29 +5,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import accountContext from "../context/accountContext";
 import ProjectMenuComponent from "./ProjectMenuComponent";
+import { makeRequest } from "../project/page";
 
 export default function LeftHandSideProjectMenu() {
     const context = useContext(accountContext);
     const [rootProjects, setRootProjects] = useState([]);
 
     useEffect(() => {
-        if (!context) return
-        const {account} = context
+        if (!context) return;
+        const { account } = context;
         const fetchProjects = async (username: string) => {
             console.log("username", username);
-            const response = await fetch(`/api/getAllProjectsByUsername`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({account: username}),
-            });
-            if (!response.ok) {
-                console.error(`Failed to fetch projects: HTTP status ${response.status}`);
-                return;
-            }
-            const data = await response.json();
-            setRootProjects(data);
+            const projects = await makeRequest("getAllProjectsByUsername", "POST", { account: username });
+
+            setRootProjects(projects);
         };
         fetchProjects(account.username);
     }, [context]);
@@ -38,7 +29,13 @@ export default function LeftHandSideProjectMenu() {
                 <h1 className="text-lg font-semibold">Your Projects</h1>
             </div>
             <div className="overflow-y-auto p-2 space-y-2">
-                <ProjectMenuComponent _id={"root"} level={1} name="Projects" isRoot={true} childrenProjects={rootProjects} />
+                <ProjectMenuComponent
+                    _id={"root"}
+                    level={1}
+                    name="Projects"
+                    isRoot={true}
+                    childrenProjects={rootProjects}
+                />
             </div>
         </div>
     );

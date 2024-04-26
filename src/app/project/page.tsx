@@ -1,11 +1,11 @@
 "use client";
 
-import { DragDropContext, DropResult, OnDragEndResponder } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import ProjectCreation from "../components/ProjectCreation";
 import ProjectTemplate from "../components/ProjectTemplate";
 import TaskCreation from "../components/TaskCreation";
 import RightSideBar from "../components/RightSideBar";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
 import EditMode, { EditingObject, isTask } from "../components/EditMode";
@@ -21,6 +21,19 @@ type CreationName = {
     place: string;
     index: number;
 };
+export const makeRequest = async (page: string, type: string, body: any = false): Promise<any> => {
+    const response = await fetch(`/api/${page}`, {
+        method: type,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+        throw new Error(`Error: ${response.status}, ${response.json()}`);
+    }
+    return await response.json();
+};
 
 export default function Home() {
     const [creation, setCreation] = useState(false);
@@ -34,19 +47,6 @@ export default function Home() {
     const [editing, setEditing] = useState<true | false>(false);
     const [editingObject, setEditingObject] = useState<EditingObject | null>(null);
 
-    const makeRequest = async (page: string, type: string, body: any = false): Promise<any> => {
-        const response = await fetch(`/api/${page}`, {
-            method: type,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}, ${response.json()}`);
-        }
-        return await response.json();
-    };
 
     useEffect(() => {
         makeRequest("connectToDB", "POST");
