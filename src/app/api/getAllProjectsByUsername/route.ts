@@ -1,10 +1,11 @@
-import TaskModel from "../../database/schema/TaskSchema";
 import Project from "../../database/schema/ProjectSchema";
+import TaskModel from "../../database/schema/TaskSchema";
 
 export async function POST(req: Request) {
     try {
         const { account } = await req.json();
         console.log("accountasasd", account);
+        const t = TaskModel
         let projects = await Project.find({ account: account, isRootProject: true })
             .populate({
                 path: "tasks",

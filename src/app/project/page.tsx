@@ -33,33 +33,29 @@ export default function Home() {
     const searchParams = useSearchParams();
     const [editing, setEditing] = useState<true | false>(false);
     const [editingObject, setEditingObject] = useState<EditingObject | null>(null);
+
+    const makeRequest = async (page: string, type: string, body: any = false): Promise<any> => {
+        const response = await fetch(`/api/${page}`, {
+            method: type,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}, ${response.json()}`);
+        }
+        return await response.json();
+    };
+
     useEffect(() => {
-        const f = async () => {
-            await fetch("api/connectToDB", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-        };
-        f();
+        makeRequest("connectToDB", "POST");
     }, []);
 
     useEffect(() => {
         let f = async (projectId: string) => {
-            const response = await fetch(`/api/getProjects`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ projectId: projectId }),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}, ${response.json()}`);
-            }
-            const responseBody: IProject = await response.json();
-            console.log("projektas", responseBody);
-            setProject(responseBody);
+            const projectGot: IProject = await makeRequest("getProjects", "POST", { projectId });
+            setProject(projectGot);
         };
         const projectId = searchParams.get("projectId");
         if (projectId) {
@@ -82,21 +78,14 @@ export default function Home() {
                 ),
             };
         });
-        const task = await fetch(
-            `/api/${type == "Task" ? "recurrentProject/updateReferenceTask" : "updateProjectName"}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: id,
-                    name: name,
-                    ...(type === "Task" ? { text: text } : { description: text }),
-                }),
-            }
-        );
-        console.log(task);
+
+        const renamedProject = await makeRequest("updateProjectName", "PUT", {
+            id: id,
+            name: name,
+            description: text,
+        });
+
+        console.log(renamedProject);
     };
 
     const handleDelete = async (id: ItemId, parentId: ParentId) => {
@@ -129,28 +118,10 @@ export default function Home() {
 
             return { ...project, tasks: newTasks, onModel: newOnModel };
         });
-        await fetch("/api/deleteTaskOrProject", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id, parentId }),
-        });
 
-        await fetch(`/api/updateProjects`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedProjects),
-        });
-        await fetch(`/api/createTask`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedTasks),
-        });
+        makeRequest("deleteTaskOrProject", "DELETE", { id, parentId });
+        makeRequest("updateProjects", "PUT", updatedProjects);
+        makeRequest("createTask", "PUT", updatedTasks);
     };
     useEffect(() => {
         console.log(project);
@@ -257,89 +228,57 @@ export default function Home() {
             return;
         }
 
-        // Creating a new copy of project
+        // Copying tasks to manipulate
         let newTasks = JSON.parse(JSON.stringify(project.tasks));
-        let updatedTasks = [];
-        let updatedProjects = [];
-        for (let i = 0; i < newTasks.length; i++) {
-            console.log("hjghjghjghj", newTasks[i]);
-            if (newTasks[i].place === source.droppableId && newTasks[i].index === source.index) {
-                newTasks[i].place = destination.droppableId;
-                newTasks[i].index = destination.index;
-                if (newTasks[i].type === "Task") {
-                    updatedTasks.push(newTasks[i]);
-                } else {
-                    updatedProjects.push(newTasks[i]);
-                }
-            } else if (
-                source.droppableId === destination.droppableId &&
-                newTasks[i].place === source.droppableId &&
-                source.index < destination.index &&
-                newTasks[i].index >= source.index &&
-                newTasks[i].index <= destination.index
-            ) {
-                newTasks[i].index--;
-                if (newTasks[i].type === "Task") {
-                    updatedTasks.push(newTasks[i]);
-                } else {
-                    updatedProjects.push(newTasks[i]);
-                }
-            } else if (
-                source.droppableId === destination.droppableId &&
-                newTasks[i].place === source.droppableId &&
-                source.index > destination.index &&
-                newTasks[i].index < source.index &&
-                newTasks[i].index >= destination.index
-            ) {
-                newTasks[i].index++;
-                if (newTasks[i].type === "Task") {
-                    updatedTasks.push(newTasks[i]);
-                } else {
-                    updatedProjects.push(newTasks[i]);
-                }
-            } else if (
-                source.droppableId !== destination.droppableId &&
-                newTasks[i].place === destination.droppableId &&
-                newTasks[i].index >= destination.index
-            ) {
-                newTasks[i].index++;
-                if (newTasks[i].type === "Task") {
-                    updatedTasks.push(newTasks[i]);
-                } else {
-                    updatedProjects.push(newTasks[i]);
-                }
-            } else if (
-                source.droppableId !== destination.droppableId &&
-                newTasks[i].place === source.droppableId &&
-                newTasks[i].index > source.index
-            ) {
-                newTasks[i].index--;
-                if (newTasks[i].type === "Task") {
-                    updatedTasks.push(newTasks[i]);
-                } else {
-                    updatedProjects.push(newTasks[i]);
-                }
-            }
-        }
+        let updatedTasks: ITask[] = [];
+        let updatedProjects: IProject[] = [];
 
-        console.log("updatedProjects", updatedProjects);
-        console.log("updatedTasks", updatedTasks);
+        newTasks.forEach((task: IProject | ITask) => {
+            if (task.place === source.droppableId) {
+                if (task.index === source.index) {
+                    // Moving the dragged task/project to new position
+                    task.place = destination.droppableId;
+                    task.index = destination.index;
+                } else {
+                    // Adjusting indexes of other tasks/projects within the same list
+                    if (source.droppableId === destination.droppableId) {
+                        if (
+                            source.index < destination.index &&
+                            task.index > source.index &&
+                            task.index <= destination.index
+                        ) {
+                            task.index--;
+                        } else if (
+                            source.index > destination.index &&
+                            task.index < source.index &&
+                            task.index >= destination.index
+                        ) {
+                            task.index++;
+                        }
+                    }
+                }
+            } else if (
+                task.place === destination.droppableId &&
+                source.droppableId !== destination.droppableId &&
+                task.index >= destination.index
+            ) {
+                // Handling cross-list drops where the destination is different and affects the indexes
+                task.index++;
+            }
+
+            // Add to updated tasks or projects based on type
+            if (isTask(task)) {
+                updatedTasks.push(task);
+            } else {
+                updatedProjects.push(task);
+            }
+        });
+
         // Update the state
         setProject({ ...project, tasks: newTasks });
-        await fetch(`/api/updateProjects`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedProjects),
-        });
-        await fetch(`/api/createTask`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedTasks),
-        });
+
+        makeRequest("updateProjects", "PUT", updatedProjects);
+        makeRequest("createTask", "PUT", updatedTasks);
     };
 
     return (

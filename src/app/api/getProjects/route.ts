@@ -24,6 +24,7 @@ export async function POST(req: Request) {
 
         return new Response(JSON.stringify(project.toObject()));
     } catch (error: any) {
+        console.log(error);
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }

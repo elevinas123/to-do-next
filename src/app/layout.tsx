@@ -6,6 +6,7 @@ import accountContext from "./context/accountContext";
 import Login from "./components/Login";
 import CreateAccount from "./components/CreateAccount";
 import { IAccount } from "./database/schema/AccSchema";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const myFont = localFont({ src: "../Work_Sans/static/WorkSans-Medium.ttf" });
 interface RootLayoutProps {
@@ -53,20 +54,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
     const startAccountCreation = () => {
         setAccountCreation(true);
     };
-
+    const queryClient = new QueryClient();
     return (
-        <accountContext.Provider value={account? { account: account }: null}>
-            <html data-theme="todoTheme" lang="en">
-                <body className={myFont.className}>
-                    {loggedIn ? (
-                        children
-                    ) : accountCreation ? (
-                        <CreateAccount authenticate={authenticate} />
-                    ) : (
-                        <Login startAccountCreation={startAccountCreation} authenticate={authenticate} />
-                    )}
-                </body>
-            </html>
-        </accountContext.Provider>
+        <QueryClientProvider client={queryClient}>
+            <accountContext.Provider value={account ? { account } : null}>
+                <html data-theme="todoTheme" lang="en">
+                    <body>
+                        {loggedIn ? (
+                            children
+                        ) : accountCreation ? (
+                            <CreateAccount authenticate={authenticate} />
+                        ) : (
+                            <Login startAccountCreation={startAccountCreation} authenticate={authenticate} />
+                        )}
+                    </body>
+                </html>
+            </accountContext.Provider>
+        </QueryClientProvider>
     );
 }
