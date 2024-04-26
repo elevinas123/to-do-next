@@ -5,8 +5,11 @@ import { ITask } from "../database/schema/TaskSchema";
 export type EditingObject = (ITask | IProject) & {
     handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
     handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
+    setEditing: React.Dispatch<SetStateAction<boolean>>;
 };
-
+export function isTask(item: IProject | ITask): item is ITask {
+    return item.type === "Task";
+}
 type EditModeProps = {
     editingObject: EditingObject | null;
 };
@@ -15,7 +18,11 @@ export default function EditMode(props: EditModeProps) {
     console.log(props);
     const [name, setName] = useState(props.editingObject?.name ?? "");
     const [text, setText] = useState(
-        props.editingObject?.type === "Task" ? props.editingObject.text : props.editingObject.description ?? ""
+        props.editingObject
+            ? isTask(props.editingObject)
+                ? props.editingObject.text
+                : (props.editingObject && props.editingObject.description) ?? ""
+            : ""
     );
 
     const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -27,9 +34,9 @@ export default function EditMode(props: EditModeProps) {
     const handleDeleteStart: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
 
-        const modal: HTMLElement | HTMLDialogElement | null = document.getElementById("my_modal_1");
+        const modal = document.getElementById("my_modal_1") as HTMLDialogElement | null; // Explicit type assertion
         if (!modal) return;
-        modal.showModal();
+        modal.showModal(); // Now TypeScript knows modal is HTMLDialogElement
     };
     const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();

@@ -3,10 +3,12 @@ import Calendar from "./Calendar";
 import { CgOptions } from "react-icons/cg";
 import accountContext from "../context/accountContext";
 import ProgressBar from "./ProgressBar";
+import { IProject } from "../database/schema/ProjectSchema";
 
-export default function RightSideBar(props) {
+
+
+export default function RightSideBar() {
     const { account } = useContext(accountContext);
-    const [project, setProject] = useState({});
 
     const logout = () => {
     localStorage.removeItem("acc")
@@ -19,7 +21,7 @@ export default function RightSideBar(props) {
             <div className="flex flex-col border-l-2 w-full h-full border-blue-300 bg-white shadow-md justify-between">
                 <div>
                     <div className="bg-white rounded-xl m-4">
-                        <Calendar project={project} />
+                        <Calendar />
                     </div>
                 </div>
                 {/* Logout button at the bottom right */}

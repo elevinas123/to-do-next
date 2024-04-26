@@ -1,17 +1,17 @@
 "use client";
 import { Draggable } from "react-beautiful-dnd";
 import EditTask from "./EditTask";
-import { ItemId } from "../database/schema/ProjectSchema";
+import { ItemId, ParentId } from "../database/schema/ProjectSchema";
+import { EditingObject } from "./EditMode";
+import { ITask } from "../database/schema/TaskSchema";
 
-
-type TaskCardProps = {
-    index: number;
-    _id: ItemId;
+interface TaskCardProps extends ITask  {
     setEditing: React.Dispatch<React.SetStateAction<boolean>>;
-    handleEdit: () => void
-    text: string
+    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    startEditing: (object: EditingObject) => void;
+    handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>
+    
 };
-
 
 export default function TaskCard(props: TaskCardProps) {
     const edit = () => {
@@ -28,11 +28,7 @@ export default function TaskCard(props: TaskCardProps) {
                         className="m-3"
                     >
                         <div className="bg-white hover:bg-gray-50 cursor-pointer border border-gray-300 rounded-lg shadow-sm p-4 flex justify-between items-center">
-                            <EditTask
-                                edit={edit}
-                                setEditing={props.setEditing}
-                                handleEdit={props.handleEdit}
-                            />
+                            <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit} />
                             <div className="text-gray-800 font-semibold truncate">{props.text}</div>
                         </div>
                     </div>

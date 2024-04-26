@@ -1,12 +1,16 @@
-import Link from 'next/link'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import EditTask from './EditTask'
 import { useRouter } from 'next/navigation';
+import { IProject, ItemId, ParentId } from '../database/schema/ProjectSchema';
+import { EditingObject } from './EditMode';
 
 
-type ProjectCardProps = {
-    
+interface ProjectCardProps extends IProject {
+    setEditing: React.Dispatch<SetStateAction<boolean>>;
+    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
+    startEditing: (object: EditingObject) => void;
 }
 
 
@@ -53,7 +57,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                         {...provided.dragHandleProps}
                         className="relative p-4 m-3 bg-white rounded-lg shadow border border-gray-300 cursor-pointer"
                     >
-                        <EditTask edit={edit} setEditing={props.setEditing} handleEdit={props.handleEdit} {...props} />
+                        <EditTask edit={edit} setEditing={props.setEditing} />
                         <h3 className="text-lg font-semibold text-gray-800">{props.name}</h3>
                         <p className="text-gray-600 text-sm">{props.description}</p>
                         <div className="mt-2">

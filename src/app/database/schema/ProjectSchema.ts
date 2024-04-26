@@ -28,6 +28,7 @@ export interface IProject {
     place: string;
     parent: ParentId;
     isRootProject: boolean;
+    deadline: string
 }
 
 export type ParentId = mongoose.Types.ObjectId | null;
@@ -82,6 +83,11 @@ const ProjectSchema = new Schema<IProject>({
     isRootProject: {
         type: Boolean,
         default: false, // Field to indicate if this is a top-level project
+        required: true,
+    },
+    deadline: {
+        type: String,
+        required: true,
     },
 });
 

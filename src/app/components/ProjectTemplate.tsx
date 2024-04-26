@@ -3,14 +3,15 @@ import ProjectCard from "./ProjectCard";
 import EmptyProjectCard from "./EmptyProjectCard";
 import { Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
-import { ItemId, ParentId, Tasks } from "../database/schema/ProjectSchema";
+import { IProject, ItemId, ParentId, Tasks } from "../database/schema/ProjectSchema";
+import { EditingObject, isTask } from "./EditMode";
 import { ITask } from "../database/schema/TaskSchema";
 
 type ProjectTemplateProps = {
     setEditing: React.Dispatch<SetStateAction<boolean>>;
     handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
     handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
-    startEditing: (object: any) => void;
+    startEditing: (object: EditingObject) => void
     changeProjects: () => void;
     biggestIndex: number;
     name: string;
@@ -27,31 +28,33 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
         let p = [];
         if (props.tasks == undefined) props.tasks = [];
         for (let i = 0; i < props.tasks.length; i++) {
-            if (props.tasks[i].type === "Project") {
-                p.push(
-                    <ProjectCard
-                        {...props.tasks[i]}
-                        setEditing={props.setEditing}
-                        handleEdit={props.handleEdit}
-                        startEditing={props.startEditing}
-                        handleDelete={props.handleDelete}
-                        index={props.index}
-                        key={props.tasks[i]._id + "-" + i}
-                    />
-                );
-            } else {
-                p.push(
-                    <TaskCard
-                        {...props.tasks[i]}
-                        setEditing={props.setEditing}
-                        handleEdit={props.handleEdit}
-                        startEditing={props.startEditing}
-                        handleDelete={props.handleDelete}
-                        index={props.index}
-                        key={props.tasks[i]._id + "-" + i}
-                    />
-                );
-            }
+             if (isTask(props.tasks[i])) {
+                 // Since isTask confirmed it is ITask, we can safely cast and use TaskCard
+                 const task = props.tasks[i] as ITask; // Explicit cast for clarity, not required
+                 p.push(
+                     <TaskCard
+                         {...task}
+                         setEditing={props.setEditing}
+                         handleEdit={props.handleEdit}
+                         startEditing={props.startEditing}
+                         handleDelete={props.handleDelete}
+                         key={props.tasks[i]._id + "-" + i}
+                     />
+                 );
+             } else {
+                 
+                const project = props.tasks[i] as IProject
+                 p.push(
+                     <ProjectCard
+                         {...project}
+                         setEditing={props.setEditing}
+                         handleEdit={props.handleEdit}
+                         startEditing={props.startEditing}
+                         handleDelete={props.handleDelete}
+                         key={props.tasks[i]._id + "-" + i}
+                     />
+                 );
+             }
         }
         for (let i = props.tasks.length; i < 4; i++) {
             p.push(

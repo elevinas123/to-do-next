@@ -1,6 +1,6 @@
 "use client";
 
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult, OnDragEndResponder } from "react-beautiful-dnd";
 import EmptyProjectCard from "../components/EmptyProjectCard";
 import Navbar from "../components/Navbar";
 import ProjectCreation from "../components/ProjectCreation";
@@ -12,7 +12,7 @@ import { ReactElement, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import accountContext from "../context/accountContext";
 import LeftHandSideProjectMenu from "../components/LeftHandSideProjectMenu";
-import EditMode, { EditingObject } from "../components/EditMode";
+import EditMode, { EditingObject, isTask } from "../components/EditMode";
 import { IProject, ItemId, ParentId } from "../database/schema/ProjectSchema";
 import { ITask } from "../database/schema/TaskSchema";
 
@@ -20,10 +20,16 @@ export function ProjectNullError(): never {
     throw new Error("Project cant be null");
 }
 
+type CreationName = {
+    parentId: ParentId;
+    place: string;
+    index: number;
+};
+
 export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
-    const [creationName, setCreationName] = useState({});
+    const [creationName, setCreationName] = useState < CreationName | null>(null);
     const [projectTemplates, setProjectTemplates] = useState<ReactElement[]>([]);
     const [project, setProject] = useState<IProject | null>(null);
     const [whichCreation, setWhichCreation] = useState("");
@@ -115,7 +121,7 @@ export default function Home() {
                         task.place === project.tasks[taskIndexToDelete].place
                     ) {
                         const updatedTask = { ...task, index: task.index - 1 };
-                        task.type === "Task" ? updatedTasks.push(updatedTask) : updatedProjects.push(updatedTask);
+                        isTask(updatedTask) ? updatedTasks.push(updatedTask) : updatedProjects.push(updatedTask);
                         return updatedTask; // Decrement index and add to updated list
                     }
                     return task; // No change
@@ -225,7 +231,7 @@ export default function Home() {
         setChanged((i) => !i);
     };
 
-    const startEditing = (object) => {
+    const startEditing = (object: EditingObject) => {
         setFirstClick(true);
         setEditingObject(object);
         setEditing(true);
@@ -244,7 +250,7 @@ export default function Home() {
         }
         setFirstClick((i) => !i);
     };
-    const handleDragEnd = async (result) => {
+    const handleDragEnd = async (result: DropResult) => {
         if (!project) ProjectNullError();
         const { source, destination, draggableId } = result;
 
@@ -347,7 +353,7 @@ export default function Home() {
         <div className="flex flex-row bg-gray-100">
             {/* Conditional rendering for task or project creation, and edit mode */}
             {creation ? (
-                whichCreation === "task" ? (
+                whichCreation === "task" ? creationName &&(
                     <TaskCreation
                         changeProjects={changeProjects}
                         parentId={creationName.parentId}
