@@ -29,13 +29,13 @@ type CreationName = {
 export default function Home() {
     const [creation, setCreation] = useState(false);
     const [firstClick, setFirstClick] = useState(false);
-    const [creationName, setCreationName] = useState < CreationName | null>(null);
+    const [creationName, setCreationName] = useState<CreationName | null>(null);
     const [projectTemplates, setProjectTemplates] = useState<ReactElement[]>([]);
     const [project, setProject] = useState<IProject | null>(null);
     const [whichCreation, setWhichCreation] = useState("");
     const [changed, setChanged] = useState(false);
     const searchParams = useSearchParams();
-    const [editing, setEditing] = useState<true| false>(false);
+    const [editing, setEditing] = useState<true | false>(false);
     const [editingObject, setEditingObject] = useState<EditingObject | null>(null);
     useEffect(() => {
         const f = async () => {
@@ -156,20 +156,17 @@ export default function Home() {
             body: JSON.stringify(updatedTasks),
         });
     };
-
     useEffect(() => {
         console.log(project);
-        if (!project) throw new Error("Project cant be null");
+        if (!project) return;
         let p = [];
         let toDo = [];
         let inProgress = [];
         let completed = [];
-        if (project.tasks != undefined) {
-            for (let i = 0; i < project.tasks.length; i++) {
-                if (project.tasks[i].place == "toDo") toDo.push(project.tasks[i]);
-                if (project.tasks[i].place == "inProgress") inProgress.push(project.tasks[i]);
-                if (project.tasks[i].place == "completed") completed.push(project.tasks[i]);
-            }
+        for (let i = 0; i < project.tasks.length; i++) {
+            if (project.tasks[i].place == "toDo") toDo.push(project.tasks[i]);
+            if (project.tasks[i].place == "inProgress") inProgress.push(project.tasks[i]);
+            if (project.tasks[i].place == "completed") completed.push(project.tasks[i]);
         }
         toDo.sort((a, b) => a.index - b.index);
         inProgress.sort((a, b) => a.index - b.index);
@@ -353,15 +350,17 @@ export default function Home() {
         <div className="flex flex-row bg-gray-100">
             {/* Conditional rendering for task or project creation, and edit mode */}
             {creation ? (
-                whichCreation === "task" ? creationName &&(
-                    <TaskCreation
-                        changeProjects={changeProjects}
-                        parentId={creationName.parentId}
-                        place={creationName.place}
-                        index={creationName.index}
-                        setCreation={setCreation}
-                        setProject={setProject}
-                    />
+                whichCreation === "task" ? (
+                    creationName && (
+                        <TaskCreation
+                            changeProjects={changeProjects}
+                            parentId={creationName.parentId}
+                            place={creationName.place}
+                            index={creationName.index}
+                            setCreation={setCreation}
+                            setProject={setProject}
+                        />
+                    )
                 ) : (
                     <ProjectCreation
                         changeProjects={changeProjects}
