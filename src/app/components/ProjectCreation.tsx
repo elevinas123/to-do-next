@@ -1,5 +1,10 @@
 "use client";
-import { useState, useContext, ChangeEventHandler, FormEventHandler } from "react";
+import {
+    useState,
+    useContext,
+    ChangeEventHandler,
+    FormEventHandler,
+} from "react";
 import accountContext from "../context/accountContext";
 import { useRouter } from "next/navigation";
 import { makeRequest } from "../project/page";
@@ -14,7 +19,9 @@ export default function ProjectCreation() {
         setName(e.target.value);
     };
 
-    const handleDescriptionChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleDescriptionChange: ChangeEventHandler<HTMLInputElement> = (
+        e
+    ) => {
         setDescription(e.target.value);
     };
 
@@ -31,7 +38,11 @@ export default function ProjectCreation() {
             index: 0,
             parent: null,
         };
-        const createdProject = await makeRequest("createProject", "POST", projectObject);
+        const createdProject = await makeRequest(
+            "createProject",
+            "POST",
+            projectObject
+        );
         router.push(`/project?projectId=${createdProject._id}`);
     };
 

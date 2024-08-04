@@ -6,7 +6,7 @@ export interface IProjectSchema extends Document {
     name: string;
     account: string;
     description: string;
-    tasks: Map<ITask |IProject, mongoose.Types.ObjectId[]>;
+    tasks: Map<ITask | IProject, mongoose.Types.ObjectId[]>;
     onModel: ("Projects" | "Task")[];
     index: number;
     type: string;
@@ -16,7 +16,7 @@ export interface IProjectSchema extends Document {
     isRootProject: boolean;
 }
 export interface IProject {
-    _id: ItemId;
+    _id: string;
     name: string;
     account: string;
     description: string;
@@ -28,11 +28,11 @@ export interface IProject {
     place: string;
     parent: ParentId;
     isRootProject: boolean;
-    deadline: string
+    deadline: string;
 }
 
-export type ParentId = mongoose.Types.ObjectId | null;
-export type ItemId = mongoose.Types.ObjectId;
+export type ParentId = string | null;
+export type ItemId = string;
 export type Tasks = (ITask | IProject)[];
 // Create a new mongoose schema for projects with typed properties
 const ProjectSchema = new Schema<IProject>({

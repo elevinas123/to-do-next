@@ -2,14 +2,10 @@ import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { IAccount } from "../database/schema/AccSchema";
 import { makeRequest } from "../project/page";
 
-
-
-
 type LoginProps = {
     startAccountCreation: () => void;
     authenticate: (acc: any) => Promise<void>;
 };
-
 
 export default function Login(props: LoginProps) {
     const [username, setUsername] = useState("");
@@ -27,8 +23,12 @@ export default function Login(props: LoginProps) {
         e.preventDefault();
         let taskObject = { username: username };
         console.log("submit", taskObject);
-        const accountGood: IAccount[] = await makeRequest("checkAccount", "POST", taskObject);
-   
+        const accountGood: IAccount[] = await makeRequest(
+            "checkAccount",
+            "POST",
+            taskObject
+        );
+
         if (accountGood[0].password === password) {
             console.log("authenticated");
             props.authenticate(accountGood[0]);
@@ -41,10 +41,15 @@ export default function Login(props: LoginProps) {
     return (
         <div className="h-screen flex items-center justify-center bg-gray-100">
             <div className="w-96 bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+                    Login
+                </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="username" className="text-sm font-medium text-gray-600 block mb-2">
+                        <label
+                            htmlFor="username"
+                            className="text-sm font-medium text-gray-600 block mb-2"
+                        >
                             Username
                         </label>
                         <input
@@ -56,7 +61,10 @@ export default function Login(props: LoginProps) {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="text-sm font-medium text-gray-600 block mb-2">
+                        <label
+                            htmlFor="password"
+                            className="text-sm font-medium text-gray-600 block mb-2"
+                        >
                             Password
                         </label>
                         <input

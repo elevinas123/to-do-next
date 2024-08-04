@@ -3,7 +3,12 @@ import { IProject, ItemId, ParentId } from "../database/schema/ProjectSchema";
 import { ITask } from "../database/schema/TaskSchema";
 
 export type EditingObject = (ITask | IProject) & {
-    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    handleEdit: (
+        id: ItemId,
+        name: string,
+        text: string,
+        type: "Task" | "Project"
+    ) => Promise<void>;
     handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
     setEditing: React.Dispatch<SetStateAction<boolean>>;
 };
@@ -27,21 +32,35 @@ export default function EditMode(props: EditModeProps) {
 
     const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        if (!props.editingObject) throw new Error("Editing object cant be null");
-        props.editingObject.handleEdit(props.editingObject._id, name, text, props.editingObject.type);
+        if (!props.editingObject)
+            throw new Error("Editing object cant be null");
+        props.editingObject.handleEdit(
+            props.editingObject._id,
+            name,
+            text,
+            props.editingObject.type
+        );
         props.editingObject.setEditing(false);
     };
-    const handleDeleteStart: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    const handleDeleteStart: React.MouseEventHandler<HTMLButtonElement> = (
+        e
+    ) => {
         e.preventDefault();
 
-        const modal = document.getElementById("my_modal_1") as HTMLDialogElement | null; // Explicit type assertion
+        const modal = document.getElementById(
+            "my_modal_1"
+        ) as HTMLDialogElement | null; // Explicit type assertion
         if (!modal) return;
         modal.showModal(); // Now TypeScript knows modal is HTMLDialogElement
     };
     const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
-        if (!props.editingObject) throw new Error("Editing object cant be null");
-        props.editingObject.handleDelete(props.editingObject._id, props.editingObject.parent);
+        if (!props.editingObject)
+            throw new Error("Editing object cant be null");
+        props.editingObject.handleDelete(
+            props.editingObject._id,
+            props.editingObject.parent
+        );
         props.editingObject.setEditing(false);
     };
     if (!props.editingObject) throw new Error("Editing object cant be null");
@@ -65,11 +84,17 @@ export default function EditMode(props: EditModeProps) {
                     value={text}
                 ></textarea>
             </label>
-            <button className="w-full border-2 border-black mt-4 rounded-md bg-accent" onClick={handleSubmit}>
+            <button
+                className="w-full border-2 border-black mt-4 rounded-md bg-accent"
+                onClick={handleSubmit}
+            >
                 Submit
             </button>
             <div className="divider">OR</div>
-            <button className="w-full border-2 border-black  rounded-md bg-error" onClick={handleDeleteStart}>
+            <button
+                className="w-full border-2 border-black  rounded-md bg-error"
+                onClick={handleDeleteStart}
+            >
                 {`Delete ${props.editingObject.type}`}{" "}
             </button>
             <dialog id="my_modal_1" className="modal">
@@ -77,7 +102,9 @@ export default function EditMode(props: EditModeProps) {
                     <h3 className="font-bold text-lg text-red-500">{`${props.editingObject.type} deletion!`}</h3>
                     <p className="mt-2">
                         {`You are about to delete a ${props.editingObject.type} named `}
-                        <span className="font-bold underline">{props.editingObject.name}</span>
+                        <span className="font-bold underline">
+                            {props.editingObject.name}
+                        </span>
                     </p>
 
                     <p className="font-bold mt-2">{`Are you sure you want to proceed?`}</p>
@@ -85,7 +112,10 @@ export default function EditMode(props: EditModeProps) {
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}
                             <button className="btn btn-info mr-2">No</button>
-                            <button className="btn btn-error mr-2" onClick={handleDeletion}>
+                            <button
+                                className="btn btn-error mr-2"
+                                onClick={handleDeletion}
+                            >
                                 Yes
                             </button>
                         </form>

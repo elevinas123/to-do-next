@@ -14,7 +14,7 @@ export interface ITaskSchema extends Document {
     onModel: "Projects" | "Task";
 }
 export interface ITask {
-    _id: ItemId;    
+    _id: string;
     name: string;
     text: string;
     place: string;

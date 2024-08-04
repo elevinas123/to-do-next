@@ -3,15 +3,25 @@ import ProjectCard from "./ProjectCard";
 import EmptyProjectCard from "./EmptyProjectCard";
 import { Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
-import { IProject, ItemId, ParentId, Tasks } from "../database/schema/ProjectSchema";
+import {
+    IProject,
+    ItemId,
+    ParentId,
+    Tasks,
+} from "../database/schema/ProjectSchema";
 import { EditingObject, isTask } from "./EditMode";
 import { ITask } from "../database/schema/TaskSchema";
 
 type ProjectTemplateProps = {
     setEditing: React.Dispatch<SetStateAction<boolean>>;
-    handleEdit: (id: ItemId, name: string, text: string, type: "Task" | "Project") => Promise<void>;
+    handleEdit: (
+        id: ItemId,
+        name: string,
+        text: string,
+        type: "Task" | "Project"
+    ) => Promise<void>;
     handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
-    startEditing: (object: EditingObject) => void
+    startEditing: (object: EditingObject) => void;
     changeProjects: () => void;
     biggestIndex: number;
     name: string;
@@ -28,33 +38,32 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
         let p = [];
         if (props.tasks == undefined) props.tasks = [];
         for (let i = 0; i < props.tasks.length; i++) {
-             if (isTask(props.tasks[i])) {
-                 // Since isTask confirmed it is ITask, we can safely cast and use TaskCard
-                 const task = props.tasks[i] as ITask; // Explicit cast for clarity, not required
-                 p.push(
-                     <TaskCard
-                         {...task}
-                         setEditing={props.setEditing}
-                         handleEdit={props.handleEdit}
-                         startEditing={props.startEditing}
-                         handleDelete={props.handleDelete}
-                         key={props.tasks[i]._id + "-" + i}
-                     />
-                 );
-             } else {
-                 
-                const project = props.tasks[i] as IProject
-                 p.push(
-                     <ProjectCard
-                         {...project}
-                         setEditing={props.setEditing}
-                         handleEdit={props.handleEdit}
-                         startEditing={props.startEditing}
-                         handleDelete={props.handleDelete}
-                         key={props.tasks[i]._id + "-" + i}
-                     />
-                 );
-             }
+            if (isTask(props.tasks[i])) {
+                // Since isTask confirmed it is ITask, we can safely cast and use TaskCard
+                const task = props.tasks[i] as ITask; // Explicit cast for clarity, not required
+                p.push(
+                    <TaskCard
+                        {...task}
+                        setEditing={props.setEditing}
+                        handleEdit={props.handleEdit}
+                        startEditing={props.startEditing}
+                        handleDelete={props.handleDelete}
+                        key={props.tasks[i]._id + "-" + i}
+                    />
+                );
+            } else {
+                const project = props.tasks[i] as IProject;
+                p.push(
+                    <ProjectCard
+                        {...project}
+                        setEditing={props.setEditing}
+                        handleEdit={props.handleEdit}
+                        startEditing={props.startEditing}
+                        handleDelete={props.handleDelete}
+                        key={props.tasks[i]._id + "-" + i}
+                    />
+                );
+            }
         }
         for (let i = props.tasks.length; i < 4; i++) {
             p.push(
@@ -73,11 +82,22 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
     return (
         <div className="w-1/5 border-dashed border-2 bg-gray-100 border-gray-300 h-70vh ml-4 mt-2 rounded-lg shadow-lg flex flex-col p-4">
             <div className="flex flex-row justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-700">{props.name}</h2>
+                <h2 className="text-xl font-bold text-gray-700">
+                    {props.name}
+                </h2>
                 <button
                     onClick={() => {
-                        console.log("Details", props.parent, props.place, props.biggestIndex + 1);
-                        props.addNewTask(props.parent, props.place, props.biggestIndex + 1);
+                        console.log(
+                            "Details",
+                            props.parent,
+                            props.place,
+                            props.biggestIndex + 1
+                        );
+                        props.addNewTask(
+                            props.parent,
+                            props.place,
+                            props.biggestIndex + 1
+                        );
                     }}
                     className="flex items-center text-gray-400 hover:text-gray-600"
                 >
@@ -91,7 +111,10 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
             <div className="flex flex-col overflow-y-auto pr-1 overflow-x-hidden">
                 <Droppable droppableId={props.place}>
                     {(provided) => (
-                        <div {...provided.droppableProps} ref={provided.innerRef}>
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
                             {projectCards}
                             {provided.placeholder}
                         </div>

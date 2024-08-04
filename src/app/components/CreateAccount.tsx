@@ -14,15 +14,21 @@ export default function CreateAccount(props: CreateAccountProps) {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
-    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (
+        e
+    ) => {
         setUsername(e.target.value);
     };
 
-    const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (
+        e
+    ) => {
         setPassword(e.target.value);
     };
 
-    const handleConfirmPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleConfirmPasswordChange: React.ChangeEventHandler<
+        HTMLInputElement
+    > = (e) => {
         setConfirmPassword(e.target.value);
     };
 
@@ -35,7 +41,11 @@ export default function CreateAccount(props: CreateAccountProps) {
         setError("");
         setLoading(true);
         let taskObject = { username: username, password: password };
-        const accountCreated: IAccount | "Account exists" = await makeRequest("createAccount", "POST", taskObject);
+        const accountCreated: IAccount | "Account exists" = await makeRequest(
+            "createAccount",
+            "POST",
+            taskObject
+        );
 
         setLoading(false);
 
@@ -50,10 +60,15 @@ export default function CreateAccount(props: CreateAccountProps) {
     return (
         <div className="h-screen flex items-center justify-center bg-gray-100">
             <div className="w-96 bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Create Account</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+                    Create Account
+                </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="username" className="text-sm font-medium text-gray-600 block mb-2">
+                        <label
+                            htmlFor="username"
+                            className="text-sm font-medium text-gray-600 block mb-2"
+                        >
                             Username
                         </label>
                         <input
@@ -61,14 +76,23 @@ export default function CreateAccount(props: CreateAccountProps) {
                             value={username}
                             onChange={handleNameChange}
                             className={`w-full p-3 border ${
-                                accountExist ? "border-red-500" : "border-gray-300"
+                                accountExist
+                                    ? "border-red-500"
+                                    : "border-gray-300"
                             } rounded-md focus:border-blue-500 focus:ring-blue-500 focus:outline-none transition duration-200`}
                             placeholder="Enter your username"
                         />
-                        {accountExist && <p className="text-red-500 text-xs italic">Username already exists.</p>}
+                        {accountExist && (
+                            <p className="text-red-500 text-xs italic">
+                                Username already exists.
+                            </p>
+                        )}
                     </div>
                     <div>
-                        <label htmlFor="password" className="text-sm font-medium text-gray-600 block mb-2">
+                        <label
+                            htmlFor="password"
+                            className="text-sm font-medium text-gray-600 block mb-2"
+                        >
                             Password
                         </label>
                         <input
@@ -81,7 +105,10 @@ export default function CreateAccount(props: CreateAccountProps) {
                         />
                     </div>
                     <div>
-                        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-600 block mb-2">
+                        <label
+                            htmlFor="confirmPassword"
+                            className="text-sm font-medium text-gray-600 block mb-2"
+                        >
                             Confirm Password
                         </label>
                         <input
@@ -92,7 +119,11 @@ export default function CreateAccount(props: CreateAccountProps) {
                             className="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 focus:outline-none transition duration-200"
                             placeholder="Confirm your password"
                         />
-                        {error && <p className="text-red-500 text-xs italic">{error}</p>}
+                        {error && (
+                            <p className="text-red-500 text-xs italic">
+                                {error}
+                            </p>
+                        )}
                     </div>
                     <button
                         className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"

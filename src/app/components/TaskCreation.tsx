@@ -18,15 +18,21 @@ export default function TaskCreation(props: TaskCreationProps) {
     const [text, setText] = useState("");
     const context = useContext(accountContext);
     const [selectValue, setSelectValue] = useState("Task");
-    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (
+        e
+    ) => {
         setName(e.target.value);
     };
     useEffect(() => {}, []);
-    const handleDateChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const handleDateChange: React.ChangeEventHandler<HTMLInputElement> = (
+        e
+    ) => {
         setDate(e.target.value);
     };
 
-    const handleSubmit: React.ChangeEventHandler<HTMLFormElement> = async (event) => {
+    const handleSubmit: React.ChangeEventHandler<HTMLFormElement> = async (
+        event
+    ) => {
         event.preventDefault();
         if (context === null) throw new Error("accountContext cant be null");
         const { account } = context;
@@ -69,10 +75,14 @@ export default function TaskCreation(props: TaskCreationProps) {
         props.setCreation((i) => !i);
         props.changeProjects();
     };
-    const handleTextChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const handleTextChange: React.ChangeEventHandler<HTMLInputElement> = (
+        event
+    ) => {
         setText(event.target.value);
     };
-    const handleSelection: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+    const handleSelection: React.ChangeEventHandler<HTMLSelectElement> = (
+        event
+    ) => {
         let value = event.target.value;
         if (value === "Type to add" || value === "Task") {
             value = "Task";
@@ -84,10 +94,18 @@ export default function TaskCreation(props: TaskCreationProps) {
 
     return (
         <div className="w-full h-screen flex justify-center items-center">
-            <form onSubmit={handleSubmit} className="w-1/4 bg-white p-4 rounded-lg shadow-lg">
-                <h2 className="text-lg font-semibold text-center text-gray-700 mb-4">Create New</h2>
+            <form
+                onSubmit={handleSubmit}
+                className="w-1/4 bg-white p-4 rounded-lg shadow-lg"
+            >
+                <h2 className="text-lg font-semibold text-center text-gray-700 mb-4">
+                    Create New
+                </h2>
                 <div className="mb-3">
-                    <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                    <label
+                        htmlFor="type"
+                        className="block text-sm font-medium text-gray-700"
+                    >
                         Type
                     </label>
                     <select
@@ -104,7 +122,10 @@ export default function TaskCreation(props: TaskCreationProps) {
                     </select>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    <label
+                        htmlFor="name"
+                        className="block text-sm font-medium text-gray-700"
+                    >
                         Name
                     </label>
                     <input
@@ -116,7 +137,10 @@ export default function TaskCreation(props: TaskCreationProps) {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="text" className="block text-sm font-medium text-gray-700">
+                    <label
+                        htmlFor="text"
+                        className="block text-sm font-medium text-gray-700"
+                    >
                         Description
                     </label>
                     <input
@@ -128,7 +152,10 @@ export default function TaskCreation(props: TaskCreationProps) {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                    <label
+                        htmlFor="date"
+                        className="block text-sm font-medium text-gray-700"
+                    >
                         Deadline
                     </label>
                     <input

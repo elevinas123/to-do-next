@@ -16,7 +16,11 @@ export default function LeftHandSideProjectMenu() {
         const { account } = context;
         const fetchProjects = async (username: string) => {
             console.log("username", username);
-            const projects = await makeRequest("getAllProjectsByUsername", "POST", { account: username });
+            const projects = await makeRequest(
+                "getAllProjectsByUsername",
+                "POST",
+                { account: username }
+            );
 
             setRootProjects(projects);
         };

@@ -23,12 +23,24 @@ export default function Calendar() {
         const firstDayOfMonth = new Date(year, month, 1).getDay();
         const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
         const lastDayOfLastMonth = new Date(year, month, 0).getDate();
-        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const daysOfWeek = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ];
 
         let dates: JSX.Element[] = [];
 
         // Add buttons for the remaining days of the previous month
-        for (let i = lastDayOfLastMonth - firstDayOfMonth + 1; i <= lastDayOfLastMonth; i++) {
+        for (
+            let i = lastDayOfLastMonth - firstDayOfMonth + 1;
+            i <= lastDayOfLastMonth;
+            i++
+        ) {
             dates.push(
                 <button className="flex items-center justify-center w-9 h-9 rounded-md font-semibold text-gray-400 border-transparent border focus:outline-none focus:text-black focus:border-blue-200">
                     {i}
@@ -66,7 +78,9 @@ export default function Calendar() {
         setMonthDays(dates);
     }, [selectedYear, selectedMonth]);
 
-    const handleMonthChangeClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    const handleMonthChangeClick: React.MouseEventHandler<HTMLButtonElement> = (
+        e
+    ) => {
         e.preventDefault();
         const target = e.target as HTMLButtonElement;
 
@@ -91,7 +105,6 @@ export default function Calendar() {
         setSelectedMonth(month);
     };
 
-
     return (
         <div className="flex flex-col items-center justify-center w-80 bg-gray-100 rounded-lg shadow-lg p-4">
             <div className="flex justify-between items-center mb-4">
@@ -113,7 +126,10 @@ export default function Calendar() {
             </div>
             <div className="grid grid-cols-7 gap-1">
                 {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((day) => (
-                    <div key={day} className="text-center text-sm text-gray-500 font-medium">
+                    <div
+                        key={day}
+                        className="text-center text-sm text-gray-500 font-medium"
+                    >
                         {day}
                     </div>
                 ))}
