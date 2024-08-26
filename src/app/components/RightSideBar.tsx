@@ -1,9 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext} from "react";
 import Calendar from "./Calendar";
-import { CgOptions } from "react-icons/cg";
 import accountContext from "../context/accountContext";
-import ProgressBar from "./ProgressBar";
-import { IProject } from "../database/schema/ProjectSchema";
 
 export default function RightSideBar() {
     const context = useContext(accountContext);
@@ -23,7 +20,6 @@ export default function RightSideBar() {
                         <Calendar />
                     </div>
                 </div>
-                {/* Logout button at the bottom right */}
                 <div className="m-4 self-end">
                     <button
                         onClick={logout}

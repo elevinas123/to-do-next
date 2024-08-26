@@ -114,7 +114,7 @@ export default function TaskCreation(props: TaskCreationProps) {
                     <select
                         id="type"
                         onChange={handleSelection}
-                        className="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm  focus:border-blue-500"
                         defaultValue=""
                     >
                         <option value="" disabled>

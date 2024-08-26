@@ -87,12 +87,6 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
                 </h2>
                 <button
                     onClick={() => {
-                        console.log(
-                            "Details",
-                            props.parent,
-                            props.place,
-                            props.biggestIndex + 1
-                        );
                         props.addNewTask(
                             props.parent,
                             props.place,
@@ -101,10 +95,6 @@ export default function ProjectTemplate(props: ProjectTemplateProps) {
                     }}
                     className="flex items-center text-gray-400 hover:text-gray-600"
                 >
-                    <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8 8 0 110 16 8 8 0 010-16zm1 3h-2v5H7v2h4v4h2v-4h4v-2h-4V7z" />
-                    </svg>
                     <span className="ml-1 text-sm">Add new task</span>
                 </button>
             </div>

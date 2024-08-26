@@ -81,11 +81,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                             ></progress>
                             <div className="text-xs font-semibold text-gray-800">{`${completedAmmount}/${props.tasks.length}`}</div>
                         </div>
-                        {props.deadline && (
-                            <div className="mt-1 bg-gray-200 text-gray-600 font-semibold rounded-full px-2 py-1 text-xs">
-                                {props.deadline}
-                            </div>
-                        )}
+                        
                     </div>
                 )}
             </Draggable>
