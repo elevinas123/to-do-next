@@ -23,11 +23,11 @@ type ProjectTemplateProps = {
     handleDelete: (id: ItemId, parentId: ParentId) => Promise<void>;
     startEditing: (object: EditingObject) => void;
     changeProjects: () => void;
+    addNewTask: (parentId: ParentId, place: string, index: number) => void;
     biggestIndex: number;
     name: string;
     tasks: Tasks;
     place: string;
-    addNewTask: (parentId: ParentId, place: string, index: number) => void;
     parent: ParentId;
 };
 
