@@ -3,7 +3,7 @@ import TaskModel, { ITask } from "../../database/schema/TaskSchema";
 export async function POST(req: Request) {
     try {
         const taskObj = await req.json();
-        console.log(taskObj);
+        console.log("taskObj", taskObj);
         let task = await TaskModel.create(taskObj);
 
         return new Response(JSON.stringify(task));

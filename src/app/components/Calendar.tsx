@@ -134,12 +134,12 @@ export default function Calendar() {
                     </div>
                 ))}
                 {monthDays.map((day, index) => (
-                    <button
+                    <div
                         key={index}
                         className="flex items-center justify-center w-8 h-8 text-sm font-medium text-gray-700 bg-transparent rounded-full hover:bg-gray-200 focus:bg-gray-300"
                     >
                         {day}
-                    </button>
+                    </div>
                 ))}
             </div>
         </div>

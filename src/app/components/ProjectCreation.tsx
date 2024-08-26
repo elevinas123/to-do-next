@@ -38,11 +38,8 @@ export default function ProjectCreation() {
             index: 0,
             parent: null,
         };
-        const createdProject = await makeRequest(
-            "createProject",
-            "POST",
-            projectObject
-        );
+        const createdProject = await makeRequest("createProject", "POST", projectObject);
+        console.log("createdProject", createdProject)
         router.push(`/project?projectId=${createdProject._id}`);
     };
 

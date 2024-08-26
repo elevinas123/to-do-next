@@ -7,7 +7,7 @@ export interface ITaskSchema extends Document {
     text: string;
     place: string;
     deadline: string;
-    comments: string;
+    comments?: string;
     type: string;
     index: number;
     parent: ParentId;
@@ -19,7 +19,7 @@ export interface ITask {
     text: string;
     place: string;
     deadline: string;
-    comments: string;
+    comments?: string;
     type: "Project" | "Task";
     index: number;
     parent: ParentId;
@@ -46,7 +46,6 @@ const TaskSchema = new Schema<ITaskSchema>({
     },
     comments: {
         type: String,
-        required: true,
     },
     type: {
         type: String,

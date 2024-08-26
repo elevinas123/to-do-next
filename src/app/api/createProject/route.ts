@@ -5,11 +5,13 @@ import Project from "../../database/schema/ProjectSchema"
 export async function POST(req: Request) {
     try {
         const { name, description, index, account, parent, isRootProject, place } = await req.json();
+        
         let response = await Project.create({
             type: "Project",
             onModel: [],
             place,
             index,
+            comments: "labas",
             name,
             isRootProject,
             description,
@@ -17,7 +19,7 @@ export async function POST(req: Request) {
             tasks: [],
             parent: parent,
         });
-        console.log(response);
+        console.log("projectResponse", response);
 
         return new Response(JSON.stringify(response));
     } catch (error: any) {
