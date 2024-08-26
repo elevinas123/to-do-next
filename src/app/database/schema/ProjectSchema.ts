@@ -10,7 +10,7 @@ export interface IProjectSchema extends Document {
     onModel: ("Projects" | "Task")[];
     index: number;
     type: string;
-    comments: string;
+    comments?: string;
     place: string;
     parent: mongoose.Types.ObjectId;
     isRootProject: boolean;
@@ -24,7 +24,7 @@ export interface IProject {
     onModel: ("Projects" | "Task")[];
     index: number;
     type: "Project" | "Task";
-    comments: string;
+    comments?: string;
     place: string;
     parent: ParentId;
     isRootProject: boolean;
@@ -70,7 +70,6 @@ const ProjectSchema = new Schema<IProject>({
     },
     comments: {
         type: String,
-        required: true,
     },
     place: {
         type: String,

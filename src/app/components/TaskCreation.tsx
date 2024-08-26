@@ -37,12 +37,13 @@ export default function TaskCreation(props: TaskCreationProps) {
                 text,
                 deadline: date,
                 name: name,
+                comments: "labas",
                 parent: props.parentId,
                 index: props.index,
                 place: props.place,
             };
             const task = await makeRequest("createTask", "POST", taskObject);
-
+            console.log("task", task)
             let taskId = task._id;
             await makeRequest("createProject", "PUT", {
                 projectId: props.parentId,
@@ -55,6 +56,9 @@ export default function TaskCreation(props: TaskCreationProps) {
                 index: props.index,
                 place: props.place,
                 name,
+                tasks: [],
+                onModel: "Projects",
+                deadline: "labas",
                 description: text,
                 account: account.username,
                 parent: props.parentId,
@@ -63,7 +67,6 @@ export default function TaskCreation(props: TaskCreationProps) {
             await makeRequest("createProject", "PUT", {
                 projectId: props.parentId,
                 taskId: project._id,
-                onModel: "Projects",
             });
         }
         props.setCreation((i) => !i);

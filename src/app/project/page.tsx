@@ -47,7 +47,6 @@ export default function Home() {
     const [editing, setEditing] = useState<true | false>(false);
     const [editingObject, setEditingObject] = useState<EditingObject | null>(null);
 
-
     useEffect(() => {
         makeRequest("connectToDB", "POST");
     }, []);
@@ -217,18 +216,12 @@ export default function Home() {
     const handleDragEnd = async (result: DropResult) => {
         if (!project) ProjectNullError();
         const { source, destination, draggableId } = result;
-
-        // Do nothing if dropped outside the list
         if (!destination) {
             return;
         }
-
-        // Dropped in the same list at the same position
         if (source.droppableId === destination.droppableId && source.index === destination.index) {
             return;
         }
-
-        // Copying tasks to manipulate
         let newTasks = JSON.parse(JSON.stringify(project.tasks));
         let updatedTasks: ITask[] = [];
         let updatedProjects: IProject[] = [];
@@ -236,11 +229,9 @@ export default function Home() {
         newTasks.forEach((task: IProject | ITask) => {
             if (task.place === source.droppableId) {
                 if (task.index === source.index) {
-                    // Moving the dragged task/project to new position
                     task.place = destination.droppableId;
                     task.index = destination.index;
                 } else {
-                    // Adjusting indexes of other tasks/projects within the same list
                     if (source.droppableId === destination.droppableId) {
                         if (
                             source.index < destination.index &&
@@ -262,21 +253,16 @@ export default function Home() {
                 source.droppableId !== destination.droppableId &&
                 task.index >= destination.index
             ) {
-                // Handling cross-list drops where the destination is different and affects the indexes
                 task.index++;
             }
 
-            // Add to updated tasks or projects based on type
             if (isTask(task)) {
                 updatedTasks.push(task);
             } else {
                 updatedProjects.push(task);
             }
         });
-
-        // Update the state
         setProject({ ...project, tasks: newTasks });
-
         makeRequest("updateProjects", "PUT", updatedProjects);
         makeRequest("createTask", "PUT", updatedTasks);
     };

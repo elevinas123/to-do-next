@@ -54,9 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     const startAccountCreation = () => {
         setAccountCreation(true);
     };
-    const queryClient = new QueryClient();
     return (
-        <QueryClientProvider client={queryClient}>
             <accountContext.Provider value={account ? { account } : null}>
                 <html data-theme="todoTheme" lang="en">
                     <body>
@@ -70,6 +68,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     </body>
                 </html>
             </accountContext.Provider>
-        </QueryClientProvider>
     );
 }
