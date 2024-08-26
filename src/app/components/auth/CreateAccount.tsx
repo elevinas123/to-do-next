@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { IAccount } from "../database/schema/AccSchema";
-import { makeRequest } from "../project/page";
+import { IAccount } from "../../database/schema/AccSchema";
+import { makeRequest } from "../../project/page";
 
 interface CreateAccountProps {
     authenticate: (user: IAccount) => void; // Adjust the type of user based on what authenticate expects
+    startLogin: () => void
 }
 
 export default function CreateAccount(props: CreateAccountProps) {
@@ -133,6 +134,15 @@ export default function CreateAccount(props: CreateAccountProps) {
                         {loading ? "Creating..." : "Create Account"}
                     </button>
                 </form>
+                <div className="text-center mt-4 text-sm font-medium text-gray-600">
+                    Have an account?{" "}
+                    <button
+                        onClick={props.startLogin}
+                        className="text-blue-500 hover:text-blue-600 transition duration-200"
+                    >
+                        Log In
+                    </button>
+                </div>
             </div>
         </div>
     );

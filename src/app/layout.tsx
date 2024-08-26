@@ -3,8 +3,8 @@ import React, { ReactNode, useEffect, useState } from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import accountContext from "./context/accountContext";
-import Login from "./components/Login";
-import CreateAccount from "./components/CreateAccount";
+import Login from "./components/auth/Login";
+import CreateAccount from "./components/auth/CreateAccount";
 import { IAccount } from "./database/schema/AccSchema";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -51,22 +51,31 @@ export default function RootLayout({ children }: RootLayoutProps) {
         setLoggedIn(true);
     };
 
+    const startLogin = () => {
+        setAccountCreation(false)
+    }
     const startAccountCreation = () => {
         setAccountCreation(true);
     };
     return (
-            <accountContext.Provider value={account ? { account } : null}>
-                <html data-theme="todoTheme" lang="en">
-                    <body>
-                        {loggedIn ? (
-                            children
-                        ) : accountCreation ? (
-                            <CreateAccount authenticate={authenticate} />
-                        ) : (
-                            <Login startAccountCreation={startAccountCreation} authenticate={authenticate} />
-                        )}
-                    </body>
-                </html>
-            </accountContext.Provider>
+        <accountContext.Provider value={account ? { account } : null}>
+            <html data-theme="todoTheme" lang="en">
+                <body>
+                    {loggedIn ? (
+                        children
+                    ) : accountCreation ? (
+                        <CreateAccount
+                            authenticate={authenticate}
+                            startLogin={startLogin}
+                        />
+                    ) : (
+                        <Login
+                            startAccountCreation={startAccountCreation}
+                            authenticate={authenticate}
+                        />
+                    )}
+                </body>
+            </html>
+        </accountContext.Provider>
     );
 }

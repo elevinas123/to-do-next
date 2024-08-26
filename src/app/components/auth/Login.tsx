@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
-import { IAccount } from "../database/schema/AccSchema";
-import { makeRequest } from "../project/page";
+import { IAccount } from "../../database/schema/AccSchema";
+import { makeRequest } from "../../project/page";
 
 type LoginProps = {
     startAccountCreation: () => void;
